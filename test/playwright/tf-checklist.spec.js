@@ -2,10 +2,10 @@
 // exposing a button trigger and a multi-select listbox per the WAI-ARIA
 // APG combobox pattern. The trigger carries aria-haspopup, aria-expanded
 // and aria-controls; the listbox carries role, aria-multiselectable and
-// aria-labelledby; the open attribute keeps the two in sync. Per the
-// theming model (--tf-* custom properties + ::part()), it ships
-// structure and hooks only: no invented classes and no baked-in
-// presentational CSS. Fails CI on regression.
+// aria-labelledby; the open attribute keeps the two in sync and trigger
+// clicks dispatch open-change. Per the theming model (--tf-* custom
+// properties + ::part()), it ships structure and hooks only: no invented
+// classes and no baked-in presentational CSS. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -124,6 +124,40 @@ test('toggles the popover from the trigger and reflects open',
             { open: true, expanded: 'true', hidden: false });
         expect(result.closedAgain).toEqual(
             { open: false, expanded: 'false', hidden: true });
+    });
+
+test('dispatches open-change across the shadow boundary',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-checklist');
+            document.body.appendChild(el);
+            const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+
+            const onHost = [];
+            const onDocument = [];
+            el.addEventListener('open-change',
+                (e) => onHost.push(e.detail));
+            document.addEventListener('open-change',
+                (e) => onDocument.push(e.detail));
+
+            trigger.click();
+            trigger.click();
+            // Programmatic state changes do not dispatch.
+            el.setOpen(true);
+            const afterSetOpen = onHost.length;
+
+            return { onHost, onDocument, afterSetOpen };
+        }, COMPONENT);
+
+        expect(result.onHost).toEqual([
+            { open: true },
+            { open: false }
+        ]);
+        expect(result.onDocument).toEqual(result.onHost);
+        expect(result.afterSetOpen).toBe(2);
     });
 
 test('setOpen() and the open attribute drive the expanded state',
@@ -367,6 +401,8 @@ test('disables the trigger while disabled is set', async ({ page }) => {
         const el = document.createElement('tf-checklist');
         document.body.appendChild(el);
         const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+        let openChanges = 0;
+        el.addEventListener('open-change', () => { openChanges++; });
         const read = () => ({
             attribute: el.hasAttribute('disabled'),
             disabled: trigger.hasAttribute('disabled')
@@ -377,7 +413,8 @@ test('disables the trigger while disabled is set', async ({ page }) => {
         const disabled = read();
         trigger.click();
         const afterClick = {
-            open: el.hasAttribute('open')
+            open: el.hasAttribute('open'),
+            openChanges
         };
         el.removeAttribute('disabled');
         const reenabled = read();
@@ -390,7 +427,7 @@ test('disables the trigger while disabled is set', async ({ page }) => {
     expect(result.disabled).toEqual(
         { attribute: true, disabled: true });
     // A disabled button fires no click, so the popover stays closed.
-    expect(result.afterClick).toEqual({ open: false });
+    expect(result.afterClick).toEqual({ open: false, openChanges: 0 });
     expect(result.reenabled).toEqual(
         { attribute: false, disabled: false });
 });

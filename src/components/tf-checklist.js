@@ -15,6 +15,11 @@
  *   it; `aria-expanded` and the listbox's `hidden` state follow.
  * - `disabled` — disables the trigger.
  *
+ * Events:
+ * - `open-change` — dispatched when the trigger toggles the popover, with
+ *   `detail: {open}`, the expanded state as a boolean. Bubbles and crosses
+ *   the shadow boundary.
+ *
  * Content is projected into the trigger through `slot="trigger"`.
  * `setText()`, `setLabel()`, `setListboxLabel()` and `setOpen()` reflect
  * the matching attributes. Styling is left to the theme via `--tf-*`
@@ -53,8 +58,7 @@ export class TfChecklistElement extends HTMLElement {
         this._triggerText =
             this.shadowRoot.querySelector('[part="trigger-text"]');
         this._listbox = this.shadowRoot.querySelector('[part="listbox"]');
-        this._trigger.addEventListener(
-            'click', () => this.setOpen(!this.hasAttribute('open')));
+        this._trigger.addEventListener('click', () => this._toggle());
     }
 
     static get observedAttributes() {
@@ -104,6 +108,19 @@ export class TfChecklistElement extends HTMLElement {
         } else {
             this.removeAttribute('open');
         }
+    }
+
+    /**
+     * Toggle the popover and announce the new state.
+     */
+    _toggle() {
+        const open = !this.hasAttribute('open');
+        this.setOpen(open);
+        this.dispatchEvent(new CustomEvent('open-change', {
+            detail: { open },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     /**
