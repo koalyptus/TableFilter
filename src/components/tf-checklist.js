@@ -256,7 +256,6 @@ export class TfChecklistElement extends HTMLElement {
         } else {
             this._listbox.removeAttribute('aria-activedescendant');
         }
-        // TODO(#929): removed — aria-activedescendant uses option ids
         const checkbox = document.createElement('span');
         checkbox.setAttribute('part', 'option-checkbox');
         checkbox.setAttribute('aria-hidden', 'true');
