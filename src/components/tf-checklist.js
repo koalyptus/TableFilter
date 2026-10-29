@@ -319,6 +319,7 @@ export class TfChecklistElement extends HTMLElement {
                 const first = enabled[0] || this._optionEls[0];
                 if (first) {
                     first.focus();
+                    this._updateActiveDescendant();
                 }
             }
         }
@@ -541,6 +542,7 @@ export class TfChecklistElement extends HTMLElement {
             this._listbox.removeAttribute('hidden');
             this._searchString = '';
             clearTimeout(this._searchTimeout);
+            this._updateActiveDescendant();
         } else {
             this._listbox.setAttribute('hidden', '');
         }
