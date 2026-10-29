@@ -14,6 +14,7 @@ test.describe('tf-checklist keyboard', () => {
         }, COMPONENT);
         const trigger = page.locator(
             'tf-checklist button[part="trigger"]');
+        await trigger.waitFor({ state: 'attached' });
         await trigger.focus();
         await trigger.press('ArrowDown');
         const option = page.locator(
@@ -37,6 +38,7 @@ test.describe('tf-checklist keyboard', () => {
         }, COMPONENT);
         const trigger = page.locator(
             'tf-checklist button[part="trigger"]');
+        await trigger.waitFor({ state: 'attached' });
         await trigger.focus();
         await trigger.press('ArrowDown');
         const opts = page.locator(
@@ -46,14 +48,16 @@ test.describe('tf-checklist keyboard', () => {
 
     test('type-ahead selects option', async ({ page }) => {
         await page.goto(FIXTURE);
-        await page.evaluate(async (c) => {
-            await import(c);
+        await page.addScriptTag({ url: COMPONENT, type: 'module' });
+        await page.waitForTimeout(500);
+        await page.evaluate(async () => {
             const el = document.createElement('tf-checklist');
-            document.body.appendChild(el);
             el.setOptions(['apple', 'banana', 'cherry']);
-        }, COMPONENT);
+            document.body.appendChild(el);
+        });
         const trigger = page.locator(
             'tf-checklist button[part="trigger"]');
+        await trigger.waitFor({ state: 'attached' });
         await trigger.focus();
         await trigger.press('ArrowDown');
         await page.keyboard.press('a');
@@ -65,15 +69,17 @@ test.describe('tf-checklist keyboard', () => {
     });
 
     test('escape closes and returns focus', async ({ page }) => {
-        await page.goto(FIXURE);
-        await page.evaluate(async (c) => {
-            await import(c);
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ url: COMPONENT, type: 'module' });
+        await page.waitForTimeout(500);
+        await page.evaluate(async () => {
             const el = document.createElement('tf-checklist');
-            document.body.appendChild(el);
             el.setOptions(['a']);
-        }, COMPONENT);
+            document.body.appendChild(el);
+        });
         const trigger = page.locator(
             'tf-checklist button[part="trigger"]');
+        await trigger.waitFor({ state: 'attached' });
         await trigger.focus();
         await trigger.press('ArrowDown');
         await page.keyboard.press('Escape');
