@@ -496,9 +496,372 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
     expect(result.color).toBe('rgb(1, 2, 3)');
 });
 
+test('exposes ::part() state tokens for selection and disabled',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-checklist');
+            el.setOptions([
+                { value: 'a', text: 'A', selected: true },
+                { value: 'b', text: 'B', disabled: true }
+            ]);
+            document.body.appendChild(el);
+
+            const style = document.createElement('style');
+            style.textContent = [
+                'tf-checklist::part(option option-selected) {',
+                '  color: rgb(9, 8, 7); }',
+                'tf-checklist::part(option option-disabled) {',
+                '  opacity: 0.5; }'
+            ].join(' ');
+            document.head.appendChild(style);
+
+            const options = Array.from(
+                el.shadowRoot.querySelector('[part="listbox"]')
+                    .querySelectorAll('[part~="option"]'));
+            return {
+                selectedColor: getComputedStyle(options[0]).color,
+                disabledOpacity: getComputedStyle(options[1]).opacity,
+                unselectedPart: options[0].getAttribute('part'),
+                disabledPart: options[1].getAttribute('part')
+            };
+        }, COMPONENT);
+
+        expect(result.unselectedPart).toBe('option option-selected');
+        expect(result.disabledPart).toBe('option option-disabled');
+        expect(result.selectedColor).toBe('rgb(9, 8, 7)');
+        expect(result.disabledOpacity).toBe('0.5');
+    });
+
+test('renders options as listbox options with aria-selected',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-checklist');
+            el.setOptions([
+                'Electronics',
+                { value: 'furniture', text: 'Furniture' }
+            ]);
+            document.body.appendChild(el);
+            const options = Array.from(
+                el.shadowRoot.querySelector('[part="listbox"]')
+                    .querySelectorAll('[part~="option"]'));
+            return {
+                count: options.length,
+                roles: options.map((o) => o.getAttribute('role')),
+                parts: options.map((o) => o.getAttribute('part')),
+                tabindex: options.map((o) => o.getAttribute('tabindex')),
+                selected:
+                    options.map((o) => o.getAttribute('aria-selected')),
+                disabled:
+                    options.map((o) => o.getAttribute('aria-disabled')),
+                texts: options.map(
+                    (o) =>
+                        o.querySelector('[part="option-text"]').textContent),
+                checkboxParts: options.map((o) =>
+                    o.querySelector('[part="option-checkbox"]')
+                        .getAttribute('part')),
+                checkboxTags: options.map((o) =>
+                    o.querySelector('[part="option-checkbox"]').tagName
+                        .toLowerCase()),
+                checkboxHidden: options.map((o) =>
+                    o.querySelector('[part="option-checkbox"]')
+                        .getAttribute('aria-hidden'))
+            };
+        }, COMPONENT);
+
+        expect(result.count).toBe(2);
+        expect(result.roles).toEqual(['option', 'option']);
+        expect(result.parts).toEqual(['option', 'option']);
+        expect(result.tabindex).toEqual(['-1', '-1']);
+        expect(result.selected).toEqual(['false', 'false']);
+        expect(result.disabled).toEqual([null, null]);
+        expect(result.texts).toEqual(['Electronics', 'Furniture']);
+        expect(result.checkboxParts).toEqual(
+            ['option-checkbox', 'option-checkbox']);
+        expect(result.checkboxTags).toEqual(['span', 'span']);
+        expect(result.checkboxHidden).toEqual(['true', 'true']);
+    });
+
+test('renders disabled and preselected option entries', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-checklist');
+        el.setOptions([
+            { value: 'a', text: 'A', selected: true },
+            { value: 'b', text: 'B', disabled: true }
+        ]);
+        document.body.appendChild(el);
+        const options = Array.from(
+            el.shadowRoot.querySelector('[part="listbox"]')
+                .querySelectorAll('[part~="option"]'));
+        return {
+            selected: options.map((o) => o.getAttribute('aria-selected')),
+            disabled: options.map((o) => o.getAttribute('aria-disabled')),
+            parts: options.map((o) => o.getAttribute('part')),
+            values: el.getSelectedValues()
+        };
+    }, COMPONENT);
+
+    expect(result.selected).toEqual(['true', 'false']);
+    expect(result.disabled).toEqual([null, 'true']);
+    expect(result.parts).toEqual(['option option-selected',
+        'option option-disabled']);
+    expect(result.values).toEqual(['a']);
+});
+
+test('toggles an option on click and dispatches selection-change',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-checklist');
+            el.setOptions(['Australia', 'New Zealand', 'Canada']);
+            document.body.appendChild(el);
+
+            const options = Array.from(
+                el.shadowRoot.querySelector('[part="listbox"]')
+                    .querySelectorAll('[part~="option"]'));
+            const onHost = [];
+            const onDocument = [];
+            el.addEventListener('selection-change',
+                (e) => onHost.push(e.detail.values));
+            document.addEventListener('selection-change',
+                (e) => onDocument.push(e.detail.values));
+
+            options[1].click();
+            const afterFirst = {
+                selected: options.map(
+                    (o) => o.getAttribute('aria-selected')),
+                values: el.getSelectedValues()
+            };
+            options[2].click();
+            const afterSecond = {
+                selected: options.map(
+                    (o) => o.getAttribute('aria-selected')),
+                values: el.getSelectedValues()
+            };
+            options[1].click();
+            const afterThird = el.getSelectedValues();
+
+            return {
+                afterFirst,
+                afterSecond,
+                afterThird,
+                onHost,
+                onDocument
+            };
+        }, COMPONENT);
+
+        expect(result.afterFirst).toEqual({
+            selected: ['false', 'true', 'false'],
+            values: ['New Zealand']
+        });
+        expect(result.afterSecond).toEqual({
+            selected: ['false', 'true', 'true'],
+            values: ['New Zealand', 'Canada']
+        });
+        expect(result.afterThird).toEqual(['Canada']);
+        expect(result.onHost).toEqual([
+            ['New Zealand'],
+            ['New Zealand', 'Canada'],
+            ['Canada']
+        ]);
+        expect(result.onDocument).toEqual(result.onHost);
+    });
+
+test('clicking the checkbox hook toggles the option once', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-checklist');
+        el.setOptions(['Australia']);
+        document.body.appendChild(el);
+
+        const option =
+            el.shadowRoot.querySelector('[part~="option"]');
+        const checkbox =
+            option.querySelector('[part="option-checkbox"]');
+        let changes = 0;
+        el.addEventListener('selection-change', () => { changes++; });
+
+        checkbox.click();
+        const afterCheck = {
+            selected: option.getAttribute('aria-selected'),
+            values: el.getSelectedValues(),
+            changes
+        };
+        checkbox.click();
+        const afterUncheck = {
+            selected: option.getAttribute('aria-selected'),
+            values: el.getSelectedValues(),
+            changes
+        };
+
+        return { afterCheck, afterUncheck };
+    }, COMPONENT);
+
+    expect(result.afterCheck).toEqual({
+        selected: 'true',
+        values: ['Australia'],
+        changes: 1
+    });
+    expect(result.afterUncheck).toEqual({
+        selected: 'false',
+        values: [],
+        changes: 2
+    });
+});
+
+test('ignores clicks on disabled options', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-checklist');
+        el.setOptions([{ value: 'a', text: 'A', disabled: true }]);
+        document.body.appendChild(el);
+
+        const option = el.shadowRoot.querySelector('[part~="option"]');
+        let changes = 0;
+        el.addEventListener('selection-change', () => { changes++; });
+        option.click();
+
+        return {
+            selected: option.getAttribute('aria-selected'),
+            values: el.getSelectedValues(),
+            changes
+        };
+    }, COMPONENT);
+
+    expect(result).toEqual({
+        selected: 'false',
+        values: [],
+        changes: 0
+    });
+});
+
+test('setSelectedValues() selects by value without dispatching',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-checklist');
+            el.setOptions(['a', 'b', 'c']);
+            document.body.appendChild(el);
+
+            const options = Array.from(
+                el.shadowRoot.querySelector('[part="listbox"]').children);
+            let changes = 0;
+            el.addEventListener('selection-change', () => { changes++; });
+
+            el.setSelectedValues(['c', 'missing', 'a']);
+            const selected = options.map(
+                (o) => o.getAttribute('aria-selected'));
+            const values = el.getSelectedValues();
+
+            el.setSelectedValues([]);
+            const cleared = {
+                selected: options.map(
+                    (o) => o.getAttribute('aria-selected')),
+                values: el.getSelectedValues()
+            };
+
+            return { selected, values, cleared, changes };
+        }, COMPONENT);
+
+        expect(result.selected).toEqual(['true', 'false', 'true']);
+        expect(result.values).toEqual(['a', 'c']);
+        expect(result.cleared).toEqual({
+            selected: ['false', 'false', 'false'],
+            values: []
+        });
+        expect(result.changes).toBe(0);
+    });
+
+test('setOptions() replaces the list and clears the selection',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-checklist');
+            el.setOptions(['a', 'b']);
+            document.body.appendChild(el);
+            el.setSelectedValues(['a']);
+            let changes = 0;
+            el.addEventListener('selection-change', () => { changes++; });
+
+            el.setOptions(['c', { value: 'd', text: 'D' }]);
+            const options = Array.from(
+                el.shadowRoot.querySelector('[part="listbox"]').children);
+
+            return {
+                count: options.length,
+                texts: options.map(
+                    (o) => o.querySelector('[part="option-text"]').textContent),
+                selected: options.map(
+                    (o) => o.getAttribute('aria-selected')),
+                values: el.getSelectedValues(),
+                changes
+            };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            count: 2,
+            texts: ['c', 'D'],
+            selected: ['false', 'false'],
+            values: [],
+            changes: 0
+        });
+    });
+
+test('renders option text as text content', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-checklist');
+        el.setOptions([{ value: '<b>A</b>', text: '<b>A</b>' }]);
+        document.body.appendChild(el);
+        const text =
+            el.shadowRoot.querySelector('[part="option-text"]');
+        return {
+            text: text.textContent,
+            hasElement: Boolean(text.querySelector('b')),
+            html: text.innerHTML
+        };
+    }, COMPONENT);
+
+    expect(result.text).toBe('<b>A</b>');
+    expect(result.hasElement).toBe(false);
+    expect(result.html).toBe('&lt;b&gt;A&lt;/b&gt;');
+});
+
 // The open element carries a representative option so the scan reaches
 // the expanded listbox; the closed elements cover the trigger's naming
 // paths.
+test('observes the col attribute (column mapping)', async ({ page }) => {
+    await page.goto(FIXTURE);
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-checklist');
+        el.setAttribute('col', '2');
+        document.body.appendChild(el);
+        return { col: el.getAttribute('col'), observed: true };
+    }, COMPONENT);
+    expect(result.col).toBe('2');
+});
+
 test('passes a scoped axe scan', async ({ page }, testInfo) => {
     test.setTimeout(60000);
     await page.goto(FIXTURE);
@@ -522,13 +885,12 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         const expanded = document.createElement('tf-checklist');
         expanded.setAttribute('trigger-text', 'Country');
         expanded.setAttribute('open', '');
+        expanded.setOptions([
+            'Australia',
+            { value: 'canada', text: 'Canada', selected: true },
+            { value: 'france', text: 'France', disabled: true }
+        ]);
         scope.appendChild(expanded);
-        const listbox = expanded.shadowRoot.querySelector('[part=listbox]');
-        const option = document.createElement('div');
-        option.setAttribute('role', 'option');
-        option.setAttribute('aria-selected', 'false');
-        option.textContent = 'Australia';
-        listbox.appendChild(option);
     }, COMPONENT);
 
     const violations = await scanAccessibility(
