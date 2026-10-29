@@ -21,14 +21,15 @@
  * previous selection. Every entry renders as a `role="option"` element
  * (`part="option"`) with `aria-selected`, `aria-disabled` for disabled
  * entries, and a decorative checkbox (`part="option-checkbox"`,
- * `aria-hidden`, non-interactive) followed by its text
- * (`part="option-text"`). The checkbox is a styling hook; selection state
- * is exposed through `aria-selected`.
+ * `aria-hidden`, non-interactive) followed by its text (`part="option-text"`),
+ * rendered as `textContent` (markup shown literally, XSS-safe). The checkbox
+ * is a styling hook; selection state is exposed through `aria-selected`
+ * and the `option` part tokens (`option-selected` / `option-disabled`).
  *
  * `setSelectedValues()` selects the options matching the given values
  * and `getSelectedValues()` returns the selected values in option order.
- * Clicking an enabled option toggles it. Option text is rendered with
- * `textContent`, so markup in a value is shown literally.
+ * Clicking an enabled option toggles it. Option text is rendered as
+ * `textContent` (markup shown literally, matching legacy behavior).
  *
  * Events:
  * - `open-change` — dispatched when the trigger toggles the popover, with
@@ -108,8 +109,8 @@ export class TfChecklistElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['trigger-text', 'label', 'listbox-label', 'open', 'disabled',
-            'col'];
+        return ['trigger-text', 'label', 'listbox-label', 'open',
+            'disabled', 'col']; // 'col' reserved for #929 column mapping
     }
 
     connectedCallback() {
@@ -230,29 +231,20 @@ export class TfChecklistElement extends HTMLElement {
     }
 
     /**
-     * Build an option element for an entry.
+     * Build an option element for an entry and apply its selection state.
+     * Delegates selection-state updates to `_applySelection()` so the two
+     * paths cannot drift.
      * @param {Object} option Normalized option
      * @param {Number} index Position in the option list
      * @returns {Element} Option element
      */
     _createOption(option, index) {
         const el = document.createElement('div');
-        const partName = option.selected ? 'option option-selected' : 'option';
-        el.setAttribute('part', partName);
         el.setAttribute('role', 'option');
-        // TODO(#929): remove once aria-activedescendant uses option ids
-        el.id = `option-${index}`;
-        el.setAttribute('data-index', String(index));
         el.setAttribute('tabindex', '-1');
-        el.setAttribute('aria-selected', option.selected ? 'true' : 'false');
-        if (option.disabled) {
-            el.setAttribute('part',
-                (option.selected ? 'option option-selected ' : 'option ') +
-                'option-disabled');
-            el.setAttribute('aria-disabled', 'true');
-        }
-
-
+        el.setAttribute('data-index', String(index));
+        el.id = `option-${index}`;
+        // TODO(#929): remove once aria-activedescendant uses option ids
         const checkbox = document.createElement('span');
         checkbox.setAttribute('part', 'option-checkbox');
         checkbox.setAttribute('aria-hidden', 'true');
@@ -263,6 +255,20 @@ export class TfChecklistElement extends HTMLElement {
 
         el.appendChild(checkbox);
         el.appendChild(text);
+
+        // Build part tokens directly so creation and updates share one logic.
+        const partNames = ['option'];
+        if (option.selected) {
+            partNames.push('option-selected');
+        }
+        if (option.disabled) {
+            partNames.push('option-disabled');
+        }
+        el.setAttribute('part', partNames.join(' '));
+        el.setAttribute('aria-selected', option.selected ? 'true' : 'false');
+        if (option.disabled) {
+            el.setAttribute('aria-disabled', 'true');
+        }
 
         return el;
     }
