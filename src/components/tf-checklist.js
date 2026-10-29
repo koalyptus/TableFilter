@@ -319,7 +319,9 @@ export class TfChecklistElement extends HTMLElement {
                     detail: { open: true }, bubbles: true, composed: true
                 }));
                 const first = this._optionEls[0];
-                if (first) first.focus();
+                if (first) {
+                    first.focus();
+                }
             }
         }
         if (evt.key === 'Escape' && open) {
@@ -400,7 +402,8 @@ export class TfChecklistElement extends HTMLElement {
                 composed: true
             }));
             this._trigger.focus();
-        } else if (evt.key.length === 1 && !evt.ctrlKey && !evt.metaKey && !evt.altKey) {
+        } else if (evt.key.length === 1 && !evt.ctrlKey &&
+            !evt.metaKey && !evt.altKey) {
             // Type-ahead
             evt.preventDefault();
             this._searchString += evt.key.toLowerCase();
