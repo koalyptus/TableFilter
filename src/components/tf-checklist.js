@@ -351,102 +351,130 @@ export class TfChecklistElement extends HTMLElement {
             el => el.getAttribute('aria-disabled') !== 'true');
         const focused = this.shadowRoot.activeElement;
         const index = options.indexOf(focused);
-        if (evt.key === 'ArrowDown') {
-            evt.preventDefault();
-            const next = options[index + 1] || options[0];
-            if (next) {
-                next.focus();
-            }
-        } else if (evt.key === 'ArrowUp') {
-            evt.preventDefault();
-            const prev = options[index - 1] || options[options.length - 1];
-            if (prev) {
-                prev.focus();
-            }
-        } else if (evt.key === 'Home') {
-            evt.preventDefault();
-            if (options[0]) {
-                options[0].focus();
-            }
-        } else if (evt.key === 'End') {
-            evt.preventDefault();
-            if (options[options.length - 1]) {
-                options[options.length - 1].focus();
-            }
-        } else if (evt.key === ' ' || evt.key === 'Enter') {
-            evt.preventDefault();
-            const target = evt.target.closest('[part~="option"]');
-            if (target) {
-                const idx = Number(target.getAttribute('data-index'));
-                const option = this._options[idx];
-                if (option && !option.disabled) {
-                    this._applySelection(option, idx, !option.selected);
-                    this.dispatchEvent(new CustomEvent('selection-change', {
-                        detail: { values: this.getSelectedValues() },
-                        bubbles: true,
-                        composed: true
-                    }));
+        const k = evt.key;
+        switch (k) {
+            case 'ArrowDown': {
+                evt.preventDefault();
+                const next = options[index + 1] || options[0];
+                if (next) {
+                    next.focus();
                 }
-                if (evt.key === 'Enter' && this.hasAttribute('open')) {
-                    this.setOpen(false);
-                    this._setExpanded(false);
-                    this.dispatchEvent(new CustomEvent('open-change', {
-                        detail: { open: false },
-                        bubbles: true,
-                        composed: true
-                    }));
-                    this._trigger.focus();
-                }
+                break;
             }
-        } else if (evt.key === 'Escape') {
-            evt.preventDefault();
-            this.setOpen(false);
-            this._setExpanded(false);
-            this.dispatchEvent(new CustomEvent('open-change', {
-                detail: { open: false },
-                bubbles: true,
-                composed: true
-            }));
-            this._trigger.focus();
-        } else if (evt.key.length === 1 && !evt.ctrlKey &&
-            !evt.metaKey && !evt.altKey) {
-            // Type-ahead
-            evt.preventDefault();
-            this._searchString += evt.key.toLowerCase();
-            clearTimeout(this._searchTimeout);
-            this._searchTimeout = setTimeout(() => {
-                this._searchString = '';
-            }, 500);
-            const focused = this.shadowRoot.activeElement;
-            const startIndex = focused && focused.hasAttribute('data-index')
-                ? Number(focused.getAttribute('data-index')) + 1
-                : 0;
-            const match = this._optionEls.slice(startIndex).find(el => {
-                if (!el.hasAttribute('data-index')) {
-                    return false;
+            case 'ArrowUp': {
+                evt.preventDefault();
+                const prev = options[index - 1] ||
+                    options[options.length - 1];
+                if (prev) {
+                    prev.focus();
                 }
-                const opt = this._options[
-                    Number(el.getAttribute('data-index'))] || {};
-                const text = opt.text || '';
-                return text.toLowerCase().startsWith(
-                    this._searchString);
-            }) || this._optionEls.find(el => {
-                if (!el.hasAttribute('data-index')) {
-                    return false;
+                break;
+            }
+            case 'Home': {
+                evt.preventDefault();
+                if (options[0]) {
+                    options[0].focus();
                 }
-                const opt = this._options[
-                    Number(el.getAttribute('data-index'))] || {};
-                const text = opt.text || '';
-                return text.toLowerCase().startsWith(
-                    this._searchString);
-            });
-            if (match) {
-                match.focus();
-                this._listbox.setAttribute('aria-activedescendant', match.id);
+                break;
+            }
+            case 'End': {
+                evt.preventDefault();
+                if (options[options.length - 1]) {
+                    options[options.length - 1].focus();
+                }
+                break;
+            }
+            case ' ':
+            case 'Enter': {
+                evt.preventDefault();
+                const target = evt.target.closest('[part~="option"]');
+                if (target) {
+                    const idx = Number(
+                        target.getAttribute('data-index'));
+                    const option = this._options[idx];
+                    if (option && !option.disabled) {
+                        this._applySelection(
+                            option, idx, !option.selected);
+                        this.dispatchEvent(new CustomEvent(
+                            'selection-change', {
+                                detail: {
+                                    values: this.getSelectedValues()
+                                },
+                                bubbles: true,
+                                composed: true
+                            }));
+                    }
+                    if (k === 'Enter' &&
+                        this.hasAttribute('open')) {
+                        this.setOpen(false);
+                        this._setExpanded(false);
+                        this.dispatchEvent(new CustomEvent(
+                            'open-change', {
+                                detail: { open: false },
+                                bubbles: true,
+                                composed: true
+                            }));
+                        this._trigger.focus();
+                    }
+                }
+                break;
+            }
+            case 'Escape': {
+                evt.preventDefault();
+                this.setOpen(false);
+                this._setExpanded(false);
+                this.dispatchEvent(new CustomEvent('open-change', {
+                    detail: { open: false },
+                    bubbles: true,
+                    composed: true
+                }));
+                this._trigger.focus();
+                break;
+            }
+            default: {
+                if (evt.key.length === 1 && !evt.ctrlKey &&
+                    !evt.metaKey && !evt.altKey) {
+                    evt.preventDefault();
+                    this._searchString += evt.key.toLowerCase();
+                    clearTimeout(this._searchTimeout);
+                    this._searchTimeout = setTimeout(
+                        () => {
+                            this._searchString = '';
+                        }, 500);
+                    const focused = this.shadowRoot.activeElement;
+                    const startIndex = focused &&
+                        focused.hasAttribute('data-index') ?
+                        Number(focused.getAttribute('data-index')) + 1 : 0;
+                    const match = this._optionEls.slice(
+                        startIndex).find(el => {
+                        if (!el.hasAttribute('data-index')) {
+                            return false;
+                        }
+                        const opt = this._options[
+                            Number(el.getAttribute('data-index'))] || {};
+                        const text = opt.text || '';
+                        return text.toLowerCase().startsWith(
+                            this._searchString);
+                    }) || this._optionEls.find(el => {
+                        if (!el.hasAttribute('data-index')) {
+                            return false;
+                        }
+                        const opt = this._options[
+                            Number(el.getAttribute('data-index'))] || {};
+                        const text = opt.text || '';
+                        return text.toLowerCase().startsWith(
+                            this._searchString);
+                    });
+                    if (match) {
+                        match.focus();
+                        this._listbox.setAttribute(
+                            'aria-activedescendant', match.id);
+                    }
+                }
+                break;
             }
         }
     }
-
     /**
      * Toggle the popover and announce the new state.
      */
