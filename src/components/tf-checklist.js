@@ -103,9 +103,14 @@ export class TfChecklistElement extends HTMLElement {
         this._options = [];
         // Rendered option elements, aligned with _options by index.
         this._optionEls = [];
+        this._searchString = '';
         this._trigger.addEventListener('click', () => this._toggle());
         this._listbox.addEventListener('click', (evt) =>
             this._onOptionClick(evt));
+        this._trigger.addEventListener('keydown', (evt) =>
+            this._onTriggerKeydown(evt));
+        this._listbox.addEventListener('keydown', (evt) =>
+            this._onListboxKeydown(evt));
     }
 
     static get observedAttributes() {
@@ -244,7 +249,10 @@ export class TfChecklistElement extends HTMLElement {
         el.setAttribute('tabindex', '-1');
         el.setAttribute('data-index', String(index));
         el.id = `option-${index}`;
-        // TODO(#929): remove once aria-activedescendant uses option ids
+        const focusedEl = this.shadowRoot.activeElement;
+        const focusedId = focusedEl ? focusedEl.id : '';
+        this._listbox.setAttribute('aria-activedescendant', focusedId);
+        // TODO(#929): removed — aria-activedescendant uses option ids
         const checkbox = document.createElement('span');
         checkbox.setAttribute('part', 'option-checkbox');
         checkbox.setAttribute('aria-hidden', 'true');
@@ -294,6 +302,124 @@ export class TfChecklistElement extends HTMLElement {
             partNames.push('option-disabled');
         }
         el.setAttribute('part', partNames.join(' '));
+    }
+
+    /**
+     * Keyboard navigation on trigger
+     */
+    _onTriggerKeydown(evt) {
+        const open = this.hasAttribute('open');
+        if (evt.key === 'ArrowDown' || evt.key === 'ArrowUp' ||
+            evt.key === ' ' || evt.key === 'Enter') {
+            evt.preventDefault();
+            if (!open) {
+                this.setOpen(true);
+                this._setExpanded(true);
+                this.dispatchEvent(new CustomEvent('open-change', {
+                    detail: { open: true }, bubbles: true, composed: true
+                }));
+                const first = this._optionEls[0];
+                if (first) first.focus();
+            }
+        }
+        if (evt.key === 'Escape' && open) {
+            evt.preventDefault();
+            this.setOpen(false);
+            this._setExpanded(false);
+            this.dispatchEvent(new CustomEvent('open-change', {
+                detail: { open: false },
+                bubbles: true,
+                composed: true
+            }));
+            this._trigger.focus();
+        }
+    }
+
+    /**
+     * Keyboard navigation inside listbox
+     */
+    _onListboxKeydown(evt) {
+        const options = this._optionEls.filter(
+            el => el.getAttribute('aria-disabled') !== 'true');
+        const focused = this.shadowRoot.activeElement;
+        const index = options.indexOf(focused);
+        if (evt.key === 'ArrowDown') {
+            evt.preventDefault();
+            const next = options[index + 1] || options[0];
+            if (next) {
+                next.focus();
+            }
+        } else if (evt.key === 'ArrowUp') {
+            evt.preventDefault();
+            const prev = options[index - 1] || options[options.length - 1];
+            if (prev) {
+                prev.focus();
+            }
+        } else if (evt.key === 'Home') {
+            evt.preventDefault();
+            if (options[0]) {
+                options[0].focus();
+            }
+        } else if (evt.key === 'End') {
+            evt.preventDefault();
+            if (options[options.length - 1]) {
+                options[options.length - 1].focus();
+            }
+        } else if (evt.key === ' ' || evt.key === 'Enter') {
+            evt.preventDefault();
+            const target = evt.target.closest('[part~="option"]');
+            if (target) {
+                const idx = Number(target.getAttribute('data-index'));
+                const option = this._options[idx];
+                if (option && !option.disabled) {
+                    this._applySelection(option, idx, !option.selected);
+                    this.dispatchEvent(new CustomEvent('selection-change', {
+                        detail: { values: this.getSelectedValues() },
+                        bubbles: true,
+                        composed: true
+                    }));
+                }
+                if (evt.key === 'Enter' && this.hasAttribute('open')) {
+                    this.setOpen(false);
+                    this._setExpanded(false);
+                    this.dispatchEvent(new CustomEvent('open-change', {
+                        detail: { open: false },
+                        bubbles: true,
+                        composed: true
+                    }));
+                    this._trigger.focus();
+                }
+            }
+        } else if (evt.key === 'Escape') {
+            evt.preventDefault();
+            this.setOpen(false);
+            this._setExpanded(false);
+            this.dispatchEvent(new CustomEvent('open-change', {
+                detail: { open: false },
+                bubbles: true,
+                composed: true
+            }));
+            this._trigger.focus();
+        } else if (evt.key.length === 1 && !evt.ctrlKey && !evt.metaKey && !evt.altKey) {
+            // Type-ahead
+            evt.preventDefault();
+            this._searchString += evt.key.toLowerCase();
+            clearTimeout(this._searchTimeout);
+            this._searchTimeout = setTimeout(() => {
+                this._searchString = '';
+            }, 500);
+            const match = this._optionEls.find(el => {
+                const opt = this._options[
+                    Number(el.getAttribute('data-index'))] || {};
+                const text = opt.text || '';
+                return text.toLowerCase().startsWith(
+                    this._searchString);
+            });
+            if (match) {
+                match.focus();
+                this._listbox.setAttribute('aria-activedescendant', match.id);
+            }
+        }
     }
 
     /**
