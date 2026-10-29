@@ -8,6 +8,8 @@ test.describe('tf-checklist keyboard', () => {
         await page.goto(FIXTURE);
         await page.evaluate(async (c) => {
             await import(c);
+            const el = document.createElement('tf-checklist');
+            document.body.appendChild(el);
         }, COMPONENT);
         const trigger = page.locator(
             'tf-checklist button[part="trigger"]');
