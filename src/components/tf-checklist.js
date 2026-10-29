@@ -251,7 +251,11 @@ export class TfChecklistElement extends HTMLElement {
         el.id = `option-${index}`;
         const focusedEl = this.shadowRoot.activeElement;
         const focusedId = focusedEl ? focusedEl.id : '';
-        this._listbox.setAttribute('aria-activedescendant', focusedId);
+        if (focusedId) {
+            this._listbox.setAttribute('aria-activedescendant', focusedId);
+        } else {
+            this._listbox.removeAttribute('aria-activedescendant');
+        }
         // TODO(#929): removed — aria-activedescendant uses option ids
         const checkbox = document.createElement('span');
         checkbox.setAttribute('part', 'option-checkbox');
@@ -411,7 +415,23 @@ export class TfChecklistElement extends HTMLElement {
             this._searchTimeout = setTimeout(() => {
                 this._searchString = '';
             }, 500);
-            const match = this._optionEls.find(el => {
+            const focused = this.shadowRoot.activeElement;
+            const startIndex = focused && focused.hasAttribute('data-index')
+                ? Number(focused.getAttribute('data-index')) + 1
+                : 0;
+            const match = this._optionEls.slice(startIndex).find(el => {
+                if (!el.hasAttribute('data-index')) {
+                    return false;
+                }
+                const opt = this._options[
+                    Number(el.getAttribute('data-index'))] || {};
+                const text = opt.text || '';
+                return text.toLowerCase().startsWith(
+                    this._searchString);
+            }) || this._optionEls.find(el => {
+                if (!el.hasAttribute('data-index')) {
+                    return false;
+                }
                 const opt = this._options[
                     Number(el.getAttribute('data-index'))] || {};
                 const text = opt.text || '';
@@ -481,6 +501,8 @@ export class TfChecklistElement extends HTMLElement {
         this._trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
         if (open) {
             this._listbox.removeAttribute('hidden');
+            this._searchString = '';
+            clearTimeout(this._searchTimeout);
         } else {
             this._listbox.setAttribute('hidden', '');
         }
