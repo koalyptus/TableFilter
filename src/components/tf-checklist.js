@@ -322,7 +322,9 @@ export class TfChecklistElement extends HTMLElement {
                 this.dispatchEvent(new CustomEvent('open-change', {
                     detail: { open: true }, bubbles: true, composed: true
                 }));
-                const first = this._optionEls[0];
+                const enabled = this._optionEls.filter(
+                    el => el.getAttribute('aria-disabled') !== 'true');
+                const first = enabled[0] || this._optionEls[0];
                 if (first) {
                     first.focus();
                 }
