@@ -249,13 +249,6 @@ export class TfChecklistElement extends HTMLElement {
         el.setAttribute('tabindex', '-1');
         el.setAttribute('data-index', String(index));
         el.id = `option-${index}`;
-        const focusedEl = this.shadowRoot.activeElement;
-        const focusedId = focusedEl ? focusedEl.id : '';
-        if (focusedId) {
-            this._listbox.setAttribute('aria-activedescendant', focusedId);
-        } else {
-            this._listbox.removeAttribute('aria-activedescendant');
-        }
         const checkbox = document.createElement('span');
         checkbox.setAttribute('part', 'option-checkbox');
         checkbox.setAttribute('aria-hidden', 'true');
@@ -357,6 +350,7 @@ export class TfChecklistElement extends HTMLElement {
                 const next = options[index + 1] || options[0];
                 if (next) {
                     next.focus();
+                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -366,6 +360,7 @@ export class TfChecklistElement extends HTMLElement {
                     options[options.length - 1];
                 if (prev) {
                     prev.focus();
+                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -373,6 +368,7 @@ export class TfChecklistElement extends HTMLElement {
                 evt.preventDefault();
                 if (options[0]) {
                     options[0].focus();
+                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -380,6 +376,7 @@ export class TfChecklistElement extends HTMLElement {
                 evt.preventDefault();
                 if (options[options.length - 1]) {
                     options[options.length - 1].focus();
+                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -414,6 +411,7 @@ export class TfChecklistElement extends HTMLElement {
                                 composed: true
                             }));
                         this._trigger.focus();
+                        this._updateActiveDescendant();
                     }
                 }
                 break;
@@ -428,6 +426,7 @@ export class TfChecklistElement extends HTMLElement {
                     composed: true
                 }));
                 this._trigger.focus();
+                this._updateActiveDescendant();
                 break;
             }
             default: {
@@ -444,7 +443,9 @@ export class TfChecklistElement extends HTMLElement {
                     const startIndex = focused &&
                         focused.hasAttribute('data-index') ?
                         Number(focused.getAttribute('data-index')) + 1 : 0;
-                    const match = this._optionEls.slice(
+                    const enabledEls = this._optionEls.filter(
+                        el => el.getAttribute('aria-disabled') !== 'true');
+                    const match = enabledEls.slice(
                         startIndex).find(el => {
                         if (!el.hasAttribute('data-index')) {
                             return false;
@@ -454,7 +455,7 @@ export class TfChecklistElement extends HTMLElement {
                         const text = opt.text || '';
                         return text.toLowerCase().startsWith(
                             this._searchString);
-                    }) || this._optionEls.find(el => {
+                    }) || enabledEls.find(el => {
                         if (!el.hasAttribute('data-index')) {
                             return false;
                         }
@@ -466,8 +467,7 @@ export class TfChecklistElement extends HTMLElement {
                     });
                     if (match) {
                         match.focus();
-                        this._listbox.setAttribute(
-                            'aria-activedescendant', match.id);
+                        this._updateActiveDescendant();
                     }
                 }
                 break;
@@ -485,6 +485,15 @@ export class TfChecklistElement extends HTMLElement {
             bubbles: true,
             composed: true
         }));
+    }
+
+    _updateActiveDescendant() {
+        const focused = this.shadowRoot.activeElement;
+        if (focused && this._optionEls.includes(focused)) {
+            this._listbox.setAttribute('aria-activedescendant', focused.id);
+        } else {
+            this._listbox.removeAttribute('aria-activedescendant');
+        }
     }
 
     /**
