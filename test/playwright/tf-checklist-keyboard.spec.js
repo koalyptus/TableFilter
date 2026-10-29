@@ -104,7 +104,7 @@ test.describe('tf-checklist keyboard', () => {
     });
 
     test('enter closes and applies', async ({ page }) => {
-        await page.goto(FIXURE);
+        await page.goto(FIXTURE);
         await page.evaluate(async (c) => {
             await import(c);
             const el = document.createElement('tf-checklist');
