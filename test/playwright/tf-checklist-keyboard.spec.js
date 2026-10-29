@@ -68,6 +68,56 @@ test.describe('tf-checklist keyboard', () => {
         await expect(option).toBeVisible();
     });
 
+    test('arrow up navigation', async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.evaluate(async (c) => {
+            await import(c);
+            const el = document.createElement('tf-checklist');
+            el.setOptions(['a', 'b', 'c']);
+            document.body.appendChild(el);
+        }, COMPONENT);
+        const trigger = page.locator('tf-checklist button[part="trigger"]');
+        await trigger.focus();
+        await trigger.press('ArrowDown');
+        await trigger.press('ArrowUp');
+        const option = page.locator(
+            'tf-checklist [part="listbox"] [role="option"]'
+        ).first();
+        await expect(option).toBeVisible();
+    });
+
+    test('home and end jump', async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.evaluate(async (c) => {
+            await import(c);
+            const el = document.createElement('tf-checklist');
+            el.setOptions(['a', 'b', 'c']);
+            document.body.appendChild(el);
+        }, COMPONENT);
+        const trigger = page.locator('tf-checklist button[part="trigger"]');
+        await trigger.focus();
+        await trigger.press('ArrowDown');
+        await page.keyboard.press('End');
+        const opts = page.locator(
+            'tf-checklist [part="listbox"] [role="option"]');
+        await expect(opts).toHaveCount(3);
+    });
+
+    test('enter closes and applies', async ({ page }) => {
+        await page.goto(FIXURE);
+        await page.evaluate(async (c) => {
+            await import(c);
+            const el = document.createElement('tf-checklist');
+            el.setOptions(['a', 'b', 'c']);
+            document.body.appendChild(el);
+        }, COMPONENT);
+        const trigger = page.locator('tf-checklist button[part="trigger"]');
+        await trigger.focus();
+        await trigger.press('ArrowDown');
+        await page.keyboard.press('Enter');
+        await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    });
+
     test('escape closes and returns focus', async ({ page }) => {
         await page.goto(FIXTURE);
         await page.addScriptTag({ url: COMPONENT, type: 'module' });
