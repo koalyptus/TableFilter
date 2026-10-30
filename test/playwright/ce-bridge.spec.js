@@ -1872,7 +1872,7 @@ test('checklist bridge works with grid layout', async ({ page }) => {
     expect(result.leftovers).toBe(true);
 });
 
-test('checklist bridge teardown is clean with two columns', async ({ page }) => {
+test('checklist bridge teardown is clean (two columns)', async ({ page }) => {
     await page.goto(FIXTURE);
     await page.addScriptTag({ content: CHECKLIST_MOUNT });
 
