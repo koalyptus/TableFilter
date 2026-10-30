@@ -270,6 +270,16 @@ export class CheckList extends BaseDropdown {
      * @param  {DOMElement} container  Dom element containing the filter
      */
     init(colIndex, isExternal, container) {
+        // Store stable handler refs so `destroy()` removes the right
+        // listeners (the emitter keys on function identity).
+        this.onBuildChecklistFilter =
+            (tf, colIndex, isLinked) => this.build(colIndex, isLinked);
+        this.onSelectChecklistOptions =
+            (tf, colIndex, values) =>
+                this.selectOptions(colIndex, values);
+        this.onRowsChanged = () => this.refreshAll();
+        this.onAfterFiltering = () => this.linkFilters();
+
         // Bridge to <tf-checklist> (#930). The element is used when the
         // source registers it (Vite / module load); otherwise the legacy
         // div/ul/li structure is rendered.
@@ -282,19 +292,12 @@ export class CheckList extends BaseDropdown {
             this.initLegacy(colIndex, isExternal, container);
         }
 
-        this.emitter.on(
-            ['build-checklist-filter'],
-            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)
-        );
-
-        this.emitter.on(
-            ['select-checklist-options'],
-            (tf, colIndex, values) => this.selectOptions(colIndex, values)
-        );
-
-        this.emitter.on(['rows-changed'], () => this.refreshAll());
-
-        this.emitter.on(['after-filtering'], () => this.linkFilters());
+        this.emitter.on(['build-checklist-filter'],
+            this.onBuildChecklistFilter);
+        this.emitter.on(['select-checklist-options'],
+            this.onSelectChecklistOptions);
+        this.emitter.on(['rows-changed'], this.onRowsChanged);
+        this.emitter.on(['after-filtering'], this.onAfterFiltering);
 
         /** @inherited */
         this.initialized = true;
@@ -804,16 +807,20 @@ export class CheckList extends BaseDropdown {
      * Destroy CheckList instance
      */
     destroy() {
-        this.emitter.off(
-            ['build-checklist-filter'],
-            (tf, colIndex, isLinked) => this.build(colIndex, isLinked)
-        );
-        this.emitter.off(
-            ['select-checklist-options'],
-            (tf, colIndex, values) => this.selectOptions(colIndex, values)
-        );
-        this.emitter.off(['rows-changed'], () => this.refreshAll());
-        this.emitter.off(['after-filtering'], () => this.linkFilters());
+        if (this.onBuildChecklistFilter) {
+            this.emitter.off(['build-checklist-filter'],
+                this.onBuildChecklistFilter);
+        }
+        if (this.onSelectChecklistOptions) {
+            this.emitter.off(['select-checklist-options'],
+                this.onSelectChecklistOptions);
+        }
+        if (this.onRowsChanged) {
+            this.emitter.off(['rows-changed'], this.onRowsChanged);
+        }
+        if (this.onAfterFiltering) {
+            this.emitter.off(['after-filtering'], this.onAfterFiltering);
+        }
 
         this.destroyCE();
 
