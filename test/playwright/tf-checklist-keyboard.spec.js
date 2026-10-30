@@ -177,7 +177,10 @@ test.describe('tf-checklist keyboard', () => {
             'aria-activedescendant');
         expect(typeof activeDesc).toBe('string');
         expect(activeDesc.length).toBeGreaterThan(0);
-        await listbox.focusout();
+        await trigger.focus();
+        const activeDescAfter = await listbox.getAttribute(
+            'aria-activedescendant');
+        expect(activeDescAfter).toBeNull();
     });
 
     test('state cleared on close and reopen', async ({ page }) => {
