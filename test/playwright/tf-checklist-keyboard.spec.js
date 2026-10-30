@@ -138,7 +138,7 @@ test.describe('tf-checklist keyboard', () => {
     });
 });
 
-test('type-ahead skips disabled option (review feedback)', async ({ page }) => {
+test('type-ahead skips disabled option', async ({ page }) => {
     await page.goto(FIXTURE);
     await page.evaluate(async (c) => {
         await import(c);
