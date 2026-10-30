@@ -270,15 +270,32 @@ export class CheckList extends BaseDropdown {
      * @param  {DOMElement} container  Dom element containing the filter
      */
     init(colIndex, isExternal, container) {
-        // Store stable handler refs so `destroy()` removes the right
-        // listeners (the emitter keys on function identity).
-        this.onBuildChecklistFilter =
-            (tf, colIndex, isLinked) => this.build(colIndex, isLinked);
-        this.onSelectChecklistOptions =
-            (tf, colIndex, values) =>
-                this.selectOptions(colIndex, values);
-        this.onRowsChanged = () => this.refreshAll();
-        this.onAfterFiltering = () => this.linkFilters();
+        // `init()` runs per checklist column (tablefilter.js:1009-1010),
+        // but the feature instance is shared and its emitter handlers are
+        // only registered on the first call; structural per-column setup
+        // (initCE/initLegacy) still runs every call.
+        if (!this.initialized) {
+            // Store stable handler refs so `destroy()` removes the right
+            // listeners (the emitter keys on function identity).
+            this.onBuildChecklistFilter =
+                (tf, colIndex, isLinked) =>
+                    this.build(colIndex, isLinked);
+            this.onSelectChecklistOptions =
+                (tf, colIndex, values) =>
+                    this.selectOptions(colIndex, values);
+            this.onRowsChanged = () => this.refreshAll();
+            this.onAfterFiltering = () => this.linkFilters();
+
+            this.emitter.on(['build-checklist-filter'],
+                this.onBuildChecklistFilter);
+            this.emitter.on(['select-checklist-options'],
+                this.onSelectChecklistOptions);
+            this.emitter.on(['rows-changed'], this.onRowsChanged);
+            this.emitter.on(['after-filtering'], this.onAfterFiltering);
+
+            /** @inherited */
+            this.initialized = true;
+        }
 
         // Bridge to <tf-checklist> (#930). The element is used when the
         // source registers it (Vite / module load); otherwise the legacy
@@ -291,16 +308,6 @@ export class CheckList extends BaseDropdown {
         } else {
             this.initLegacy(colIndex, isExternal, container);
         }
-
-        this.emitter.on(['build-checklist-filter'],
-            this.onBuildChecklistFilter);
-        this.emitter.on(['select-checklist-options'],
-            this.onSelectChecklistOptions);
-        this.emitter.on(['rows-changed'], this.onRowsChanged);
-        this.emitter.on(['after-filtering'], this.onAfterFiltering);
-
-        /** @inherited */
-        this.initialized = true;
     }
 
     /**

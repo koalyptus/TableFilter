@@ -1871,3 +1871,50 @@ test('checklist bridge works with grid layout', async ({ page }) => {
     expect(result.filtered.visible).toBe(1);
     expect(result.leftovers).toBe(true);
 });
+
+test('checklist bridge teardown is clean with two columns', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountChecklist('ce-checklist-multi', {
+            col_0: 'checklist', col_1: 'checklist'
+        }, html);
+        const cities = window.checklistHost(tf, 0);
+        const countries = window.checklistHost(tf, 1);
+
+        // Interaction with either column filters the rows once.
+        window.checklistOption(cities, 'Paris').click();
+        const afterPick = Array.from(
+            document.querySelectorAll('#ce-checklist-multi tbody tr')
+        ).filter((row) => row.offsetParent !== null).length;
+
+        const statusBefore = tf.emitter.events['after-filtering'].length;
+
+        tf.destroy();
+        const destroyed = !cities.isConnected && !countries.isConnected;
+        const statusAfterDestroy = tf.emitter.events['after-filtering'].length;
+
+        tf.init();
+        const citiesNext = window.checklistHost(tf, 0);
+        const countriesNext = window.checklistHost(tf, 1);
+        window.checklistOption(citiesNext, 'Lyon').click();
+        const afterReinit = Array.from(
+            document.querySelectorAll('#ce-checklist-multi tbody tr')
+        ).filter((row) => row.offsetParent !== null).length;
+
+        tf.destroy();
+        return {
+            afterPick, statusBefore, statusAfterDestroy, destroyed,
+            remounted: citiesNext !== cities && countriesNext !== countries,
+            afterReinit
+        };
+    }, CHECKLIST_TABLE_HTML);
+
+    expect(result.afterPick).toBe(1);
+    expect(result.destroyed).toBe(true);
+    expect(result.statusBefore).toBe(1);
+    expect(result.statusAfterDestroy).toBe(0);
+    expect(result.remounted).toBe(true);
+    expect(result.afterReinit).toBe(1);
+});
