@@ -111,6 +111,12 @@ export class TfChecklistElement extends HTMLElement {
             this._onTriggerKeydown(evt));
         this._listbox.addEventListener('keydown', (evt) =>
             this._onListboxKeydown(evt));
+        this._listbox.addEventListener('focusin', () => {
+            this._updateActiveDescendant();
+        });
+        this._listbox.addEventListener('focusout', () => {
+            this._listbox.removeAttribute('aria-activedescendant');
+        });
     }
 
     static get observedAttributes() {
@@ -319,7 +325,6 @@ export class TfChecklistElement extends HTMLElement {
                 const first = enabled[0] || this._optionEls[0];
                 if (first) {
                     first.focus();
-                    this._updateActiveDescendant();
                 }
             }
         }
@@ -351,7 +356,6 @@ export class TfChecklistElement extends HTMLElement {
                 const next = options[index + 1] || options[0];
                 if (next) {
                     next.focus();
-                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -361,7 +365,6 @@ export class TfChecklistElement extends HTMLElement {
                     options[options.length - 1];
                 if (prev) {
                     prev.focus();
-                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -369,7 +372,6 @@ export class TfChecklistElement extends HTMLElement {
                 evt.preventDefault();
                 if (options[0]) {
                     options[0].focus();
-                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -377,7 +379,6 @@ export class TfChecklistElement extends HTMLElement {
                 evt.preventDefault();
                 if (options[options.length - 1]) {
                     options[options.length - 1].focus();
-                    this._updateActiveDescendant();
                 }
                 break;
             }
@@ -412,7 +413,6 @@ export class TfChecklistElement extends HTMLElement {
                                 composed: true
                             }));
                         this._trigger.focus();
-                        this._updateActiveDescendant();
                     }
                 }
                 break;
@@ -427,7 +427,6 @@ export class TfChecklistElement extends HTMLElement {
                     composed: true
                 }));
                 this._trigger.focus();
-                this._updateActiveDescendant();
                 break;
             }
             default: {
@@ -441,11 +440,11 @@ export class TfChecklistElement extends HTMLElement {
                             this._searchString = '';
                         }, 500);
                     const focused = this.shadowRoot.activeElement;
-                    const startIndex = focused &&
-                        focused.hasAttribute('data-index') ?
-                        Number(focused.getAttribute('data-index')) + 1 : 0;
                     const enabledEls = this._optionEls.filter(
                         el => el.getAttribute('aria-disabled') !== 'true');
+                    const startIndex = focused &&
+                        enabledEls.indexOf(focused) >= 0 ?
+                        enabledEls.indexOf(focused) + 1 : 0;
                     const match = enabledEls.slice(
                         startIndex).find(el => {
                         if (!el.hasAttribute('data-index')) {
@@ -468,7 +467,6 @@ export class TfChecklistElement extends HTMLElement {
                     });
                     if (match) {
                         match.focus();
-                        this._updateActiveDescendant();
                     }
                 }
                 break;
@@ -545,6 +543,7 @@ export class TfChecklistElement extends HTMLElement {
             this._updateActiveDescendant();
         } else {
             this._listbox.setAttribute('hidden', '');
+            this._listbox.removeAttribute('aria-activedescendant');
         }
     }
 

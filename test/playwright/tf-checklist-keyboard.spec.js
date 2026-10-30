@@ -137,3 +137,24 @@ test.describe('tf-checklist keyboard', () => {
         expect(expanded).toBe('false');
     });
 });
+
+test('type-ahead skips disabled option (review feedback)', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.evaluate(async (c) => {
+        await import(c);
+        const el = document.createElement('tf-checklist');
+        document.body.appendChild(el);
+        el.setOptions([
+            { value: 'd', text: 'disabled', disabled: true },
+            { value: 'a', text: 'apple' },
+        ]);
+    }, COMPONENT);
+    const trigger = page.locator('tf-checklist button[part="trigger"]');
+    await trigger.waitFor({ state: 'attached' });
+    await trigger.focus();
+    await trigger.press('ArrowDown');
+    await page.keyboard.press('d');
+    const listbox = page.locator('tf-checklist [part="listbox"]');
+    const activeDesc = await listbox.getAttribute('aria-activedescendant');
+    expect(activeDesc || '').not.toContain('option-0');
+});
