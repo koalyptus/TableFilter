@@ -136,25 +136,70 @@ test.describe('tf-checklist keyboard', () => {
         const expanded = await trigger.getAttribute('aria-expanded');
         expect(expanded).toBe('false');
     });
-});
 
-test('type-ahead skips disabled option', async ({ page }) => {
-    await page.goto(FIXTURE);
-    await page.evaluate(async (c) => {
-        await import(c);
-        const el = document.createElement('tf-checklist');
-        document.body.appendChild(el);
-        el.setOptions([
-            { value: 'd', text: 'disabled', disabled: true },
-            { value: 'a', text: 'apple' },
-        ]);
-    }, COMPONENT);
-    const trigger = page.locator('tf-checklist button[part="trigger"]');
-    await trigger.waitFor({ state: 'attached' });
-    await trigger.focus();
-    await trigger.press('ArrowDown');
-    await page.keyboard.press('d');
-    const listbox = page.locator('tf-checklist [part="listbox"]');
-    const activeDesc = await listbox.getAttribute('aria-activedescendant');
-    expect(activeDesc || '').not.toContain('option-0');
+    test('type-ahead startIndex after disabled options', async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.evaluate(async (c) => {
+            await import(c);
+            const el = document.createElement('tf-checklist');
+            document.body.appendChild(el);
+            el.setOptions([
+                { value: 'd', text: 'disabled', disabled: true },
+                { value: 'a', text: 'apple' },
+                { value: 'b', text: 'bear' },
+            ]);
+        }, COMPONENT);
+        const trigger = page.locator(
+            'tf-checklist button[part="trigger"]');
+        await trigger.waitFor({ state: 'attached' });
+        await trigger.focus();
+        await trigger.press('ArrowDown');
+        await page.keyboard.press('b');
+        const listbox = page.locator('tf-checklist [part="listbox"]');
+        const activeDesc = await listbox.getAttribute('aria-activedescendant');
+        expect(activeDesc).toContain('option-2');
+    });
+
+    test('aria-activedescendant syncs on focusin and clears on focusout', async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.evaluate(async (c) => {
+            await import(c);
+            const el = document.createElement('tf-checklist');
+            document.body.appendChild(el);
+            el.setOptions(['apple', 'banana']);
+        }, COMPONENT);
+        const trigger = page.locator(
+            'tf-checklist button[part="trigger"]');
+        await trigger.focus();
+        await trigger.press('ArrowDown');
+        const listbox = page.locator('tf-checklist [part="listbox"]');
+        const activeDesc = await listbox.getAttribute('aria-activedescendant');
+        expect(typeof activeDesc).toBe('string');
+        expect(activeDesc.length).toBeGreaterThan(0);
+        await listbox.focusout();
+        const activeDescAfter = await listbox.getAttribute('aria-activedescendant');
+        expect(activeDescAfter).toBeNull();
+    });
+
+    test('state cleared on close and reopen', async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.evaluate(async (c) => {
+            await import(c);
+            const el = document.createElement('tf-checklist');
+            document.body.appendChild(el);
+            el.setOptions(['a', 'b']);
+        }, COMPONENT);
+        const trigger = page.locator('tf-checklist button[part="trigger"]');
+        await trigger.focus();
+        await trigger.press('ArrowDown');
+        const listbox = page.locator('tf-checklist [part="listbox"]');
+        const activeDescBefore = await listbox.getAttribute('aria-activedescendant');
+        expect(typeof activeDescBefore).toBe('string');
+        await trigger.press('Escape');
+        const activeDescAfter = await listbox.getAttribute('aria-activedescendant');
+        expect(activeDescAfter).toBeNull();
+        await trigger.press('ArrowDown');
+        const activeDescAfterReopen = await listbox.getAttribute('aria-activedescendant');
+        expect(activeDescAfterReopen).toBeNull();
+    });
 });
