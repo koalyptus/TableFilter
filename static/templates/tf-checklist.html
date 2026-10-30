@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{NAME} v{VERSION} - Web Components Checklist Demo</title>
+    <!-- @import partials/style.html -->
+</head>
+<body>
+<h1>{NAME} v{VERSION}</h1>
+<h2>Web components checklist demo</h2>
+<p>
+    The checklist filter of the first column is rendered through the
+    <code>&lt;tf-checklist&gt;</code> custom element (#930) instead of the
+    legacy div/ul/li structure. The second column keeps a drop-down filter.
+</p>
+
+<!-- @import partials/pre.html -->
+<!-- @import partials/countries-table.html -->
+
+<!-- @import partials/tablefilter-vite-script.html -->
+<!-- TODO(#965): the element is absent from both published bundles, so
+     the page imports it from source; `type="module"` is deferred, so
+     init waits for the registration. Both go away once the bundle
+     registers <tf-checklist>. -->
+<script type="module" src="../src/components/tf-checklist.js"></script>
+<script data-config>
+    var filtersConfig = {
+        base_path: '../dist/tablefilter/',
+        col_0: 'checklist',
+        col_1: 'select',
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        status_bar: true
+    };
+
+    customElements.whenDefined('tf-checklist').then(function () {
+        var tf = new TableFilter('demo', filtersConfig);
+        tf.init();
+    });
+</script>
+<!-- @import partials/pre-inline-script.html -->
+</body>
+</html>
