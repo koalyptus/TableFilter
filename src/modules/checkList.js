@@ -814,20 +814,12 @@ export class CheckList extends BaseDropdown {
      * Destroy CheckList instance
      */
     destroy() {
-        if (this.onBuildChecklistFilter) {
-            this.emitter.off(['build-checklist-filter'],
-                this.onBuildChecklistFilter);
-        }
-        if (this.onSelectChecklistOptions) {
-            this.emitter.off(['select-checklist-options'],
-                this.onSelectChecklistOptions);
-        }
-        if (this.onRowsChanged) {
-            this.emitter.off(['rows-changed'], this.onRowsChanged);
-        }
-        if (this.onAfterFiltering) {
-            this.emitter.off(['after-filtering'], this.onAfterFiltering);
-        }
+        this.emitter.off(['build-checklist-filter'],
+            this.onBuildChecklistFilter);
+        this.emitter.off(['select-checklist-options'],
+            this.onSelectChecklistOptions);
+        this.emitter.off(['rows-changed'], this.onRowsChanged);
+        this.emitter.off(['after-filtering'], this.onAfterFiltering);
 
         this.destroyCE();
 
