@@ -814,6 +814,9 @@ export class CheckList extends BaseDropdown {
      * Destroy CheckList instance
      */
     destroy() {
+        if (!this.initialized) {
+            return;
+        }
         this.emitter.off(['build-checklist-filter'],
             this.onBuildChecklistFilter);
         this.emitter.off(['select-checklist-options'],
