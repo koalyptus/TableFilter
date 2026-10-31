@@ -49,5 +49,10 @@ with `NODE_OPTIONS=--openssl-legacy-provider`. Match that locally.
 
 ## Versioning
 
-Do not bump the `package.json` version in feature PRs. Versions change only in
-the milestone "Release vX.Y.Z" issue.
+Feature PRs do not bump the version by default: the normal channel is the
+milestone "Release vX.Y.Z" issue. A patch bump is appropriate only as part
+of a PR that impacts the tracked legacy production bundle
+(`dist/tablefilter/tablefilter.js`), such as edits to `src/modules/*.js`
+that change runtime behaviour. When that applies, bump `package.json`,
+`package-lock.json` and `dist/starter.html` in the same PR and record the
+bump in the PR body.

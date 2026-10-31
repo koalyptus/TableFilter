@@ -1201,3 +1201,758 @@ test('paging bridge emits page-change and the legacy page events',
         expect(result.before).toEqual([2, 3]);
         expect(result.after).toEqual([2, 3]);
     });
+
+// Checklist bridge (#930): the feature routes through <tf-checklist>
+// when the source registers it, so the options, selection state and
+// open state live in the element while the feature keeps the filtering,
+// linked-filter and load-on-demand behaviour. Each test asserts the host
+// and that interaction still reaches TableFilter.
+const CHECKLIST_TABLE_HTML =
+    '<thead><tr><th>City</th><th>Country</th></tr></thead>' +
+    '<tbody>' +
+    '<tr><td>Sydney</td><td>Australia</td></tr>' +
+    '<tr><td>Perth</td><td>Australia</td></tr>' +
+    '<tr><td>Paris</td><td>France</td></tr>' +
+    '<tr><td>Lyon</td><td>France</td></tr>' +
+    '</tbody>';
+
+const CHECKLIST_MOUNT = `
+window.checklistHost = function (tf, col) {
+    return tf.feature('checkList').containers[col];
+};
+window.checklistOptions = function (host) {
+    return Array.from(host.shadowRoot.querySelectorAll('[part~="option"]'))
+        .map(function (el) {
+            return {
+                text: el.querySelector('[part="option-text"]').textContent,
+                selected: el.getAttribute('aria-selected'),
+                disabled: el.getAttribute('aria-disabled')
+            };
+        });
+};
+window.checklistOption = function (host, text) {
+    return Array.from(host.shadowRoot.querySelectorAll('[part~="option"]'))
+        .find(function (el) {
+            const label = el.querySelector('[part="option-text"]');
+            return label.textContent === text;
+        });
+};
+window.checklistTrigger = function (host) {
+    return host.shadowRoot.querySelector('[part="trigger"]');
+};
+window.visibleRows = function (tableId) {
+    return Array.from(document.querySelectorAll('#' + tableId + ' tbody tr'))
+        .filter(function (row) { return row.style.display !== 'none'; })
+        .length;
+};
+window.mountChecklist = async function (id, config, html) {
+    await import('/src/components/tf-checklist.js');
+    const table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = html;
+    document.body.appendChild(table);
+    const tf = new TableFilter(id, Object.assign({
+        base_path: '/dist/tablefilter/'
+    }, config));
+    tf.init();
+    window.tf = tf;
+    return tf;
+};
+`;
+
+test('checklist bridge uses tf-checklist with the legacy config',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist',
+                { col_0: 'checklist' }, html);
+            const checkList = tf.feature('checkList');
+            const host = window.checklistHost(tf, 0);
+            const sr = host.shadowRoot;
+
+            const state = {
+                isCE: Boolean(host) && host.nodeName === 'TF-CHECKLIST',
+                id: host.id,
+                col: host.getAttribute('col'),
+                className: host.className,
+                filterId: tf.getFilterId(0),
+                byType: tf.getFiltersByType('checklist'),
+                byTypeIdx: tf.getFiltersByType('checklist', true),
+                filterElement: tf.getFilterElement(0) === host,
+                triggerText: host.getAttribute('trigger-text'),
+                listboxLabel: host.getAttribute('listbox-label'),
+                parts: ['trigger', 'listbox'].map((name) =>
+                    Boolean(sr.querySelector(`[part="${name}"]`))),
+                options: window.checklistOptions(host),
+                legacy: host.parentElement.querySelectorAll(
+                    'div.div_checklist, ul.flt_checklist').length
+            };
+
+            tf.destroy();
+            return Object.assign(state, {
+                removed: !host.isConnected,
+                initialized: checkList.initialized
+            });
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.id).toBe('flt0_ce-checklist');
+        expect(result.col).toBe('0');
+        expect(result.className).toBe('div_checklist');
+        expect(result.filterId).toBe(result.id);
+        expect(result.byType).toEqual([result.id]);
+        expect(result.byTypeIdx).toEqual([0]);
+        expect(result.filterElement).toBe(true);
+        expect(result.triggerText).toBe('City');
+        expect(result.listboxLabel).toBe('City options');
+        expect(result.parts).toEqual([true, true]);
+        expect(result.options).toEqual([
+            { text: 'Clear', selected: 'false', disabled: null },
+            { text: 'Lyon', selected: 'false', disabled: null },
+            { text: 'Paris', selected: 'false', disabled: null },
+            { text: 'Perth', selected: 'false', disabled: null },
+            { text: 'Sydney', selected: 'false', disabled: null }
+        ]);
+        expect(result.legacy).toBe(0);
+        expect(result.removed).toBe(true);
+        expect(result.initialized).toBe(false);
+    });
+
+test('checklist bridge filters the table from an option click',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist-click',
+                { col_0: 'checklist' }, html);
+            const host = window.checklistHost(tf, 0);
+            const active = [];
+
+            tf.emitter.on(['filter-focus'],
+                (inst, filter) => active.push(filter.id));
+
+            window.checklistOption(host, 'Perth').click();
+            const state = {
+                values: tf.feature('checkList').getValues(0),
+                filterValue: tf.getFilterValue(0),
+                visible: window.visibleRows('ce-checklist-click'),
+                triggerText: host.getAttribute('trigger-text'),
+                selected: window.checklistOptions(host)
+                    .filter((option) => option.selected === 'true')
+                    .map((option) => option.text),
+                active: active.slice()
+            };
+
+            // A second pick widens the filter with an OR condition.
+            window.checklistOption(host, 'Paris').click();
+            state.twoValues = tf.getFilterValue(0);
+            state.twoVisible = window.visibleRows('ce-checklist-click');
+            state.twoTrigger = host.getAttribute('trigger-text');
+
+            tf.destroy();
+            return state;
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.values).toEqual(['Perth']);
+        expect(result.filterValue).toEqual(['Perth']);
+        expect(result.visible).toBe(1);
+        expect(result.triggerText).toBe('City (1)');
+        expect(result.selected).toEqual(['Perth']);
+        expect(result.active).toEqual(['flt0_ce-checklist-click']);
+        expect(result.twoValues).toEqual(['Paris', 'Perth']);
+        expect(result.twoVisible).toBe(2);
+        expect(result.twoTrigger).toBe('City (2)');
+    });
+
+test('checklist bridge keeps the reset option exclusive',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist-reset',
+                { col_0: 'checklist' }, html);
+            const host = window.checklistHost(tf, 0);
+
+            window.checklistOption(host, 'Sydney').click();
+            window.checklistOption(host, 'Perth').click();
+            const selected = window.checklistOptions(host)
+                .filter((option) => option.selected === 'true')
+                .map((option) => option.text);
+
+            window.checklistOption(host, 'Clear').click();
+            const afterReset = {
+                values: tf.feature('checkList').getValues(0),
+                filterValue: tf.getFilterValue(0),
+                visible: window.visibleRows('ce-checklist-reset'),
+                selected: window.checklistOptions(host)
+                    .filter((option) => option.selected === 'true')
+                    .map((option) => option.text)
+            };
+
+            // A pick after the reset unselects the reset option.
+            window.checklistOption(host, 'Paris').click();
+            const afterPick = {
+                values: tf.feature('checkList').getValues(0),
+                selected: window.checklistOptions(host)
+                    .filter((option) => option.selected === 'true')
+                    .map((option) => option.text)
+            };
+
+            tf.destroy();
+            return { selected, afterReset, afterPick };
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.selected).toEqual(['Perth', 'Sydney']);
+        expect(result.afterReset).toEqual({
+            values: [''],
+            filterValue: '',
+            visible: 4,
+            selected: ['Clear']
+        });
+        expect(result.afterPick).toEqual({
+            values: ['Paris'],
+            selected: ['Paris']
+        });
+    });
+
+test('checklist bridge maps selectOptions, setFilterValue and getValues',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist-api',
+                { col_0: 'checklist' }, html);
+            const checkList = tf.feature('checkList');
+            const host = window.checklistHost(tf, 0);
+
+            checkList.selectOptions(0, ['Perth', 'Sydney']);
+            const selected = {
+                values: checkList.getValues(0),
+                selected: window.checklistOptions(host)
+                    .filter((option) => option.selected === 'true')
+                    .map((option) => option.text)
+            };
+
+            tf.setFilterValue(0, 'Sydney');
+            const single = {
+                value: tf.getFilterValue(0),
+                selected: window.checklistOptions(host)
+                    .filter((option) => option.selected === 'true')
+                    .map((option) => option.text)
+            };
+
+            tf.setFilterValue(0, 'sydney || perth');
+            const orString = checkList.getValues(0);
+
+            tf.clearFilters();
+            const cleared = {
+                values: checkList.getValues(0),
+                filterValue: tf.getFilterValue(0),
+                selected: window.checklistOptions(host)
+                    .filter((option) => option.selected === 'true').length
+            };
+
+            tf.destroy();
+            return { selected, single, orString, cleared };
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.selected).toEqual({
+            values: ['Perth', 'Sydney'],
+            selected: ['Perth', 'Sydney']
+        });
+        expect(result.single).toEqual({
+            value: ['Sydney'],
+            selected: ['Sydney']
+        });
+        expect(result.orString).toEqual(['Perth', 'Sydney']);
+        expect(result.cleared).toEqual({
+            values: [''],
+            filterValue: '',
+            selected: 0
+        });
+    });
+
+test('checklist bridge maps empty, non-empty and reset text options',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const tableHtml =
+            '<thead><tr><th>City</th></tr></thead>' +
+            '<tbody>' +
+            '<tr><td>Sydney</td></tr>' +
+            '<tr><td></td></tr>' +
+            '</tbody>';
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist-empty', {
+                col_0: 'checklist',
+                enable_empty_option: true,
+                enable_non_empty_option: true,
+                clear_filter_text: 'Reset city'
+            }, html);
+            const checkList = tf.feature('checkList');
+            const host = window.checklistHost(tf, 0);
+
+            const options = window.checklistOptions(host);
+            checkList.selectOptions(0, [tf.emOperator, tf.nmOperator]);
+            const operators = {
+                values: checkList.getValues(0),
+                visible: window.visibleRows('ce-checklist-empty')
+            };
+
+            window.checklistOption(host, 'Reset city').click();
+            const resetText = window.checklistOptions(host)
+                .map((option) => option.text);
+
+            tf.destroy();
+            return { options, operators, resetText };
+        }, tableHtml);
+
+        expect(result.options.map((option) => option.text)).toEqual([
+            'Reset city', '(Empty)', '(Non empty)', 'Sydney'
+        ]);
+        expect(result.operators.values).toEqual(['[empty]', '[nonempty]']);
+        expect(result.operators.visible).toBe(2);
+        expect(result.resetText).toEqual([
+            'Reset city', '(Empty)', '(Non empty)', 'Sydney'
+        ]);
+    });
+
+test('checklist bridge renders custom options and sorted values',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist-custom', {
+                col_0: 'checklist',
+                custom_options: {
+                    cols: [0],
+                    values: [['syd', 'per', 'par']],
+                    texts: [['Sydney', 'Perth', 'Paris']],
+                    sorts: [true]
+                }
+            }, html);
+            const host = window.checklistHost(tf, 0);
+
+            const custom = window.checklistOptions(host)
+                .map((option) => option.text);
+
+            // A non-custom column sorts its options from the cells.
+            tf.destroy();
+            const tf2 = await window.mountChecklist('ce-checklist-sorted', {
+                col_0: 'checklist',
+                sort_filter_options_desc: [0]
+            }, html);
+            const sorted = window.checklistOptions(
+                window.checklistHost(tf2, 0)).map((option) => option.text);
+
+            tf2.destroy();
+            return { custom, sorted };
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.custom).toEqual([
+            'Clear', 'Paris', 'Perth', 'Sydney'
+        ]);
+        expect(result.sorted).toEqual([
+            'Clear', 'Sydney', 'Perth', 'Paris', 'Lyon'
+        ]);
+    });
+
+test('checklist bridge disables options excluded by linked filters',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist-linked', {
+                col_0: 'checklist',
+                col_1: 'checklist',
+                linked_filters: true,
+                disable_excluded_options: true
+            }, html);
+            const city = window.checklistHost(tf, 0);
+            const country = window.checklistHost(tf, 1);
+
+            window.checklistOption(country, 'France').click();
+            const state = {
+                cities: window.checklistOptions(city)
+                    .map((option) => [option.text, option.disabled]),
+                countries: window.checklistOptions(country)
+                    .map((option) => [option.text, option.selected])
+            };
+
+            window.checklistOption(city, 'Sydney').click();
+            state.afterDisabledClick = tf.feature('checkList').getValues(0);
+
+            window.checklistOption(city, 'Paris').click();
+            state.afterEnabledClick = tf.feature('checkList').getValues(0);
+
+            tf.destroy();
+            return state;
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.cities).toEqual([
+            ['Clear', null],
+            ['Lyon', null],
+            ['Paris', null],
+            ['Perth', 'true'],
+            ['Sydney', 'true']
+        ]);
+        expect(result.countries).toEqual([
+            ['Clear', 'false'],
+            ['Australia', 'false'],
+            ['France', 'true']
+        ]);
+        expect(result.afterDisabledClick).toEqual(['']);
+        expect(result.afterEnabledClick).toEqual(['Paris']);
+    });
+
+test('checklist bridge mounts into external filters',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const external = document.createElement('div');
+            external.id = 'ce-checklist-external';
+            document.body.appendChild(external);
+
+            const tf = await window.mountChecklist('ce-checklist-ext', {
+                col_0: 'checklist',
+                external_flt_ids: ['ce-checklist-external']
+            }, html);
+            const host = window.checklistHost(tf, 0);
+
+            const state = {
+                mounted: host.parentElement === external,
+                externalEmpty: external.children.length
+            };
+
+            tf.destroy();
+            return Object.assign(state, {
+                removed: !host.isConnected,
+                externalAfter: external.children.length
+            });
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.mounted).toBe(true);
+        expect(result.externalEmpty).toBe(1);
+        expect(result.removed).toBe(true);
+        expect(result.externalAfter).toBe(0);
+    });
+
+test('checklist bridge builds on demand from the open state',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountChecklist('ce-checklist-demand', {
+                col_0: 'checklist',
+                load_filters_on_demand: true,
+                activate_checklist_text: 'Load cities'
+            }, html);
+            const host = window.checklistHost(tf, 0);
+
+            const before = {
+                triggerText: host.getAttribute('trigger-text'),
+                listboxLabel: host.getAttribute('listbox-label'),
+                filled: host.getAttribute('filled'),
+                options: window.checklistOptions(host).length
+            };
+
+            window.checklistTrigger(host).click();
+            const after = {
+                open: host.hasAttribute('open'),
+                filled: host.getAttribute('filled'),
+                triggerText: host.getAttribute('trigger-text'),
+                options: window.checklistOptions(host)
+                    .map((option) => option.text)
+            };
+
+            window.checklistOption(host, 'Perth').click();
+            const filtered = {
+                values: tf.feature('checkList').getValues(0),
+                visible: window.visibleRows('ce-checklist-demand')
+            };
+
+            tf.destroy();
+            return { before, after, filtered };
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.before).toEqual({
+            triggerText: 'Load cities',
+            listboxLabel: 'Load cities options',
+            filled: null,
+            options: 0
+        });
+        expect(result.after).toEqual({
+            open: true,
+            filled: '1',
+            triggerText: 'City',
+            options: ['Clear', 'Lyon', 'Paris', 'Perth', 'Sydney']
+        });
+        expect(result.filtered).toEqual({
+            values: ['Perth'],
+            visible: 1
+        });
+    });
+
+test('checklist bridge falls back to the legacy markup without the element',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (html) => {
+            const table = document.createElement('table');
+            table.id = 'ce-checklist-legacy';
+            table.innerHTML = html;
+            document.body.appendChild(table);
+
+            const tf = new TableFilter('ce-checklist-legacy', {
+                base_path: '/dist/tablefilter/',
+                col_0: 'checklist'
+            });
+            tf.init();
+
+            const checkList = tf.feature('checkList');
+            const container = checkList.containers[0];
+            const ul = tf.getFilterElement(0);
+            const state = {
+                registered: Boolean(customElements.get('tf-checklist')),
+                containerTag: container.nodeName,
+                containerId: container.id,
+                ulTag: ul ? ul.nodeName : null,
+                options: ul ? ul.querySelectorAll('li').length : 0,
+                values: checkList.getValues(0)
+            };
+
+            tf.destroy();
+            return state;
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.registered).toBe(false);
+        expect(result.containerTag).toBe('DIV');
+        expect(result.containerId).toBe('chkdiv_0_ce-checklist-legacy');
+        expect(result.ulTag).toBe('UL');
+        expect(result.options).toBe(5);
+        expect(result.values).toEqual(['']);
+    });
+
+test('checklist bridge instances are independent and re-init mounts one',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tfA = await window.mountChecklist('ce-checklist-a',
+                { col_0: 'checklist' }, html);
+            const hostA = window.checklistHost(tfA, 0);
+            const tfB = await window.mountChecklist('ce-checklist-b',
+                { col_0: 'checklist' }, html);
+            const hostB = window.checklistHost(tfB, 0);
+
+            window.checklistOption(hostA, 'Perth').click();
+            const picked = {
+                a: tfA.feature('checkList').getValues(0),
+                b: tfB.feature('checkList').getValues(0),
+                distinct: hostA !== hostB
+            };
+
+            tfA.destroy();
+            const removed = !hostA.isConnected;
+            tfA.init();
+            const remounted = window.checklistHost(tfA, 0);
+            const hosts = remounted.parentElement
+                .querySelectorAll('tf-checklist').length;
+
+            tfA.destroy();
+            tfB.destroy();
+            return { picked, removed, hosts, remounted: remounted !== hostA };
+        }, CHECKLIST_TABLE_HTML);
+
+        expect(result.picked).toEqual({
+            a: ['Perth'],
+            b: [''],
+            distinct: true
+        });
+        expect(result.removed).toBe(true);
+        expect(result.hosts).toBe(1);
+        expect(result.remounted).toBe(true);
+    });
+
+test('checklist bridge keeps case-sensitive option values distinct',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+        const html =
+            '<thead><tr><th>City</th></tr></thead>' +
+            '<tbody>' +
+            '<tr><td>Paris</td></tr>' +
+            '<tr><td>paris</td></tr>' +
+            '<tr><td>Lyon</td></tr>' +
+            '</tbody>';
+
+        const result = await page.evaluate(async (rawHtml) => {
+            const tf = await window.mountChecklist(
+                'ce-checklist-case', {
+                    col_0: 'checklist',
+                    case_sensitive: true
+                }, rawHtml);
+            const host = window.checklistHost(tf, 0);
+
+            const names = window.checklistOptions(host)
+                .map((option) => option.text);
+            const total = names.length; // includes Clear
+
+            // Case-insensitive mount: the two casing variants collapse.
+            const tf2 = await window.mountChecklist(
+                'ce-checklist-nocase', {
+                    col_0: 'checklist',
+                    case_sensitive: false
+                }, rawHtml);
+            const host2 = window.checklistHost(tf2, 0);
+            const names2 = window.checklistOptions(host2)
+                .map((option) => option.text);
+
+            tf.destroy();
+            tf2.destroy();
+            return { total, names, names2 };
+        }, html);
+
+        expect(result.total).toBe(4); // Clear, Lyon, Paris, paris
+        expect(result.names).toEqual(['Clear', 'Lyon', 'Paris', 'paris']);
+        expect(result.names2).toEqual(['Clear', 'Lyon', 'Paris']);
+    });
+
+test('checklist bridge works with grid layout', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountChecklist('ce-checklist-grid', {
+            col_0: 'checklist', grid_layout: true
+        }, html);
+        const host = window.checklistHost(tf, 0);
+
+        const before = {
+            isCE: host.nodeName === 'TF-CHECKLIST',
+            hostInDoc: host.isConnected,
+            className: host.className
+        };
+
+        window.checklistOption(host, 'Paris').click();
+
+        const filtered = {
+            values: tf.feature('checkList').getValues(0),
+            visible: Array.from(
+                document.querySelectorAll('#ce-checklist-grid tbody tr')
+            ).filter((row) => row.offsetParent !== null).length
+        };
+
+        const leftovers = document.querySelectorAll(
+            '#ce-checklist-grid').length === 1;
+
+        tf.destroy();
+        return { before, filtered, leftovers };
+    }, CHECKLIST_TABLE_HTML);
+
+    expect(result.before.isCE).toBe(true);
+    expect(result.before.hostInDoc).toBe(true);
+    expect(result.before.className).toBe('div_checklist');
+    expect(result.filtered.values).toEqual(['Paris']);
+    expect(result.filtered.visible).toBe(1);
+    expect(result.leftovers).toBe(true);
+});
+
+test('checklist bridge teardown is clean (two columns)', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountChecklist('ce-checklist-multi', {
+            col_0: 'checklist', col_1: 'checklist'
+        }, html);
+        const cities = window.checklistHost(tf, 0);
+        const countries = window.checklistHost(tf, 1);
+
+        // Interaction with either column filters the rows once.
+        window.checklistOption(cities, 'Paris').click();
+        const afterPick = Array.from(
+            document.querySelectorAll('#ce-checklist-multi tbody tr')
+        ).filter((row) => row.offsetParent !== null).length;
+
+        const statusBefore = tf.emitter.events['after-filtering'].length;
+
+        tf.destroy();
+        const destroyed = !cities.isConnected && !countries.isConnected;
+        const statusAfterDestroy = tf.emitter.events['after-filtering'].length;
+
+        tf.init();
+        const citiesNext = window.checklistHost(tf, 0);
+        const countriesNext = window.checklistHost(tf, 1);
+        window.checklistOption(citiesNext, 'Lyon').click();
+        const afterReinit = Array.from(
+            document.querySelectorAll('#ce-checklist-multi tbody tr')
+        ).filter((row) => row.offsetParent !== null).length;
+
+        tf.destroy();
+        return {
+            afterPick, statusBefore, statusAfterDestroy, destroyed,
+            remounted: citiesNext !== cities && countriesNext !== countries,
+            afterReinit
+        };
+    }, CHECKLIST_TABLE_HTML);
+
+    expect(result.afterPick).toBe(1);
+    expect(result.destroyed).toBe(true);
+    expect(result.statusBefore).toBe(1);
+    expect(result.statusAfterDestroy).toBe(0);
+    expect(result.remounted).toBe(true);
+    expect(result.afterReinit).toBe(1);
+});
+
+test('checklist destroy safe on uninitialized', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: CHECKLIST_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const table = document.createElement('table');
+        table.id = 'ce-checklist-uninit';
+        table.innerHTML = html;
+        document.body.appendChild(table);
+
+        const tf = new TableFilter('ce-checklist-uninit', {
+            base_path: '/dist/tablefilter/', col_0: 'checklist'
+        });
+
+        let threwOnFirst = null;
+        try {
+            tf.destroy();
+        } catch (error) {
+            threwOnFirst = error.message;
+        }
+
+        tf.init();
+        const host = window.checklistHost(tf, 0);
+        tf.destroy();
+        let threwOnSecond = null;
+        try {
+            tf.destroy();
+        } catch (error) {
+            threwOnSecond = error.message;
+        }
+        return { threwOnFirst, threwOnSecond, removed: !host.isConnected };
+    }, CHECKLIST_TABLE_HTML);
+
+    expect(result.threwOnFirst).toBeNull();
+    expect(result.threwOnSecond).toBeNull();
+    expect(result.removed).toBe(true);
+});
