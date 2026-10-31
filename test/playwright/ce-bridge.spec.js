@@ -1919,48 +1919,40 @@ test('checklist bridge teardown is clean (two columns)', async ({ page }) => {
     expect(result.afterReinit).toBe(1);
 });
 
-test('checklist bridge teardown clean with two cols', async ({ page }) => {
+test('checklist destroy safe on uninitialized', async ({ page }) => {
     await page.goto(FIXTURE);
     await page.addScriptTag({ content: CHECKLIST_MOUNT });
 
     const result = await page.evaluate(async (html) => {
-        const tf = await window.mountChecklist('ce-checklist-multi2', {
-            col_0: 'checklist', col_1: 'checklist'
-        }, html);
-        const cities = window.checklistHost(tf, 0);
-        const countries = window.checklistHost(tf, 1);
+        const table = document.createElement('table');
+        table.id = 'ce-checklist-uninit';
+        table.innerHTML = html;
+        document.body.appendChild(table);
 
-        window.checklistOption(cities, 'Paris').click();
-        const afterPick = Array.from(
-            document.querySelectorAll('#ce-checklist-multi2 tbody tr')
-        ).filter((row) => row.offsetParent !== null).length;
+        const tf = new TableFilter('ce-checklist-uninit', {
+            base_path: '/dist/tablefilter/', col_0: 'checklist'
+        });
 
-        const statusBefore = tf.emitter.events['after-filtering'].length;
-
-        tf.destroy();
-        const destroyed = !cities.isConnected && !countries.isConnected;
-        const statusAfter = tf.emitter.events['after-filtering'].length;
+        let threwOnFirst = null;
+        try {
+            tf.destroy();
+        } catch (error) {
+            threwOnFirst = error.message;
+        }
 
         tf.init();
-        const citiesNext = window.checklistHost(tf, 0);
-        const countriesNext = window.checklistHost(tf, 1);
-        window.checklistOption(citiesNext, 'Lyon').click();
-        const afterReinit = Array.from(
-            document.querySelectorAll('#ce-checklist-multi2 tbody tr')
-        ).filter((row) => row.offsetParent !== null).length;
-
+        const host = window.checklistHost(tf, 0);
         tf.destroy();
-        return {
-            afterPick, statusBefore, statusAfter, destroyed,
-            remounted: citiesNext !== cities && countriesNext !== countries,
-            afterReinit
-        };
+        let threwOnSecond = null;
+        try {
+            tf.destroy();
+        } catch (error) {
+            threwOnSecond = error.message;
+        }
+        return { threwOnFirst, threwOnSecond, removed: !host.isConnected };
     }, CHECKLIST_TABLE_HTML);
 
-    expect(result.afterPick).toBe(1);
-    expect(result.destroyed).toBe(true);
-    expect(result.statusBefore).toBe(1);
-    expect(result.statusAfter).toBe(0);
-    expect(result.remounted).toBe(true);
-    expect(result.afterReinit).toBe(1);
+    expect(result.threwOnFirst).toBeNull();
+    expect(result.threwOnSecond).toBeNull();
+    expect(result.removed).toBe(true);
 });
