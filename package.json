@@ -1,6 +1,6 @@
 {
   "name": "tablefilter",
-  "version": "0.7.7",
+  "version": "0.7.8",
   "description": "A Javascript library making HTML tables filterable and a bit more",
   "license": "MIT",
   "author": {
@@ -31,13 +31,14 @@
   "scripts": {
     "lint": "eslint src/**/*.js test/*.js test/playwright/*.js *.js",
     "lint:css-tokens": "node scripts/check-css-tokens.js",
-    "dev": "webpack --colors --config webpack.dev.config.js",
-    "build": "webpack --colors --config webpack.config.js",
+    "dev": "node scripts/with-legacy-openssl.js webpack --colors --config webpack.dev.config.js",
+    "build": "node scripts/with-legacy-openssl.js webpack --colors --config webpack.config.js",
     "build:css": "stylus -c static/style/tablefilter.styl -o dist/tablefilter/style && stylus -c static/style/extensions -o dist/tablefilter/style && stylus -c static/style/themes/default -o dist/tablefilter/style/themes/default && stylus -c static/style/themes/mytheme -o dist/tablefilter/style/themes/mytheme && stylus -c static/style/themes/skyblue -o dist/tablefilter/style/themes/skyblue  && stylus -c static/style/themes/transparent -o dist/tablefilter/style/themes/transparent",
     "build:demos": "grunt build-demos",
-    "build:test": "webpack --colors --config webpack.test.config.js",
+    "build:test": "node scripts/with-legacy-openssl.js webpack --colors --config webpack.test.config.js",
     "build:vite": "vite build",
-    "server": "webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
+    "serve:vite": "vite --port 8080 --strictPort",
+    "server": "node scripts/with-legacy-openssl.js webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
     "test": "grunt test",
     "test:playwright": "playwright test",
     "test:node-require": "node scripts/check-node-require.js",
