@@ -135,12 +135,13 @@ npm run build:demos
 ```
 then run the local webserver:
 ```shell
-npm start
+npm run serve:vite
 ```
 then pick a demo from:
 ```shell
 http://localhost:8080/demos/
 ```
+The legacy webpack dev server is still available with `npm start`.
 
 ## Documentation
 Find exhaustive documentation on the configuration options in the [WIKI](https://github.com/koalyptus/TableFilter/wiki) section.

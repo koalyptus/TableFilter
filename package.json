@@ -37,6 +37,7 @@
     "build:demos": "grunt build-demos",
     "build:test": "webpack --colors --config webpack.test.config.js",
     "build:vite": "vite build",
+    "serve:vite": "vite --port 8080 --strictPort",
     "server": "webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
     "test": "grunt test",
     "test:playwright": "playwright test",
