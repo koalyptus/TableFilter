@@ -115,6 +115,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
@@ -218,8 +221,10 @@ jobs:
       - name: Deploy documentation to S3
         run: aws s3 sync docs/ "s3://www.tablefilter.com/"
 
-      # tablefilter-website copies its checked-in tablefilter/ folder to the
-      # same S3 prefix from its own deploy workflow (#1066).
+      # Requires the WEBSITE_REPO_TOKEN secret: a fine-grained PAT with
+      # Contents read/write on koalyptus/tablefilter-website, allowed to push
+      # to master. tablefilter-website copies its checked-in tablefilter/
+      # folder to the same S3 prefix from its own deploy workflow (#1066).
       - name: Sync tablefilter-website/tablefilter
         env:
           WEBSITE_REPO_TOKEN: ${{ secrets.WEBSITE_REPO_TOKEN }}
@@ -252,5 +257,5 @@ jobs:
           git config user.name "koalyptus"
           git config user.email "maxgug@hotmail.com"
           git add tablefilter
-          git commit -m "Update tablefilter to ${version}"
+          git commit -m "Update tablefilter to ${version} (${GITHUB_SHA})"
           git push origin master
