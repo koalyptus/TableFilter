@@ -192,27 +192,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_DEFAULT_REGION }}
 
+      # The release creates the tag server-side; `--target` sets the commit
+      # the tag points at when it does not exist yet.
       - name: Publish version release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           version=$(node -p "require('./package.json').version")
-          if ! git show-ref --verify --quiet "refs/tags/$version"; then
-            latest_tag="$(git describe --tags --abbrev=0 2>/dev/null || true)"
-            if [ "$latest_tag" != "$version" ]; then
-              git config user.name "koalyptus"
-              git config user.email "maxgug@hotmail.com"
-              git tag -a "$version" -m "Generated tag from GitHub Actions run $GITHUB_RUN_NUMBER"
-              git push origin "refs/tags/$version"
-            fi
-          fi
 
           if ! gh release view "$version" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            release_args=()
+            if ! git show-ref --verify --quiet "refs/tags/$version"; then
+              release_args+=(--target "$GITHUB_SHA")
+            fi
             gh release create "$version" \
               --repo "$GITHUB_REPOSITORY" \
               --title "$version" \
-              --notes ""
+              --notes "" \
+              "${release_args[@]}"
           fi
 
       - name: Deploy distribution to S3
@@ -225,9 +223,17 @@ jobs:
       # Contents read/write on koalyptus/tablefilter-website, allowed to push
       # to master. tablefilter-website copies its checked-in tablefilter/
       # folder to the same S3 prefix from its own deploy workflow (#1066).
+      #
+      # `GIT_AUTHOR_*` / `GIT_COMMITTER_*` attribute the commit to
+      # github-actions[bot]. GitHub records the push under the
+      # WEBSITE_REPO_TOKEN owner.
       - name: Sync tablefilter-website/tablefilter
         env:
           WEBSITE_REPO_TOKEN: ${{ secrets.WEBSITE_REPO_TOKEN }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: |
           set -euo pipefail
           version=$(node -p "require('./package.json').version")
@@ -254,8 +260,6 @@ jobs:
             exit 0
           fi
 
-          git config user.name "koalyptus"
-          git config user.email "maxgug@hotmail.com"
           git add tablefilter
           git commit -m "Update tablefilter to ${version} (${GITHUB_SHA})"
           git push origin master
