@@ -115,6 +115,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
@@ -217,3 +220,42 @@ jobs:
 
       - name: Deploy documentation to S3
         run: aws s3 sync docs/ "s3://www.tablefilter.com/"
+
+      # Requires the WEBSITE_REPO_TOKEN secret: a fine-grained PAT with
+      # Contents read/write on koalyptus/tablefilter-website, allowed to push
+      # to master. tablefilter-website copies its checked-in tablefilter/
+      # folder to the same S3 prefix from its own deploy workflow (#1066).
+      - name: Sync tablefilter-website/tablefilter
+        env:
+          WEBSITE_REPO_TOKEN: ${{ secrets.WEBSITE_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+
+          if [ -z "${WEBSITE_REPO_TOKEN:-}" ]; then
+            echo "::error::WEBSITE_REPO_TOKEN is unset - cannot sync tablefilter-website"
+            exit 1
+          fi
+
+          if ! grep -qF "this.version=\"${version}\"" dist/tablefilter/tablefilter.js; then
+            echo "::error::dist/tablefilter/tablefilter.js does not report ${version}"
+            exit 1
+          fi
+
+          git clone --depth 1 --branch master \
+            "https://x-access-token:${WEBSITE_REPO_TOKEN}@github.com/koalyptus/tablefilter-website.git" \
+            tablefilter-website
+
+          rsync -a --delete dist/tablefilter/ tablefilter-website/tablefilter/
+
+          cd tablefilter-website
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "tablefilter-website/tablefilter is already at ${version}"
+            exit 0
+          fi
+
+          git config user.name "koalyptus"
+          git config user.email "maxgug@hotmail.com"
+          git add tablefilter
+          git commit -m "Update tablefilter to ${version} (${GITHUB_SHA})"
+          git push origin master
