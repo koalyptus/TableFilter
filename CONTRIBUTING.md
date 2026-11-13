@@ -121,8 +121,3 @@ In general, we follow the "fork-and-pull" Git workflow.
  5. Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
-
-## Donations
-Support this project by donating [here](http://www.tablefilter.com/donate.html).
-Thanks to all those who supported this project in the past and those who will
-in the future!
