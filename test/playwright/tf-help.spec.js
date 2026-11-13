@@ -633,3 +633,27 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)
     ).toEqual([]);
 });
+
+test('disabled blocks a slotted trigger control',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.setAttribute('disabled', '');
+            el.innerHTML = '<button data-control slot="trigger">Help</button>';
+            document.body.appendChild(el);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            el.querySelector('[data-control]').click();
+            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+            const state = {
+                open: dialog.open,
+                attr: el.hasAttribute('open')
+            };
+            el.remove();
+            return state;
+        }, COMPONENT);
+
+        expect(result).toEqual({ open: false, attr: false });
+    });
