@@ -1,18 +1,21 @@
 // Component gate (#913): the <tf-help> element registers an open shadow
-// root with a trigger button and a modal <dialog>, exposes structure
+// root with a trigger control and a modal <dialog>, exposes structure
 // through `part` hooks and stays free of invented classes and
 // presentational CSS. Every configurable string (trigger text, button
 // name, instructions text, dialog name, close text) renders only from
 // its attribute, so the legacy defaults stay in the Help module and the
-// bridge (#915) maps them. Focus return (#914) and the Help bridge
-// (#915) are separate tickets. Fails CI on regression.
+// bridge (#915) maps them. A slotted trigger control is the control;
+// with no slotted control the element renders its own button. Focus
+// return (#914) and the Help bridge (#915) are separate tickets.
+// Fails CI on regression.
 const { test, expect } = require('@playwright/test');
+const { scanAccessibility } = require('./axeScan');
 
 const FIXTURE = '/test/test-emitter.html';
 const COMPONENT = '/src/components/tf-help.js';
 
 const PARTS = [
-    'trigger', 'trigger-text',
+    'trigger-slot', 'trigger', 'trigger-text',
     'dialog',
     'instructions', 'instructions-text',
     'close', 'close-text'
@@ -64,7 +67,7 @@ test('registers an open shadow root exposing the dialog parts',
         expect(result.styleless).toBe(true);
     });
 
-test('projects trigger markup through the trigger slot',
+test('projects trigger markup as the trigger control',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -76,19 +79,38 @@ test('projects trigger markup through the trigger slot',
             document.body.appendChild(el);
             await new Promise((resolve) => setTimeout(resolve, 0));
 
-            const slot = el.shadowRoot
-                .querySelector('slot[name="trigger"]');
+            const sr = el.shadowRoot;
+            const slot = sr.querySelector('slot[name="trigger"]');
             const assigned = slot.assignedElements();
-            const state = {
+            const button = sr.querySelector('[part="trigger"]');
+            const dialog = sr.querySelector('[part="dialog"]');
+
+            const before = {
                 count: assigned.length,
-                tag: assigned[0] && assigned[0].tagName
+                tag: assigned[0] && assigned[0].tagName,
+                nestedInButton: assigned[0]
+                    ? Boolean(assigned[0].closest('button')) : true,
+                buttonHidden: button.hidden
             };
+
+            assigned[0].click();
+            const after = { open: dialog.open, attr: el.hasAttribute('open') };
+
+            assigned[0].click();
+            const toggled = dialog.open;
+
             el.remove();
-            return state;
+            return { before, after, toggled };
         }, COMPONENT);
 
-        expect(result.count).toBe(1);
-        expect(result.tag).toBe('A');
+        expect(result.before).toEqual({
+            count: 1,
+            tag: 'A',
+            nestedInButton: false,
+            buttonHidden: true
+        });
+        expect(result.after).toEqual({ open: true, attr: true });
+        expect(result.toggled).toBe(false);
     });
 
 test('opens the dialog from the trigger', async ({ page }) => {
@@ -459,4 +481,155 @@ test('removing the element closes an open dialog', async ({ page }) => {
 
     expect(result.opened).toBe(true);
     expect(result.closed).toBe(false);
+});
+
+test('remove and re-append while open keeps the dialog open',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const host = document.createElement('div');
+            document.body.appendChild(host);
+            const el = document.createElement('tf-help');
+            host.appendChild(el);
+            el.setOpen(true);
+            el.remove();
+            host.appendChild(el);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+            const state = { open: dialog.open, attr: el.hasAttribute('open') };
+            el.remove();
+            host.remove();
+            return state;
+        }, COMPONENT);
+
+        expect(result).toEqual({ open: true, attr: true });
+    });
+
+test('hides the text siblings when the slots have assigned nodes',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.setAttribute('trigger-text', '?');
+            el.setAttribute('instructions-text', 'Use the operator list');
+            el.innerHTML = '<a slot="trigger" href="#">Help</a>' +
+                '<p slot="instructions">Operators</p>';
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const button = sr.querySelector('[part="trigger"]');
+            const instrText = sr.querySelector('[part="instructions-text"]');
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const projected = {
+                buttonHidden: button.hidden,
+                instrTextHidden: instrText.hidden
+            };
+
+            for (const node of Array.from(el.children)) {
+                node.remove();
+            }
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const cleared = {
+                buttonHidden: button.hidden,
+                instrTextHidden: instrText.hidden
+            };
+
+            el.remove();
+            return { projected, cleared };
+        }, COMPONENT);
+
+        expect(result.projected).toEqual({
+            buttonHidden: true,
+            instrTextHidden: true
+        });
+        expect(result.cleared).toEqual({
+            buttonHidden: false,
+            instrTextHidden: false
+        });
+    });
+
+test('renders the element button as the control without slotted content',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.setAttribute('trigger-text', '?');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const button = sr.querySelector('[part="trigger"]');
+            const slot = sr.querySelector('slot[name="trigger"]');
+            const state = {
+                buttonHidden: button.hidden,
+                hasPopup: button.getAttribute('aria-haspopup'),
+                controls: button.getAttribute('aria-controls'),
+                slotHasPopup: slot.getAttribute('aria-haspopup'),
+                slotTabIndex: slot.getAttribute('tabindex'),
+                slotRole: slot.getAttribute('role')
+            };
+            el.remove();
+            return state;
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            buttonHidden: false,
+            hasPopup: 'dialog',
+            controls: 'dialog',
+            slotHasPopup: null,
+            slotTabIndex: null,
+            slotRole: null
+        });
+    });
+
+// The open element carries the full naming surface, matching the two
+// naming paths (`dialog-label`, trigger-named) plus the unnamed close
+// control failure this gate exists to catch.
+test('passes a scoped axe scan', async ({ page }, testInfo) => {
+    test.setTimeout(60000);
+    await page.goto(FIXTURE);
+
+    await page.evaluate(async (component) => {
+        await import(component);
+        const scope = document.createElement('div');
+        scope.id = 'tf-help-scope';
+        document.body.appendChild(scope);
+
+        const labelled = document.createElement('tf-help');
+        labelled.setAttribute('trigger-text', '?');
+        labelled.setAttribute('label', 'Help');
+        labelled.setAttribute('close-text', 'Close');
+        scope.appendChild(labelled);
+
+        const defaultNamed = document.createElement('tf-help');
+        defaultNamed.setAttribute('trigger-text', '?');
+        defaultNamed.setAttribute('label', 'Help');
+        defaultNamed.setAttribute('dialog-label', 'Help instructions');
+        defaultNamed.setAttribute('close-text', 'Close');
+        defaultNamed.setAttribute('instructions-text',
+            'Use the operators');
+        scope.appendChild(defaultNamed);
+
+        const expanded = document.createElement('tf-help');
+        expanded.setAttribute('trigger-text', '?');
+        expanded.setAttribute('label', 'Help');
+        expanded.setAttribute('dialog-label', 'Help instructions');
+        expanded.setAttribute('close-text', 'Close');
+        expanded.setAttribute('instructions-text',
+            'Use the operators');
+        expanded.setAttribute('open', '');
+        scope.appendChild(expanded);
+    }, COMPONENT);
+
+    const violations = await scanAccessibility(
+        page, testInfo, 'tf-help',
+        { include: '#tf-help-scope' }
+    );
+
+    expect(
+        violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)
+    ).toEqual([]);
 });

@@ -1,53 +1,47 @@
 /**
  * `<tf-help>` custom element: help instructions in a native `<dialog>`
- * (ROADMAP: hybrid-migration-strategy.md, Milestone 0.8.x).
+ * (ROADMAP: hybrid-migration-strategy.md, "Accessible overlays &
+ * instructions" milestone).
  *
- * Scaffold (#913): an open shadow root with a trigger button and a modal
- * dialog. The dialog carries `part="dialog"`, the projected instructions
- * live in `part="instructions"` and the close control is a semantic
- * `<button type="button">` via `part="close"`. Opening goes through
- * `showModal()`, so the browser provides the focus trap, the `Escape`
- * key and the top layer. The focus-return contract is #914 and the Help
- * bridge is #915.
+ * Scaffold (#913): an open shadow root with a trigger control and a
+ * modal dialog. The dialog carries `part="dialog"`, the projected
+ * instructions live in `part="instructions"` and the close control is a
+ * semantic `<button type="button">` via `part="close"`. Opening goes
+ * through `showModal()`, so the browser provides the focus trap, the
+ * `Escape` key and the top layer. The focus-return contract is #914 and
+ * the Help bridge is #915.
  *
  * Content routes, following the legacy `Help` config
  * (ROADMAP: content-projection-parity.md, inventory row 5):
- * - `btn_html` → project markup through `slot="trigger"`.
- * - `btn_text` → set `trigger-text`, rendered as the button's text.
- *   `label` sets the button's `aria-label`.
- * - `help_instructions.html` → project markup through
+ * - `help_instructions.html` / light DOM → project through
  *   `slot="instructions"`.
  * - `help_instructions.text` → set `instructions-text`, rendered as text.
+ * - `btn_html` / light DOM → project through `slot="trigger"`; a slotted
+ *   control is the control and `part="trigger"` is hidden while the slot
+ *   has assigned nodes.
+ * - `btn_text` → set `trigger-text`, rendered as the button's text.
+ *   `label` sets the button's `aria-label`.
  *
- * No value is defaulted here: every configurable string comes from its
- * attribute, so the element renders nothing until the bridge (#915)
- * maps the legacy config, including the defaults in `help.js`
- * (`btn_text` at help.js:59). The same split applies to the legacy
- * `btn_css_class`/`container_css_class` classes, `target_id`,
- * `toolbar_position` and `container_target_id`: they are bridge
- * concerns, as in the other feature bridges (`clearButton.js:129-152`,
- * `statusBar.js:234-260`).
+ * Every configurable string comes from its attribute; empty or absent
+ * attributes render empty and the defaults in `help.js` (`btn_text` at
+ * `help.js:63`, `help_instructions.text` at `help.js:44`) are mapped by
+ * #915.
  *
  * The host `open` attribute reflects the dialog state: setting it calls
- * `showModal()`, removing it calls `close()`. The trigger and the close
- * button toggle it and `open-change` reports the state with
+ * `showModal()`, removing it calls `close()`. The trigger controls and
+ * the close button toggle it and `open-change` reports the state with
  * `detail: {open}`. `dialog-label` names the dialog; without it the
- * dialog is named from the trigger through `aria-labelledby`, as
- * `<tf-checklist>` names its listbox from the trigger. `close-text`
- * sets the close control's text.
+ * dialog is named from the trigger through `aria-labelledby`.
+ * `close-text` sets the close control's text.
  *
  * Styling is left to the theme via `--tf-*` custom properties and
  * `::part()`. The element ships no CSS class and no presentational
  * style.
  *
  * Importing this module registers the element. Like the other leaf
- * components it is not part of the legacy webpack bundle (PhantomJS
- * `_wrapNativeSuper`); consumers load it as a module, and shipping it in
- * a bundle belongs with #965.
+ * components it is not part of the legacy webpack bundle; consumers
+ * load it as a module, and shipping it in a bundle belongs with #965.
  */
-
-import {addEvt} from '../event';
-import {defaultsStr} from '../settings';
 
 const TRIGGER_ID = 'trigger';
 const DIALOG_ID = 'dialog';
@@ -56,10 +50,11 @@ const DIALOG_ID = 'dialog';
 // only: no class or presentational style is baked in.
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
+    <slot name="trigger" part="trigger-slot"></slot>
     <button type="button" part="trigger" id="${TRIGGER_ID}"
         aria-haspopup="dialog" aria-expanded="false"
         aria-controls="${DIALOG_ID}">
-        <slot name="trigger"></slot><span part="trigger-text"></span>
+        <span part="trigger-text"></span>
     </button>
     <dialog part="dialog" id="${DIALOG_ID}">
         <div part="instructions">
@@ -77,10 +72,14 @@ export class TfHelpElement extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+        this._triggerSlot =
+            this.shadowRoot.querySelector('slot[name="trigger"]');
         this._trigger = this.shadowRoot.querySelector('[part="trigger"]');
         this._triggerText =
             this.shadowRoot.querySelector('[part="trigger-text"]');
         this._dialog = this.shadowRoot.querySelector('[part="dialog"]');
+        this._instructionsSlot =
+            this.shadowRoot.querySelector('slot[name="instructions"]');
         this._instructionsText =
             this.shadowRoot.querySelector('[part="instructions-text"]');
         this._close = this.shadowRoot.querySelector('[part="close"]');
@@ -88,9 +87,14 @@ export class TfHelpElement extends HTMLElement {
             this.shadowRoot.querySelector('[part="close-text"]');
         this._reportedOpen = false;
 
-        addEvt(this._trigger, 'click', () => this._toggle());
-        addEvt(this._close, 'click', () => this.setOpen(false));
-        addEvt(this._dialog, 'close', () => this._onClose());
+        this._trigger.addEventListener('click', () => this._toggle());
+        this._triggerSlot.addEventListener('click', () => this._toggle());
+        this._triggerSlot.addEventListener(
+            'slotchange', () => this._syncLayout());
+        this._instructionsSlot.addEventListener(
+            'slotchange', () => this._syncLayout());
+        this._close.addEventListener('click', () => this.setOpen(false));
+        this._dialog.addEventListener('close', () => this._onClose());
     }
 
     static get observedAttributes() {
@@ -173,11 +177,11 @@ export class TfHelpElement extends HTMLElement {
 
         this._setAriaLabel(this._trigger, 'label');
         this._triggerText.textContent =
-            defaultsStr(this.getAttribute('trigger-text'), '');
+            this.getAttribute('trigger-text') || '';
         this._instructionsText.textContent =
-            defaultsStr(this.getAttribute('instructions-text'), '');
+            this.getAttribute('instructions-text') || '';
         this._closeText.textContent =
-            defaultsStr(this.getAttribute('close-text'), '');
+            this.getAttribute('close-text') || '';
         this._setDialogName();
 
         if (this.hasAttribute('disabled')) {
@@ -186,14 +190,30 @@ export class TfHelpElement extends HTMLElement {
             this._trigger.removeAttribute('disabled');
         }
 
+        this._syncLayout();
         this._syncExpanded();
+    }
+
+    /**
+     * Show the element-rendered trigger control only when the trigger
+     * slot has no assigned nodes, and the instructions text part only
+     * when the instructions slot has none.
+     */
+    _syncLayout() {
+        if (!this._trigger) {
+            return;
+        }
+        this._trigger.hidden = this._triggerSlot
+            .assignedNodes({ flatten: true }).length > 0;
+        this._instructionsText.hidden = this._instructionsSlot
+            .assignedNodes({ flatten: true }).length > 0;
     }
 
     /**
      * Name the dialog from its own attribute, or from the trigger.
      */
     _setDialogName() {
-        const label = defaultsStr(this.getAttribute('dialog-label'), '');
+        const label = this.getAttribute('dialog-label') || '';
         if (label) {
             this._dialog.setAttribute('aria-label', label);
             this._dialog.removeAttribute('aria-labelledby');
@@ -210,7 +230,7 @@ export class TfHelpElement extends HTMLElement {
      * @param {String} attr Attribute holding the accessible name
      */
     _setAriaLabel(el, attr) {
-        const label = defaultsStr(this.getAttribute(attr), '');
+        const label = this.getAttribute(attr) || '';
         if (label) {
             el.setAttribute('aria-label', label);
         } else {
@@ -219,7 +239,7 @@ export class TfHelpElement extends HTMLElement {
     }
 
     /**
-     * Toggle the dialog from the trigger.
+     * Toggle the dialog from the trigger control.
      */
     _toggle() {
         if (this.hasAttribute('disabled')) {
@@ -274,6 +294,9 @@ export class TfHelpElement extends HTMLElement {
      * (`Escape`) or from the close control.
      */
     _onClose() {
+        if (this._dialog.open) {
+            return;
+        }
         if (this.hasAttribute('open')) {
             this.removeAttribute('open');
         }
