@@ -32,7 +32,10 @@
  * the close button toggle it and `open-change` reports the state with
  * `detail: {open}`. `dialog-label` names the dialog; without it the
  * dialog is named from the trigger through `aria-labelledby`.
- * `close-text` sets the close control's text.
+ * `close-text` sets the close control's text. Clicking the
+ * instructions container or the dialog backdrop closes the dialog
+ * (legacy parity, `help.js`: container click toggles, outside `mouseup`
+ * closes).
  *
  * Styling is left to the theme via `--tf-*` custom properties and
  * `::part()`. The element ships no CSS class and no presentational
@@ -78,6 +81,8 @@ export class TfHelpElement extends HTMLElement {
         this._triggerText =
             this.shadowRoot.querySelector('[part="trigger-text"]');
         this._dialog = this.shadowRoot.querySelector('[part="dialog"]');
+        this._instructions =
+            this.shadowRoot.querySelector('[part="instructions"]');
         this._instructionsSlot =
             this.shadowRoot.querySelector('slot[name="instructions"]');
         this._instructionsText =
@@ -93,6 +98,12 @@ export class TfHelpElement extends HTMLElement {
             'slotchange', () => this._syncLayout());
         this._instructionsSlot.addEventListener(
             'slotchange', () => this._syncLayout());
+        this._instructions.addEventListener('click', () => this._toggle());
+        this._dialog.addEventListener('click', (event) => {
+            if (event.target === this._dialog) {
+                this.setOpen(false);
+            }
+        });
         this._close.addEventListener('click', () => this.setOpen(false));
         this._dialog.addEventListener('close', () => this._onClose());
     }

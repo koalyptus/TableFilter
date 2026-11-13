@@ -634,6 +634,52 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
     ).toEqual([]);
 });
 
+test('clicking the instructions container closes the dialog',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.setAttribute('instructions-text', 'Use the operators');
+            document.body.appendChild(el);
+            el.setOpen(true);
+            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+            el.shadowRoot.querySelector('[part="instructions"]')
+                .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            const state = {
+                open: dialog.open,
+                attr: el.hasAttribute('open')
+            };
+            el.remove();
+            return state;
+        }, COMPONENT);
+
+        expect(result).toEqual({ open: false, attr: false });
+    });
+
+test('clicking the dialog backdrop closes the dialog',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            document.body.appendChild(el);
+            el.setOpen(true);
+            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+            dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            const state = {
+                open: dialog.open,
+                attr: el.hasAttribute('open')
+            };
+            el.remove();
+            return state;
+        }, COMPONENT);
+
+        expect(result).toEqual({ open: false, attr: false });
+    });
+
 test('disabled blocks a slotted trigger control',
     async ({ page }) => {
         await page.goto(FIXTURE);
