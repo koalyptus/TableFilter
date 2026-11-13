@@ -1,0 +1,70 @@
+// Component demo gate (#913): the demo page mounts <tf-help> in a real
+// TableFilter page, with the trigger, the instructions slot and the
+// native dialog working from declarative markup. The page lives in
+// static/templates/ and is built into the gitignored demos/ by grunt
+// build-demos; the Vite dev server that serves the repo root compiles
+// the element module it imports. The Help bridge (#915) is a separate
+// ticket. Fails CI on regression.
+const { test, expect } = require('@playwright/test');
+
+const DEMO_PAGE = 'demos/tf-help.html';
+
+test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
+    const pageErrors = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+
+    await page.goto(`/${DEMO_PAGE}`);
+
+    // The element registered, so the deferred module loaded.
+    await page.waitForFunction(
+        () => Boolean(customElements.get('tf-help'))
+    );
+
+    await page.waitForSelector('tf-help [part="trigger"]', {
+        timeout: 15000
+    });
+
+    const result = await page.evaluate(() => {
+        const host = document.querySelector('tf-help');
+        const sr = host.shadowRoot;
+        const trigger = sr.querySelector('[part="trigger"]');
+        const dialog = sr.querySelector('[part="dialog"]');
+        const slot = sr.querySelector('slot[name="instructions"]');
+
+        const initial = {
+            defined: Boolean(customElements.get('tf-help')),
+            triggerText:
+                sr.querySelector('[part="trigger-text"]').textContent,
+            dialogName: dialog.getAttribute('aria-label'),
+            instructions: slot.assignedElements()[0].textContent
+                .replace(/\s+/g, ' ').trim().length > 0,
+            open: dialog.open
+        };
+
+        trigger.click();
+        const opened = {
+            open: dialog.open,
+            modal: dialog.matches(':modal'),
+            attr: host.hasAttribute('open')
+        };
+
+        sr.querySelector('[part="close"]').click();
+        const closed = {
+            open: dialog.open,
+            attr: host.hasAttribute('open')
+        };
+
+        return { initial, opened, closed };
+    });
+
+    expect(result.initial.defined).toBe(true);
+    expect(result.initial.triggerText).toBe('?');
+    expect(result.initial.dialogName).toBe('Help instructions');
+    expect(result.initial.instructions).toBe(true);
+    expect(result.initial.open).toBe(false);
+    expect(result.opened).toEqual({
+        open: true, modal: true, attr: true
+    });
+    expect(result.closed).toEqual({ open: false, attr: false });
+    expect(pageErrors).toEqual([]);
+});
