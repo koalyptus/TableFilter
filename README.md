@@ -156,12 +156,14 @@ Run this task to generate the documentation in the ``docs/docs`` directory:
 npm run esdoc
 ```
 
-## Support
+## Contributing
 * GitHub for [reporting bugs](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#reporting-bugs) and [feature requests](https://github.com/koalyptus/TableFilter/blob/master/CONTRIBUTING.md#suggesting-enhancements-and-features).
 
 ## License
 [MIT](LICENSE)
 
-
+## Support
+TableFilter is free and open-source software. If it saves you time, consider [sponsoring the project on GitHub](https://github.com/sponsors/koalyptus)
+to support its ongoing modernization into native Web Components.
 
 
