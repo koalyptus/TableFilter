@@ -1,11 +1,10 @@
-// Component demo gate (#913): the demo pages mount <tf-help> in real
+// Component demo gate: the demo pages mount <tf-help> in real
 // TableFilter pages — the dedicated template and the existing
 // pagination demo — with the trigger, the instructions slot and the
 // native dialog working from declarative markup. The pages live in
 // static/templates/ and are built into the gitignored demos/ by grunt
 // build-demos; the Vite dev server that serves the repo root compiles
-// the element module they import. The Help bridge (#915) is a
-// separate ticket. Fails CI on regression.
+// the element module they import. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 
 const DEMO_PAGE = 'demos/tf-help.html';
@@ -17,7 +16,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
 
     await page.goto(`/${DEMO_PAGE}`);
 
-    // The element registered, so the deferred module loaded.
+    // Waits until the deferred module registers the element.
     await page.waitForFunction(
         () => Boolean(customElements.get('tf-help'))
     );
@@ -54,7 +53,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
             attr: host.hasAttribute('open')
         };
 
-        // Instructions container click dismisses, like legacy cont click.
+        // Clicking inside the instructions container closes the dialog.
         sr.querySelector('[part="instructions"]').click();
         const dismissed = { open: dialog.open };
 

@@ -1,13 +1,8 @@
-// Component gate (#913): the <tf-help> element registers an open shadow
-// root with a trigger control and a modal <dialog>, exposes structure
-// through `part` hooks and stays free of invented classes and
-// presentational CSS. Every configurable string (trigger text, button
-// name, instructions text, dialog name, close text) renders only from
-// its attribute, so the legacy defaults stay in the Help module and the
-// bridge (#915) maps them. A slotted trigger control is the control;
-// with no slotted control the element renders its own button. Focus
-// return (#914) and the Help bridge (#915) are separate tickets.
-// Fails CI on regression.
+// Component gate: the <tf-help> element registers an open shadow root
+// with a trigger control and a modal <dialog>, exposes structure through
+// `part` hooks and stays free of classes and presentational CSS. A
+// slotted trigger control is the control; with no slotted control the
+// element renders its own button. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -585,9 +580,8 @@ test('renders the element button as the control without slotted content',
         });
     });
 
-// The open element carries the full naming surface, matching the two
-// naming paths (`dialog-label`, trigger-named) plus the unnamed close
-// control failure this gate exists to catch.
+// Scans three configurations: `dialog-label`-named, trigger-named and
+// an open dialog with the full naming surface.
 test('passes a scoped axe scan', async ({ page }, testInfo) => {
     test.setTimeout(60000);
     await page.goto(FIXTURE);

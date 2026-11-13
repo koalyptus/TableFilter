@@ -1,49 +1,27 @@
 /**
- * `<tf-help>` custom element: help instructions in a native `<dialog>`
- * (ROADMAP: hybrid-migration-strategy.md, "Accessible overlays &
- * instructions" milestone).
+ * `<tf-help>`: help instructions in a native modal `<dialog>`.
  *
- * Scaffold (#913): an open shadow root with a trigger control and a
- * modal dialog. The dialog carries `part="dialog"`, the projected
- * instructions live in `part="instructions"` and the close control is a
- * semantic `<button type="button">` via `part="close"`. Opening goes
- * through `showModal()`, so the browser provides the focus trap, the
- * `Escape` key and the top layer. The focus-return contract is #914 and
- * the Help bridge is #915.
+ * Shadow root: `slot[name="trigger"]` (a slotted control is the
+ * control) and `<button part="trigger">` for the element-rendered
+ * case; a `<dialog part="dialog">` carrying
+ * `<div part="instructions">` with `slot[name="instructions"]` and a
+ * `part="instructions-text"` text part; a `<button part="close">` with
+ * `part="close-text"`.
  *
- * Content routes, following the legacy `Help` config
- * (ROADMAP: content-projection-parity.md, inventory row 5):
- * - `help_instructions.html` / light DOM → project through
- *   `slot="instructions"`.
- * - `help_instructions.text` → set `instructions-text`, rendered as text.
- * - `btn_html` / light DOM → project through `slot="trigger"`; a slotted
- *   control is the control and `part="trigger"` is hidden while the slot
- *   has assigned nodes.
- * - `btn_text` → set `trigger-text`, rendered as the button's text.
- *   `label` sets the button's `aria-label`.
+ * Attributes: `trigger-text`; `label` (trigger `aria-label`);
+ * `instructions-text`; `dialog-label` (dialog accessible name, falling
+ * back to `aria-labelledby` on the trigger); `close-text`; `open`
+ * (reflects the dialog state); `disabled` (blocks trigger
+ * activation). Empty or absent attributes render empty.
  *
- * Every configurable string comes from its attribute; empty or absent
- * attributes render empty and the defaults in `help.js` (`btn_text` at
- * `help.js:63`, `help_instructions.text` at `help.js:44`) are mapped by
- * #915.
+ * The dialog opens with `showModal()`. `Escape`, the backdrop and the
+ * instructions container close it. Setting `open` opens the dialog,
+ * removing it closes the dialog, and `open-change` reports the state
+ * with `detail: {open}`.
  *
- * The host `open` attribute reflects the dialog state: setting it calls
- * `showModal()`, removing it calls `close()`. The trigger controls and
- * the close button toggle it and `open-change` reports the state with
- * `detail: {open}`. `dialog-label` names the dialog; without it the
- * dialog is named from the trigger through `aria-labelledby`.
- * `close-text` sets the close control's text. Clicking the
- * instructions container or the dialog backdrop closes the dialog
- * (legacy parity, `help.js`: container click toggles, outside `mouseup`
- * closes).
- *
- * Styling is left to the theme via `--tf-*` custom properties and
- * `::part()`. The element ships no CSS class and no presentational
- * style.
- *
- * Importing this module registers the element. Like the other leaf
- * components it is not part of the legacy webpack bundle; consumers
- * load it as a module, and shipping it in a bundle belongs with #965.
+ * The element ships no class or presentational style; theme it via
+ * `::part()` and `--tf-*` custom properties. Importing this module
+ * registers the element.
  */
 
 const TRIGGER_ID = 'trigger';
@@ -302,7 +280,7 @@ export class TfHelpElement extends HTMLElement {
 
     /**
      * Sync the host attribute when the dialog closes from the platform
-     * (`Escape`) or from the close control.
+     * (`Escape`), the backdrop or the instructions container.
      */
     _onClose() {
         if (this._dialog.open) {
