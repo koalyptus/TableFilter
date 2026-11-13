@@ -22,11 +22,38 @@
 <body>
 <h1>{NAME} v{VERSION}</h1>
 <h2>Pagination demo</h2>
+<p>
+    Help instructions rendered through the <code>&lt;tf-help&gt;</code>
+    custom element: a semantic trigger button and a native modal
+    <code>&lt;dialog&gt;</code>. The Help bridge (#915) is not wired yet,
+    so the element is used declaratively next to the table.
+</p>
+
+<tf-help trigger-text="?" label="Help" dialog-label="Help instructions"
+    close-text="Close">
+    <div slot="instructions">
+        <p>
+            Use the filters above each column to filter and limit table
+            data. Advanced searches can be performed by using the
+            following operators: <b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>,
+            <b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>,
+            <b>}</b>, <b>||</b>, <b>&amp;&amp;</b>, <b>[empty]</b>,
+            <b>[nonempty]</b>, <b>rgx:</b>
+        </p>
+        <a href="https://github.com/koalyptus/TableFilter/wiki/4.-Filter-operators"
+            target="_blank">Learn more</a>
+    </div>
+</tf-help>
 
 <!-- @import partials/pre.html -->
 <!-- @import partials/countries-table.html -->
 
 <!-- @import partials/tablefilter-script.html -->
+<!-- TODO(#965): the element is absent from both published bundles, so
+     the page imports it from source; `type="module"` is deferred, so
+     init waits for the registration. Both go away once the bundle
+     registers <tf-help>. -->
+<script type="module" src="../src/components/tf-help.js"></script>
 <script data-config>
     var filtersConfig = {
         base_path: '../dist/tablefilter/',
@@ -41,9 +68,6 @@
             sort: true
         },
         responsive: true,
-        help_instructions: {
-            container_adjust_left_position: 30
-        },
         alternate_rows: true,
         btn_reset: true,
         rows_counter: true,
@@ -69,8 +93,10 @@
         }]
     };
 
-    var tf = new TableFilter('demo', filtersConfig);
-    tf.init();
+    customElements.whenDefined('tf-help').then(function () {
+        var tf = new TableFilter('demo', filtersConfig);
+        tf.init();
+    });
 
 </script>
 <!-- @import partials/pre-inline-script.html -->

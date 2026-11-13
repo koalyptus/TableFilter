@@ -1,13 +1,15 @@
-// Component demo gate (#913): the demo page mounts <tf-help> in a real
-// TableFilter page, with the trigger, the instructions slot and the
-// native dialog working from declarative markup. The page lives in
-// static/templates/ and is built into the gitignored demos/ by grunt
+// Component demo gate (#913): the demo pages mount <tf-help> in real
+// TableFilter pages — the dedicated template and the existing
+// pagination demo — with the trigger, the instructions slot and the
+// native dialog working from declarative markup. The pages live in
+// static/templates/ and are built into the gitignored demos/ by grunt
 // build-demos; the Vite dev server that serves the repo root compiles
-// the element module it imports. The Help bridge (#915) is a separate
-// ticket. Fails CI on regression.
+// the element module they import. The Help bridge (#915) is a
+// separate ticket. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 
 const DEMO_PAGE = 'demos/tf-help.html';
+const EXISTING_DEMO_PAGE = 'demos/pagination.html';
 
 test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
     const pageErrors = [];
@@ -68,3 +70,58 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
     expect(result.closed).toEqual({ open: false, attr: false });
     expect(pageErrors).toEqual([]);
 });
+
+test(`help mounts declaratively in an existing demo: ${EXISTING_DEMO_PAGE}`,
+    async ({ page }) => {
+        const pageErrors = [];
+        page.on('pageerror', (error) => pageErrors.push(error.message));
+
+        await page.goto(`/${EXISTING_DEMO_PAGE}`);
+
+        await page.waitForFunction(
+            () => Boolean(customElements.get('tf-help'))
+        );
+
+        // TableFilter initialised next to the element.
+        await page.waitForSelector('#demo .fltrow', {
+            state: 'attached',
+            timeout: 15000
+        });
+
+        const result = await page.evaluate(() => {
+            const host = document.querySelector('tf-help');
+            const sr = host.shadowRoot;
+            const trigger = sr.querySelector('[part="trigger"]');
+            const dialog = sr.querySelector('[part="dialog"]');
+
+            trigger.click();
+            const opened = {
+                open: dialog.open,
+                modal: dialog.matches(':modal'),
+                attr: host.hasAttribute('open')
+            };
+
+            sr.querySelector('[part="close"]').click();
+            const closed = {
+                open: dialog.open,
+                attr: host.hasAttribute('open')
+            };
+
+            return {
+                initial: {
+                    triggerHidden: trigger.hidden,
+                    dialogName: dialog.getAttribute('aria-label')
+                },
+                opened,
+                closed
+            };
+        });
+
+        expect(result.initial.triggerHidden).toBe(false);
+        expect(result.initial.dialogName).toBe('Help instructions');
+        expect(result.opened).toEqual({
+            open: true, modal: true, attr: true
+        });
+        expect(result.closed).toEqual({ open: false, attr: false });
+        expect(pageErrors).toEqual([]);
+    });
