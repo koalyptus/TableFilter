@@ -52,13 +52,13 @@ jobs:
       - name: Checkout repository
         # Skipped on manual dispatch: the next step checks out the PR head.
         if: github.event_name != 'workflow_dispatch'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Checkout PR head (manual dispatch only)
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
           ref: ${{ format('refs/pull/{0}/head', github.event.inputs.pr) }}
