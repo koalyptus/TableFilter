@@ -36,6 +36,8 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
             defined: Boolean(customElements.get('tf-help')),
             legacyHelp: Boolean(document.querySelector('.helpBtn')) ||
                 Boolean(document.querySelector('.helpCont')),
+            toolbarPlaced: Boolean(host.closest('.inf')) &&
+                Boolean(host.closest('.rdiv')),
             triggerText:
                 sr.querySelector('[part="trigger-text"]').textContent,
             dialogName: dialog.getAttribute('aria-label'),
@@ -78,6 +80,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
 
     expect(result.initial.defined).toBe(true);
     expect(result.initial.legacyHelp).toBe(false);
+    expect(result.initial.toolbarPlaced).toBe(true);
     expect(result.initial.triggerText).toBe('?');
     expect(result.initial.dialogName).toBe('Help instructions');
     expect(result.initial.instructions).toBe(true);

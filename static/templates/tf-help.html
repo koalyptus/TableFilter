@@ -3,6 +3,23 @@
 <head>
     <title>{NAME} v{VERSION} - Web Components Help Demo</title>
     <!-- @import partials/style.html -->
+    <style>
+        tf-help::part(trigger) {
+            height: 27px;
+            margin: 0;
+            padding: 8px 15px 0 15px;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            vertical-align: top;
+            cursor: pointer;
+        }
+
+        tf-help::part(trigger):hover {
+            background-color: var(--tf-border-light, #F4F4F4);
+        }
+    </style>
 </head>
 <body>
 <h1>{NAME} v{VERSION}</h1>
@@ -61,6 +78,9 @@
     customElements.whenDefined('tf-help').then(function () {
         var tf = new TableFilter('demo', filtersConfig);
         tf.init();
+        // TODO(#915): the Help bridge mounts the element in the toolbar.
+        tf.feature('toolbar').container('right',
+            document.querySelector('tf-help'));
     });
 </script>
 <!-- @import partials/pre-inline-script.html -->
