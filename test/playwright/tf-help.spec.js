@@ -83,8 +83,7 @@ test('projects trigger markup as the trigger control',
             const before = {
                 count: assigned.length,
                 tag: assigned[0] && assigned[0].tagName,
-                nestedInButton: assigned[0]
-                    ? Boolean(assigned[0].closest('button')) : true,
+                slotWrapped: Boolean(slot.closest('button')),
                 buttonHidden: button.hidden
             };
 
@@ -101,7 +100,7 @@ test('projects trigger markup as the trigger control',
         expect(result.before).toEqual({
             count: 1,
             tag: 'A',
-            nestedInButton: false,
+            slotWrapped: false,
             buttonHidden: true
         });
         expect(result.after).toEqual({ open: true, attr: true });
@@ -580,8 +579,8 @@ test('renders the element button as the control without slotted content',
         });
     });
 
-// Scans three configurations: `dialog-label`-named, trigger-named and
-// an open dialog with the full naming surface.
+// Scans four configurations: trigger-named closed, dialog-labelled
+// closed, trigger-named open and dialog-labelled open.
 test('passes a scoped axe scan', async ({ page }, testInfo) => {
     test.setTimeout(60000);
     await page.goto(FIXTURE);
@@ -593,12 +592,14 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         document.body.appendChild(scope);
 
         const labelled = document.createElement('tf-help');
+        labelled.id = 'help-named';
         labelled.setAttribute('trigger-text', '?');
         labelled.setAttribute('label', 'Help');
         labelled.setAttribute('close-text', 'Close');
         scope.appendChild(labelled);
 
         const defaultNamed = document.createElement('tf-help');
+        defaultNamed.id = 'help-dialog-named';
         defaultNamed.setAttribute('trigger-text', '?');
         defaultNamed.setAttribute('label', 'Help');
         defaultNamed.setAttribute('dialog-label', 'Help instructions');
@@ -607,7 +608,18 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
             'Use the operators');
         scope.appendChild(defaultNamed);
 
+        const openTriggerNamed = document.createElement('tf-help');
+        openTriggerNamed.id = 'help-open-trigger-named';
+        openTriggerNamed.setAttribute('trigger-text', '?');
+        openTriggerNamed.setAttribute('label', 'Help');
+        openTriggerNamed.setAttribute('close-text', 'Close');
+        openTriggerNamed.setAttribute('instructions-text',
+            'Use the operators');
+        openTriggerNamed.setAttribute('open', '');
+        scope.appendChild(openTriggerNamed);
+
         const expanded = document.createElement('tf-help');
+        expanded.id = 'help-open-dialog-named';
         expanded.setAttribute('trigger-text', '?');
         expanded.setAttribute('label', 'Help');
         expanded.setAttribute('dialog-label', 'Help instructions');
@@ -626,6 +638,25 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
     expect(
         violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)
     ).toEqual([]);
+
+    const names = await page.evaluate(() => {
+        const el = document.getElementById('help-open-trigger-named');
+        const sr = el.shadowRoot;
+        const dialog = sr.querySelector('[part="dialog"]');
+        const trigger = sr.querySelector('[part="trigger"]');
+        return {
+            labelledby: dialog.getAttribute('aria-labelledby'),
+            triggerLabel: trigger.getAttribute('aria-label'),
+            closeText:
+                sr.querySelector('[part="close"]').textContent.trim()
+        };
+    });
+
+    expect(names).toEqual({
+        labelledby: 'trigger',
+        triggerLabel: 'Help',
+        closeText: 'Close'
+    });
 });
 
 test('clicking the instructions container closes the dialog',
@@ -812,7 +843,7 @@ test('open-change fires on dialog backdrop dismissal',
         expect(result).toEqual([true, false]);
     });
 
-test('setDialogLabel and setInstructionsText set their attributes',
+test('setLabel, setDialogLabel and setInstructionsText set their attributes',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -821,6 +852,9 @@ test('setDialogLabel and setInstructionsText set their attributes',
             const el = document.createElement('tf-help');
             document.body.appendChild(el);
 
+            el.setLabel('Help');
+            const labelled = el.getAttribute('label');
+
             el.setDialogLabel('Filter instructions');
             const named = el.getAttribute('dialog-label');
 
@@ -828,10 +862,11 @@ test('setDialogLabel and setInstructionsText set their attributes',
             const instructed = el.getAttribute('instructions-text');
 
             el.remove();
-            return { named, instructed };
+            return { labelled, named, instructed };
         }, COMPONENT);
 
         expect(result).toEqual({
+            labelled: 'Help',
             named: 'Filter instructions',
             instructed: 'Use the operators'
         });

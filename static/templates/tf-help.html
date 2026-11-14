@@ -31,7 +31,7 @@
             <h4>TableFilter v{VERSION}</h4>
             <a href="https://www.tablefilter.com/" target="_blank">
                 www.tablefilter.com</a>
-            <br /><span>&copy; 2015-2026 TableFilter</span>
+            <br /><span>&copy; 2015-{YEAR} TableFilter</span>
             <div align="center" style="margin-top:8px;">
                 <a href="javascript:void(0);" class="close">Close</a>
             </div>
@@ -54,7 +54,8 @@
         alternate_rows: true,
         rows_counter: true,
         btn_reset: true,
-        status_bar: true
+        status_bar: true,
+        help_instructions: false
     };
 
     customElements.whenDefined('tf-help').then(function () {

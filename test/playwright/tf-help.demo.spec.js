@@ -35,6 +35,8 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
 
         const initial = {
             defined: Boolean(customElements.get('tf-help')),
+            legacyHelp: Boolean(document.querySelector('.helpBtn')) ||
+                Boolean(document.querySelector('.helpCont')),
             triggerText:
                 sr.querySelector('[part="trigger-text"]').textContent,
             dialogName: dialog.getAttribute('aria-label'),
@@ -76,6 +78,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
     });
 
     expect(result.initial.defined).toBe(true);
+    expect(result.initial.legacyHelp).toBe(false);
     expect(result.initial.triggerText).toBe('?');
     expect(result.initial.dialogName).toBe('Help instructions');
     expect(result.initial.instructions).toBe(true);
@@ -138,6 +141,8 @@ test(`help mounts declaratively in an existing demo: ${EXISTING_DEMO_PAGE}`,
 
             return {
                 initial: {
+                    legacyHelp: Boolean(document.querySelector('.helpBtn')) ||
+                        Boolean(document.querySelector('.helpCont')),
                     triggerHidden: trigger.hidden,
                     triggerText:
                         sr.querySelector('[part="trigger-text"]').textContent,
@@ -157,6 +162,7 @@ test(`help mounts declaratively in an existing demo: ${EXISTING_DEMO_PAGE}`,
             };
         });
 
+        expect(result.initial.legacyHelp).toBe(false);
         expect(result.initial.triggerHidden).toBe(false);
         expect(result.initial.triggerText).toBe('?');
         expect(result.initial.dialogName).toBe('Help instructions');

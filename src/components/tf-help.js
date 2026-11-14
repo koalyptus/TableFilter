@@ -10,9 +10,11 @@
  *
  * Attributes: `trigger-text`; `label` (trigger `aria-label`);
  * `instructions-text`; `dialog-label` (dialog accessible name, falling
- * back to `aria-labelledby` on the trigger); `close-text`; `open`
- * (reflects the dialog state); `disabled` (blocks trigger
- * activation). Empty or absent attributes render empty.
+ * back to `aria-labelledby` on the trigger); `close-text` (close
+ * control text and accessible name; the control is unnamed when the
+ * attribute is absent); `open` (reflects the dialog state); `disabled`
+ * (blocks trigger activation). Empty or absent attributes render
+ * empty.
  *
  * The dialog opens with `showModal()`. `Escape`, the backdrop and the
  * instructions container close it. Setting `open` opens the dialog,
