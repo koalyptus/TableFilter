@@ -79,8 +79,9 @@
         var tf = new TableFilter('demo', filtersConfig);
         tf.init();
         // TODO(#915): the Help bridge mounts the element in the toolbar.
-        tf.feature('toolbar').container('right',
-            document.querySelector('tf-help'));
+        tf.feature('toolbar').container('right').insertBefore(
+            document.querySelector('tf-help'),
+            tf.feature('clearButton').container);
     });
 </script>
 <!-- @import partials/pre-inline-script.html -->

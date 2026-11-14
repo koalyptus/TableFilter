@@ -38,6 +38,17 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
                 Boolean(document.querySelector('.helpCont')),
             toolbarPlaced: Boolean(host.closest('.inf')) &&
                 Boolean(host.closest('.rdiv')),
+            toolbarOrder: (() => {
+                const right = host.closest('.rdiv');
+                const clear = document.querySelector('.rdiv .reset');
+                return {
+                    helpBeforeClear: Boolean(clear) &&
+                        host.compareDocumentPosition(clear) ===
+                            Node.DOCUMENT_POSITION_FOLLOWING,
+                    clearIsLast: Boolean(clear) &&
+                        right.lastElementChild.contains(clear)
+                };
+            })(),
             triggerText:
                 sr.querySelector('[part="trigger-text"]').textContent,
             dialogName: dialog.getAttribute('aria-label'),
@@ -81,6 +92,9 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
     expect(result.initial.defined).toBe(true);
     expect(result.initial.legacyHelp).toBe(false);
     expect(result.initial.toolbarPlaced).toBe(true);
+    expect(result.initial.toolbarOrder).toEqual({
+        helpBeforeClear: true, clearIsLast: true
+    });
     expect(result.initial.triggerText).toBe('?');
     expect(result.initial.dialogName).toBe('Help instructions');
     expect(result.initial.instructions).toBe(true);
