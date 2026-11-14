@@ -366,6 +366,40 @@ test('projects instructions markup through the instructions slot',
         expect(result.html).toBe('<b>Operators</b>');
     });
 
+test('replacing the instructions slot content swaps the dialog body',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.innerHTML = '<p slot="instructions">First</p>';
+            document.body.appendChild(el);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+
+            const slot = el.shadowRoot
+                .querySelector('slot[name="instructions"]');
+            const before = slot.assignedElements()[0].textContent;
+
+            el.innerHTML = '<div slot="instructions"><b>Second</b></div>';
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const assigned = slot.assignedElements();
+            const after = assigned[0].textContent;
+            const textHidden = el.shadowRoot
+                .querySelector('[part="instructions-text"]').hidden;
+
+            el.remove();
+            return { before, after, count: assigned.length, textHidden };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            before: 'First',
+            after: 'Second',
+            count: 1,
+            textHidden: true
+        });
+    });
+
 test('renders the close control text from the attribute',
     async ({ page }) => {
         await page.goto(FIXTURE);
