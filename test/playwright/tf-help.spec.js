@@ -697,3 +697,142 @@ test('disabled blocks a slotted trigger control',
 
         expect(result).toEqual({ open: false, attr: false });
     });
+
+test('clicking the trigger toggles the dialog closed',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const dialog = sr.querySelector('[part="dialog"]');
+            const trigger = sr.querySelector('[part="trigger"]');
+
+            trigger.click();
+            const opened = dialog.open;
+            trigger.click();
+            const closed = dialog.open;
+            const attr = el.hasAttribute('open');
+
+            el.remove();
+            return { opened, closed, attr };
+        }, COMPONENT);
+
+        expect(result).toEqual({ opened: true, closed: false, attr: false });
+    });
+
+test('Escape closes the dialog and syncs the host attribute',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.id = 'escape-help';
+            el.setAttribute('trigger-text', '?');
+            el.setAttribute('label', 'Help');
+            document.body.appendChild(el);
+            el.setOpen(true);
+        }, COMPONENT);
+
+        const opened = await page.evaluate(() => {
+            const el = document.getElementById('escape-help');
+            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+            return { open: dialog.open, attr: el.hasAttribute('open') };
+        });
+
+        await page.keyboard.press('Escape');
+
+        await page.waitForFunction(() => {
+            const el = document.getElementById('escape-help');
+            return el && !el.hasAttribute('open');
+        });
+
+        const result = await page.evaluate(() => {
+            const el = document.getElementById('escape-help');
+            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+            const state = {
+                open: dialog.open,
+                attr: el.hasAttribute('open')
+            };
+            el.remove();
+            return state;
+        });
+        expect(opened).toEqual({ open: true, attr: true });
+        expect(result).toEqual({ open: false, attr: false });
+    });
+
+test('open-change fires on instructions container dismissal',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const instructions = sr.querySelector('[part="instructions"]');
+
+            const seen = [];
+            document.addEventListener('open-change', (event) => seen.push(
+                event.detail.open));
+
+            el.setOpen(true);
+            instructions.click();
+            el.remove();
+            return seen;
+        }, COMPONENT);
+
+        expect(result).toEqual([true, false]);
+    });
+
+test('open-change fires on dialog backdrop dismissal',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            const dialog = sr.querySelector('[part="dialog"]');
+
+            const seen = [];
+            document.addEventListener('open-change', (event) => seen.push(
+                event.detail.open));
+
+            el.setOpen(true);
+            dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            el.remove();
+            return seen;
+        }, COMPONENT);
+
+        expect(result).toEqual([true, false]);
+    });
+
+test('setDialogLabel and setInstructionsText set their attributes',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            document.body.appendChild(el);
+
+            el.setDialogLabel('Filter instructions');
+            const named = el.getAttribute('dialog-label');
+
+            el.setInstructionsText('Use the operators');
+            const instructed = el.getAttribute('instructions-text');
+
+            el.remove();
+            return { named, instructed };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            named: 'Filter instructions',
+            instructed: 'Use the operators'
+        });
+    });

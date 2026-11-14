@@ -64,7 +64,15 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
             attr: host.hasAttribute('open')
         };
 
-        return { initial, opened, dismissed, closed };
+        trigger.click();
+        sr.querySelector('slot[name="instructions"]')
+            .assignedElements()[0].querySelector('a.close').click();
+        const footerClosed = {
+            open: dialog.open,
+            attr: host.hasAttribute('open')
+        };
+
+        return { initial, opened, dismissed, closed, footerClosed };
     });
 
     expect(result.initial.defined).toBe(true);
@@ -78,6 +86,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
     });
     expect(result.dismissed).toEqual({ open: false });
     expect(result.closed).toEqual({ open: false, attr: false });
+    expect(result.footerClosed).toEqual({ open: false, attr: false });
     expect(pageErrors).toEqual([]);
 });
 
@@ -120,25 +129,43 @@ test(`help mounts declaratively in an existing demo: ${EXISTING_DEMO_PAGE}`,
                 attr: host.hasAttribute('open')
             };
 
+            trigger.click();
+            instructions.querySelector('a.close').click();
+            const footerClosed = {
+                open: dialog.open,
+                attr: host.hasAttribute('open')
+            };
+
             return {
                 initial: {
                     triggerHidden: trigger.hidden,
+                    triggerText:
+                        sr.querySelector('[part="trigger-text"]').textContent,
                     dialogName: dialog.getAttribute('aria-label'),
+                    instructions: instructions.textContent
+                        .replace(/\s+/g, ' ').trim().length > 0,
                     footer: instructions.textContent
                         .includes('TableFilter v') &&
-                        Boolean(instructions.querySelector('a.close'))
+                        instructions.textContent
+                            .includes('www.tablefilter.com') &&
+                        instructions.querySelector('a.close').textContent ===
+                        'Close'
                 },
                 opened,
-                closed
+                closed,
+                footerClosed
             };
         });
 
         expect(result.initial.triggerHidden).toBe(false);
+        expect(result.initial.triggerText).toBe('?');
         expect(result.initial.dialogName).toBe('Help instructions');
+        expect(result.initial.instructions).toBe(true);
         expect(result.initial.footer).toBe(true);
         expect(result.opened).toEqual({
             open: true, modal: true, attr: true
         });
         expect(result.closed).toEqual({ open: false, attr: false });
+        expect(result.footerClosed).toEqual({ open: false, attr: false });
         expect(pageErrors).toEqual([]);
     });
