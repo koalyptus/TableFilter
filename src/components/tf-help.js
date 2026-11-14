@@ -118,10 +118,10 @@ export class TfHelpElement extends HTMLElement {
     }
 
     /**
-     * Set the trigger button's text.
-     * @param {*} text Button text
+     * Set the trigger text, rendered into the trigger button.
+     * @param {*} text Trigger text
      */
-    setTriggerText(text) {
+    setText(text) {
         this.setAttribute('trigger-text',
             text == null ? '' : String(text));
     }

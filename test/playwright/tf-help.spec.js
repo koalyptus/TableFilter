@@ -286,14 +286,14 @@ test('renders the trigger text and accessible name from attributes',
             };
 
             el.setAttribute('label', 'Help');
-            el.setTriggerText('?');
+            el.setText('?');
             const configured = {
                 text: text(),
                 label: trigger().getAttribute('aria-label')
             };
 
             el.setAttribute('label', '');
-            el.setTriggerText('');
+            el.setText('');
             const cleared = {
                 text: text(),
                 label: trigger().getAttribute('aria-label')
