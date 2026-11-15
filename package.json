@@ -37,7 +37,7 @@
     "build:demos": "grunt build-demos",
     "build:test": "node scripts/with-legacy-openssl.js webpack --colors --config webpack.test.config.js",
     "build:vite": "vite build",
-    "serve:vite": "vite --port 8080 --strictPort",
+    "serve:vite": "npm run build:vite && vite --port 8080 --strictPort",
     "server": "node scripts/with-legacy-openssl.js webpack-dev-server --colors --hot --config ./webpack.dev.config.js",
     "test": "grunt test",
     "test:playwright": "playwright test",

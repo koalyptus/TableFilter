@@ -84,6 +84,9 @@ module.exports = function (grunt) {
                             pattern: /{VERSION}/ig,
                             replacement: pkg.version
                         }, {
+                            pattern: /{YEAR}/ig,
+                            replacement: String(new Date().getFullYear())
+                        }, {
                             pattern: /{EZEDITTABLE_LINK}/ig,
                             replacement: '<a href="http://edittable.free.fr/' +
                             'zip.php?f=ezEditTable.zip&amp;p=1"' +

@@ -137,7 +137,12 @@ then run the local webserver:
 ```shell
 npm run serve:vite
 ```
-then pick a demo from:
+It builds the Vite bundle that the `tf-checklist.html` and
+`tf-pager.html` demos load (`dist/tablefilter/tablefilter.vite.js`)
+and serves the repository root. The bundle is built once at startup,
+so restart the server after changing `src/`.
+
+Then pick a demo from:
 ```shell
 http://localhost:8080/demos/
 ```
