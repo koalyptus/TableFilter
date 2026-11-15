@@ -16,10 +16,12 @@
  * (blocks trigger activation). Empty or absent attributes render
  * empty.
  *
- * The dialog opens with `showModal()`. `Escape`, the backdrop and the
- * instructions container close it. Setting `open` opens the dialog,
- * removing it closes the dialog, and `open-change` reports the state
- * with `detail: {open}`.
+ * The dialog opens with `showModal()`, which traps focus inside it and
+ * closes it on `Escape`. Every close path returns focus to the trigger
+ * control: the slotted trigger when one is assigned, the element
+ * button otherwise. Setting `open` opens the dialog, removing it
+ * closes the dialog, and `open-change` reports the state with
+ * `detail: {open}`.
  *
  * The element ships no class or presentational style; theme it via
  * `::part()` and `--tf-*` custom properties. Importing this module
@@ -28,6 +30,12 @@
 
 const TRIGGER_ID = 'trigger';
 const DIALOG_ID = 'dialog';
+
+// Controls and widgets that take focus; used to pick the focus target
+// inside slotted trigger markup.
+const FOCUSABLE = 'button:not([disabled]), a[href], ' +
+    'input:not([disabled]), select:not([disabled]), ' +
+    'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 // Cloned into every instance's shadow root. Structure and `part` hooks
 // only: no class or presentational style is baked in.
@@ -293,6 +301,32 @@ export class TfHelpElement extends HTMLElement {
         }
         this._syncExpanded();
         this._reportOpen();
+        // The modal dialog restores focus to the element focused at
+        // showModal() after the close event fires; `setTimeout` runs
+        // after that restoration.
+        setTimeout(() => this._focusTrigger());
+    }
+
+    /**
+     * Move focus to the slotted trigger control, or to the element
+     * button when the slot has none.
+     */
+    _focusTrigger() {
+        if (!this.isConnected) {
+            return;
+        }
+        const assigned = this._triggerSlot
+            .assignedNodes({ flatten: true })
+            .filter((node) => node.nodeType === Node.ELEMENT_NODE);
+        const slotted = assigned
+            .map((el) => el.matches(FOCUSABLE) ? el
+                : el.querySelector(FOCUSABLE))
+            .find(Boolean);
+        if (slotted) {
+            slotted.focus();
+        } else {
+            this._trigger.focus();
+        }
     }
 }
 

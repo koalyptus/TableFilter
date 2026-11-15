@@ -905,3 +905,218 @@ test('setLabel, setDialogLabel and setInstructionsText set their attributes',
             instructed: 'Use the operators'
         });
     });
+
+test('Escape returns focus to the element-rendered trigger',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.id = 'escape-return-help';
+            document.body.appendChild(el);
+        }, COMPONENT);
+
+        await page.evaluate(() => {
+            const el = document.getElementById('escape-return-help');
+            el.shadowRoot.querySelector('[part="trigger"]').click();
+        });
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(() => {
+            const el = document.getElementById('escape-return-help');
+            return el && !el.hasAttribute('open') &&
+                el.shadowRoot.activeElement ===
+                    el.shadowRoot.querySelector('[part="trigger"]');
+        });
+
+        const result = await page.evaluate(() => {
+            const el = document.getElementById('escape-return-help');
+            const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+            const state = {
+                open: el.shadowRoot.querySelector('[part="dialog"]').open,
+                onTrigger: el.shadowRoot.activeElement === trigger
+            };
+            el.remove();
+            return state;
+        });
+
+        expect(result).toEqual({ open: false, onTrigger: true });
+    });
+
+test('the close control returns focus to the trigger', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-help');
+        el.id = 'close-return-help';
+        document.body.appendChild(el);
+        const sr = el.shadowRoot;
+        sr.querySelector('[part="trigger"]').click();
+        sr.querySelector('[part="close"]').click();
+    }, COMPONENT);
+
+    await page.waitForFunction(() => {
+        const el = document.getElementById('close-return-help');
+        return el && !el.hasAttribute('open') &&
+            el.shadowRoot.activeElement ===
+                el.shadowRoot.querySelector('[part="trigger"]');
+    });
+
+    const result = await page.evaluate(() => {
+        const el = document.getElementById('close-return-help');
+        el.remove();
+        return true;
+    });
+
+    expect(result).toBe(true);
+});
+
+test('the backdrop dismissal returns focus to the trigger',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.id = 'backdrop-return-help';
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            sr.querySelector('[part="trigger"]').click();
+            sr.querySelector('[part="dialog"]').dispatchEvent(
+                new MouseEvent('click', { bubbles: true }));
+        }, COMPONENT);
+
+        await page.waitForFunction(() => {
+            const el = document.getElementById('backdrop-return-help');
+            return el && !el.hasAttribute('open') &&
+                el.shadowRoot.activeElement ===
+                    el.shadowRoot.querySelector('[part="trigger"]');
+        });
+
+        await page.evaluate(() => {
+            document.getElementById('backdrop-return-help').remove();
+        });
+    });
+
+test('the instructions dismissal returns focus to the trigger',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.id = 'instructions-return-help';
+            document.body.appendChild(el);
+            const sr = el.shadowRoot;
+            sr.querySelector('[part="trigger"]').click();
+            sr.querySelector('[part="instructions"]').dispatchEvent(
+                new MouseEvent('click', { bubbles: true }));
+        }, COMPONENT);
+
+        await page.waitForFunction(() => {
+            const el = document.getElementById('instructions-return-help');
+            return el && !el.hasAttribute('open') &&
+                el.shadowRoot.activeElement ===
+                    el.shadowRoot.querySelector('[part="trigger"]');
+        });
+
+        await page.evaluate(() => {
+            document.getElementById('instructions-return-help').remove();
+        });
+    });
+
+test('setOpen(false) returns focus to the trigger from elsewhere',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.id = 'setopen-return-help';
+            const outside = document.createElement('button');
+            outside.id = 'outside-focus';
+            document.body.appendChild(outside);
+            document.body.appendChild(el);
+            outside.focus();
+            el.setOpen(true);
+            el.setOpen(false);
+        }, COMPONENT);
+
+        await page.waitForFunction(() => {
+            const el = document.getElementById('setopen-return-help');
+            return el && !el.hasAttribute('open') &&
+                el.shadowRoot.activeElement ===
+                    el.shadowRoot.querySelector('[part="trigger"]');
+        });
+
+        await page.evaluate(() => {
+            document.getElementById('setopen-return-help').remove();
+            document.getElementById('outside-focus').remove();
+        });
+    });
+
+test('closing returns focus to a slotted trigger control',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.id = 'slotted-return-help';
+            el.innerHTML = '<button data-control slot="trigger">Help</button>';
+            document.body.appendChild(el);
+            el.querySelector('[data-control]').click();
+            el.shadowRoot.querySelector('[part="dialog"]').close();
+        }, COMPONENT);
+
+        await page.waitForFunction(() => {
+            const el = document.getElementById('slotted-return-help');
+            return el &&
+                !el.shadowRoot.querySelector('[part="dialog"]').open &&
+                document.activeElement === el.querySelector('[data-control]');
+        });
+
+        await page.evaluate(() => {
+            document.getElementById('slotted-return-help').remove();
+        });
+    });
+
+test('showModal moves focus into the dialog', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-help');
+        el.id = 'focus-help';
+        el.setAttribute('instructions-text', 'Use the operators');
+        document.body.appendChild(el);
+        el.setOpen(true);
+        const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+        const active = el.shadowRoot.activeElement;
+        const state = {
+            inside: Boolean(active) && dialog.contains(active)
+        };
+        el.remove();
+        return state;
+    }, COMPONENT);
+
+    expect(result.inside).toBe(true);
+});
+
+test('removing an open element does not move focus', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-help');
+        document.body.appendChild(el);
+        el.setOpen(true);
+        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+        el.remove();
+        return { active: document.activeElement === document.body,
+            triggerDetached: !trigger.isConnected };
+    }, COMPONENT);
+
+    expect(result).toEqual({ active: true, triggerDetached: true });
+});
