@@ -906,13 +906,14 @@ test('setLabel, setDialogLabel and setInstructionsText set their attributes',
         });
     });
 
-// Mounts a <tf-help> with light-DOM markup and attributes under the
-// fixed id `tf-help-focus`.
-async function mountHelp(page, markup, attrs) {
-    await page.evaluate(async ({ markup, attrs, component }) => {
+// Mounts a <tf-help> with light-DOM markup and attributes. The element
+// gets the id `tf-help-focus` unless `id` is given, so several
+// instances can share one page.
+async function mountHelp(page, markup, attrs, id) {
+    await page.evaluate(async ({ markup, attrs, component, id }) => {
         await import(component);
         const el = document.createElement('tf-help');
-        el.id = 'tf-help-focus';
+        el.id = id || 'tf-help-focus';
         for (const [name, value] of Object.entries(attrs)) {
             el.setAttribute(name, value);
         }
@@ -920,7 +921,7 @@ async function mountHelp(page, markup, attrs) {
             el.innerHTML = markup;
         }
         document.body.appendChild(el);
-    }, { markup, attrs, component: COMPONENT });
+    }, { markup, attrs, component: COMPONENT, id });
 }
 
 function readFocusState(page) {
@@ -1160,3 +1161,79 @@ test('removing an open element does not move focus', async ({ page }) => {
 
     expect(result).toEqual({ active: true, triggerDetached: true });
 });
+
+test('two instances on one page open and close independently',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await mountHelp(page, '', {}, 'tf-help-a');
+        await mountHelp(page,
+            '<button data-control slot="trigger">Help</button>',
+            {}, 'tf-help-b');
+
+        await page.evaluate(() => {
+            document.getElementById('tf-help-a').shadowRoot
+                .querySelector('[part="trigger"]').click();
+        });
+
+        const afterOpenA = await page.evaluate(() => ({
+            a: document.getElementById('tf-help-a').shadowRoot
+                .querySelector('[part="dialog"]').open,
+            b: document.getElementById('tf-help-b').shadowRoot
+                .querySelector('[part="dialog"]').open,
+            bExpanded: document.getElementById('tf-help-b').shadowRoot
+                .querySelector('[part="trigger"]')
+                .getAttribute('aria-expanded')
+        }));
+        expect(afterOpenA).toEqual({ a: true, b: false, bExpanded: 'false' });
+
+        await page.keyboard.press('Escape');
+
+        await page.waitForFunction(() => {
+            const a = document.getElementById('tf-help-a');
+            return !a.shadowRoot.querySelector('[part="dialog"]').open &&
+                a.shadowRoot.activeElement ===
+                    a.shadowRoot.querySelector('[part="trigger"]');
+        });
+
+        await page.evaluate(() => {
+            document.getElementById('tf-help-b')
+                .querySelector('[data-control]').click();
+        });
+
+        const afterOpenB = await page.evaluate(() => ({
+            a: document.getElementById('tf-help-a').shadowRoot
+                .querySelector('[part="dialog"]').open,
+            b: document.getElementById('tf-help-b').shadowRoot
+                .querySelector('[part="dialog"]').open
+        }));
+        expect(afterOpenB).toEqual({ a: false, b: true });
+
+        await page.evaluate(() => {
+            document.getElementById('tf-help-b').shadowRoot
+                .querySelector('[part="close"]').click();
+        });
+
+        await page.waitForFunction(() => {
+            const b = document.getElementById('tf-help-b');
+            return !b.shadowRoot.querySelector('[part="dialog"]').open &&
+                document.activeElement === b.querySelector('[data-control]');
+        });
+
+        const final = await page.evaluate(() => {
+            const a = document.getElementById('tf-help-a');
+            const b = document.getElementById('tf-help-b');
+            const state = {
+                a: a.shadowRoot.querySelector('[part="dialog"]').open,
+                b: b.shadowRoot.querySelector('[part="dialog"]').open,
+                aExpanded: a.shadowRoot.querySelector('[part="trigger"]')
+                    .getAttribute('aria-expanded'),
+                bAttr: b.hasAttribute('open')
+            };
+            a.remove();
+            b.remove();
+            return state;
+        });
+        expect(final).toEqual({
+            a: false, b: false, aExpanded: 'false', bAttr: false
+        });
+    });
