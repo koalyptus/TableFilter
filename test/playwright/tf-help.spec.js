@@ -906,38 +906,54 @@ test('setLabel, setDialogLabel and setInstructionsText set their attributes',
         });
     });
 
+// Mounts a <tf-help> with light-DOM markup and attributes under the
+// fixed id `tf-help-focus`.
+async function mountHelp(page, markup, attrs) {
+    await page.evaluate(async ({ markup, attrs, component }) => {
+        await import(component);
+        const el = document.createElement('tf-help');
+        el.id = 'tf-help-focus';
+        for (const [name, value] of Object.entries(attrs)) {
+            el.setAttribute(name, value);
+        }
+        if (markup) {
+            el.innerHTML = markup;
+        }
+        document.body.appendChild(el);
+    }, { markup, attrs, component: COMPONENT });
+}
+
+function readFocusState(page) {
+    return page.evaluate(() => {
+        const el = document.getElementById('tf-help-focus');
+        return {
+            open: el.shadowRoot.querySelector('[part="dialog"]').open,
+            onTrigger: el.shadowRoot.activeElement === el.shadowRoot
+                .querySelector('[part="trigger"]')
+        };
+    });
+}
+
 test('Escape returns focus to the element-rendered trigger',
     async ({ page }) => {
         await page.goto(FIXTURE);
-
-        await page.evaluate(async (component) => {
-            await import(component);
-            const el = document.createElement('tf-help');
-            el.id = 'escape-return-help';
-            document.body.appendChild(el);
-        }, COMPONENT);
+        await mountHelp(page, '', {});
 
         await page.evaluate(() => {
-            const el = document.getElementById('escape-return-help');
-            el.shadowRoot.querySelector('[part="trigger"]').click();
+            document.getElementById('tf-help-focus').shadowRoot
+                .querySelector('[part="trigger"]').click();
         });
         await page.keyboard.press('Escape');
         await page.waitForFunction(() => {
-            const el = document.getElementById('escape-return-help');
+            const el = document.getElementById('tf-help-focus');
             return el && !el.hasAttribute('open') &&
                 el.shadowRoot.activeElement ===
                     el.shadowRoot.querySelector('[part="trigger"]');
         });
 
-        const result = await page.evaluate(() => {
-            const el = document.getElementById('escape-return-help');
-            const trigger = el.shadowRoot.querySelector('[part="trigger"]');
-            const state = {
-                open: el.shadowRoot.querySelector('[part="dialog"]').open,
-                onTrigger: el.shadowRoot.activeElement === trigger
-            };
-            el.remove();
-            return state;
+        const result = await readFocusState(page);
+        await page.evaluate(() => {
+            document.getElementById('tf-help-focus').remove();
         });
 
         expect(result).toEqual({ open: false, onTrigger: true });
@@ -945,164 +961,188 @@ test('Escape returns focus to the element-rendered trigger',
 
 test('the close control returns focus to the trigger', async ({ page }) => {
     await page.goto(FIXTURE);
+    await mountHelp(page, '', {});
 
-    await page.evaluate(async (component) => {
-        await import(component);
-        const el = document.createElement('tf-help');
-        el.id = 'close-return-help';
-        document.body.appendChild(el);
-        const sr = el.shadowRoot;
-        sr.querySelector('[part="trigger"]').click();
-        sr.querySelector('[part="close"]').click();
-    }, COMPONENT);
+    await page.evaluate(() => {
+        const el = document.getElementById('tf-help-focus');
+        el.shadowRoot.querySelector('[part="trigger"]').click();
+        el.shadowRoot.querySelector('[part="close"]').click();
+    });
 
     await page.waitForFunction(() => {
-        const el = document.getElementById('close-return-help');
+        const el = document.getElementById('tf-help-focus');
         return el && !el.hasAttribute('open') &&
             el.shadowRoot.activeElement ===
                 el.shadowRoot.querySelector('[part="trigger"]');
     });
 
-    const result = await page.evaluate(() => {
-        const el = document.getElementById('close-return-help');
-        el.remove();
-        return true;
+    const result = await readFocusState(page);
+    await page.evaluate(() => {
+        document.getElementById('tf-help-focus').remove();
     });
 
-    expect(result).toBe(true);
+    expect(result).toEqual({ open: false, onTrigger: true });
 });
 
 test('the backdrop dismissal returns focus to the trigger',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await mountHelp(page, '', {});
 
-        await page.evaluate(async (component) => {
-            await import(component);
-            const el = document.createElement('tf-help');
-            el.id = 'backdrop-return-help';
-            document.body.appendChild(el);
-            const sr = el.shadowRoot;
-            sr.querySelector('[part="trigger"]').click();
-            sr.querySelector('[part="dialog"]').dispatchEvent(
+        await page.evaluate(() => {
+            const el = document.getElementById('tf-help-focus');
+            el.shadowRoot.querySelector('[part="trigger"]').click();
+            el.shadowRoot.querySelector('[part="dialog"]').dispatchEvent(
                 new MouseEvent('click', { bubbles: true }));
-        }, COMPONENT);
+        });
 
         await page.waitForFunction(() => {
-            const el = document.getElementById('backdrop-return-help');
+            const el = document.getElementById('tf-help-focus');
             return el && !el.hasAttribute('open') &&
                 el.shadowRoot.activeElement ===
                     el.shadowRoot.querySelector('[part="trigger"]');
         });
 
+        const result = await readFocusState(page);
         await page.evaluate(() => {
-            document.getElementById('backdrop-return-help').remove();
+            document.getElementById('tf-help-focus').remove();
         });
+
+        expect(result).toEqual({ open: false, onTrigger: true });
     });
 
 test('the instructions dismissal returns focus to the trigger',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await mountHelp(page, '', {});
 
-        await page.evaluate(async (component) => {
-            await import(component);
-            const el = document.createElement('tf-help');
-            el.id = 'instructions-return-help';
-            document.body.appendChild(el);
-            const sr = el.shadowRoot;
-            sr.querySelector('[part="trigger"]').click();
-            sr.querySelector('[part="instructions"]').dispatchEvent(
-                new MouseEvent('click', { bubbles: true }));
-        }, COMPONENT);
+        await page.evaluate(() => {
+            const el = document.getElementById('tf-help-focus');
+            el.shadowRoot.querySelector('[part="trigger"]').click();
+            el.shadowRoot.querySelector('[part="instructions"]')
+                .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
 
         await page.waitForFunction(() => {
-            const el = document.getElementById('instructions-return-help');
+            const el = document.getElementById('tf-help-focus');
             return el && !el.hasAttribute('open') &&
                 el.shadowRoot.activeElement ===
                     el.shadowRoot.querySelector('[part="trigger"]');
         });
 
+        const result = await readFocusState(page);
         await page.evaluate(() => {
-            document.getElementById('instructions-return-help').remove();
+            document.getElementById('tf-help-focus').remove();
         });
+
+        expect(result).toEqual({ open: false, onTrigger: true });
     });
 
-test('setOpen(false) returns focus to the trigger from elsewhere',
+test('the trigger toggle returns focus to the element button',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await mountHelp(page, '', {});
 
-        await page.evaluate(async (component) => {
-            await import(component);
-            const el = document.createElement('tf-help');
-            el.id = 'setopen-return-help';
-            const outside = document.createElement('button');
-            outside.id = 'outside-focus';
-            document.body.appendChild(outside);
-            document.body.appendChild(el);
-            outside.focus();
-            el.setOpen(true);
-            el.setOpen(false);
-        }, COMPONENT);
+        await page.evaluate(() => {
+            const el = document.getElementById('tf-help-focus');
+            el.shadowRoot.querySelector('[part="trigger"]').click();
+            el.shadowRoot.querySelector('[part="trigger"]').click();
+        });
 
         await page.waitForFunction(() => {
-            const el = document.getElementById('setopen-return-help');
+            const el = document.getElementById('tf-help-focus');
             return el && !el.hasAttribute('open') &&
                 el.shadowRoot.activeElement ===
                     el.shadowRoot.querySelector('[part="trigger"]');
         });
 
+        const result = await readFocusState(page);
         await page.evaluate(() => {
-            document.getElementById('setopen-return-help').remove();
-            document.getElementById('outside-focus').remove();
+            document.getElementById('tf-help-focus').remove();
         });
+
+        expect(result).toEqual({ open: false, onTrigger: true });
     });
 
 test('closing returns focus to a slotted trigger control',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await mountHelp(page,
+            '<button data-control slot="trigger">Help</button>', {});
 
-        await page.evaluate(async (component) => {
-            await import(component);
-            const el = document.createElement('tf-help');
-            el.id = 'slotted-return-help';
-            el.innerHTML = '<button data-control slot="trigger">Help</button>';
-            document.body.appendChild(el);
+        await page.evaluate(() => {
+            const el = document.getElementById('tf-help-focus');
             el.querySelector('[data-control]').click();
-            el.shadowRoot.querySelector('[part="dialog"]').close();
-        }, COMPONENT);
+            el.querySelector('[data-control]').click();
+        });
 
         await page.waitForFunction(() => {
-            const el = document.getElementById('slotted-return-help');
+            const el = document.getElementById('tf-help-focus');
             return el &&
                 !el.shadowRoot.querySelector('[part="dialog"]').open &&
                 document.activeElement === el.querySelector('[data-control]');
         });
 
+        const result = await page.evaluate(() => {
+            const el = document.getElementById('tf-help-focus');
+            const state = {
+                open: el.shadowRoot.querySelector('[part="dialog"]').open,
+                onControl: document.activeElement ===
+                    el.querySelector('[data-control]')
+            };
+            el.remove();
+            return state;
+        });
+
+        expect(result).toEqual({ open: false, onControl: true });
+    });
+
+test('closing returns focus to the host for non-focusable slotted markup',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await mountHelp(page, '<span slot="trigger">Help</span>', {});
+
         await page.evaluate(() => {
-            document.getElementById('slotted-return-help').remove();
+            document.getElementById('tf-help-focus')
+                .querySelector('[slot="trigger"]').click();
+        });
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(() => {
+            const el = document.getElementById('tf-help-focus');
+            return el && !el.hasAttribute('open') &&
+                document.activeElement === el;
+        });
+
+        await page.evaluate(() => {
+            document.getElementById('tf-help-focus').remove();
         });
     });
 
-test('showModal moves focus into the dialog', async ({ page }) => {
-    await page.goto(FIXTURE);
+test('a programmatic close keeps the platform focus restore',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await mountHelp(page, '', {});
 
-    const result = await page.evaluate(async (component) => {
-        await import(component);
-        const el = document.createElement('tf-help');
-        el.id = 'focus-help';
-        el.setAttribute('instructions-text', 'Use the operators');
-        document.body.appendChild(el);
-        el.setOpen(true);
-        const dialog = el.shadowRoot.querySelector('[part="dialog"]');
-        const active = el.shadowRoot.activeElement;
-        const state = {
-            inside: Boolean(active) && dialog.contains(active)
-        };
-        el.remove();
-        return state;
-    }, COMPONENT);
+        await page.evaluate(() => {
+            const outside = document.createElement('button');
+            outside.id = 'outside-focus';
+            document.body.appendChild(outside);
+            outside.focus();
+            document.getElementById('tf-help-focus').setOpen(true);
+        });
 
-    expect(result.inside).toBe(true);
-});
+        await page.evaluate(() => {
+            document.getElementById('tf-help-focus').setOpen(false);
+        });
+
+        await page.waitForFunction(() => document.activeElement ===
+            document.getElementById('outside-focus'));
+
+        await page.evaluate(() => {
+            document.getElementById('tf-help-focus').remove();
+            document.getElementById('outside-focus').remove();
+        });
+    });
 
 test('removing an open element does not move focus', async ({ page }) => {
     await page.goto(FIXTURE);

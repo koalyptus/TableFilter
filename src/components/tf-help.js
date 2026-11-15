@@ -17,11 +17,13 @@
  * empty.
  *
  * The dialog opens with `showModal()`, which traps focus inside it and
- * closes it on `Escape`. Every close path returns focus to the trigger
- * control: the slotted trigger when one is assigned, the element
- * button otherwise. Setting `open` opens the dialog, removing it
- * closes the dialog, and `open-change` reports the state with
- * `detail: {open}`.
+ * closes it on `Escape`. A user dismissal (`Escape`, backdrop,
+ * instructions container, close control, trigger toggle) returns focus
+ * to the trigger control: the slotted trigger when one is assigned, the
+ * element button otherwise, the host when slotted markup hides it. A
+ * programmatic close keeps the platform focus restore. Setting `open`
+ * opens the dialog, removing it closes the dialog, and `open-change`
+ * reports the state with `detail: {open}`.
  *
  * The element ships no class or presentational style; theme it via
  * `::part()` and `--tf-*` custom properties. Importing this module
@@ -79,6 +81,7 @@ export class TfHelpElement extends HTMLElement {
         this._closeText =
             this.shadowRoot.querySelector('[part="close-text"]');
         this._reportedOpen = false;
+        this._userClosed = false;
 
         this._trigger.addEventListener('click', () => this._toggle());
         this._triggerSlot.addEventListener('click', () => this._toggle());
@@ -89,10 +92,12 @@ export class TfHelpElement extends HTMLElement {
         this._instructions.addEventListener('click', () => this._toggle());
         this._dialog.addEventListener('click', (event) => {
             if (event.target === this._dialog) {
-                this.setOpen(false);
+                this._dismiss();
             }
         });
-        this._close.addEventListener('click', () => this.setOpen(false));
+        this._close.addEventListener('click', () => this._dismiss());
+        this._dialog.addEventListener(
+            'cancel', () => { this._userClosed = true; });
         this._dialog.addEventListener('close', () => this._onClose());
     }
 
@@ -244,7 +249,18 @@ export class TfHelpElement extends HTMLElement {
         if (this.hasAttribute('disabled')) {
             return;
         }
+        if (this._dialog.open) {
+            this._userClosed = true;
+        }
         this.setOpen(!this._dialog.open);
+    }
+
+    /**
+     * Close the dialog from a user dismissal.
+     */
+    _dismiss() {
+        this._userClosed = true;
+        this.setOpen(false);
     }
 
     /**
@@ -301,15 +317,21 @@ export class TfHelpElement extends HTMLElement {
         }
         this._syncExpanded();
         this._reportOpen();
-        // The modal dialog restores focus to the element focused at
-        // showModal() after the close event fires; `setTimeout` runs
+        const userClosed = this._userClosed;
+        this._userClosed = false;
+        if (!userClosed) {
+            return;
+        }
+        // The platform restores focus to the element focused at
+        // showModal() after the close event; the deferred call runs
         // after that restoration.
         setTimeout(() => this._focusTrigger());
     }
 
     /**
-     * Move focus to the slotted trigger control, or to the element
-     * button when the slot has none.
+     * Move focus to the slotted trigger control, to the element button
+     * when the slot has none, or to the host when slotted markup hides
+     * the button.
      */
     _focusTrigger() {
         if (!this.isConnected) {
@@ -324,9 +346,14 @@ export class TfHelpElement extends HTMLElement {
             .find(Boolean);
         if (slotted) {
             slotted.focus();
-        } else {
-            this._trigger.focus();
+            return;
         }
+        if (this._trigger.hidden) {
+            this.tabIndex = -1;
+            this.focus();
+            return;
+        }
+        this._trigger.focus();
     }
 }
 
