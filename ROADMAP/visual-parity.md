@@ -18,8 +18,10 @@ The bridges apply the legacy class to the **host** only
 (`src/modules/statusBar.js:240`, `src/modules/rowsCounter.js:141`,
 `src/modules/paging.js:419`). Shadow internals are therefore unreachable from
 the shipped stylesheet: `grep -rn "::part" static/style` returns nothing.
-`demos/tf-pager.html` and `demos/tf-checklist.html` carry no page CSS and render
-unstyled native controls; `demos/tf-help.html` styles only the trigger inline.
+`demos/tf-pager.html` and `demos/tf-checklist.html` carry no component
+presentation CSS (the shared `partials/style.html` partial styles page chrome
+only) and render unstyled native controls; `<tf-help>` is not on this branch
+(see #913).
 
 Parity is a target, not a property of the current build.
 
@@ -35,7 +37,7 @@ closing gate:
 | `<tf-rows-counter>` | `static/style/rows-counter.styl` | [#1078](https://github.com/koalyptus/TableFilter/issues/1078) |
 | `<tf-clear-button>` | `static/style/reset-button.styl` | [#1079](https://github.com/koalyptus/TableFilter/issues/1079) |
 | `<tf-pager>` | `static/style/paging.styl` | [#1080](https://github.com/koalyptus/TableFilter/issues/1080) |
-| `<tf-results-per-page>` | `static/style/paging.styl` (`select.rspg`) | [#1081](https://github.com/koalyptus/TableFilter/issues/1081) |
+| `<tf-results-per-page>` | `static/style/paging.styl:66` (`select.rspg`), `:72` (`span.rspgSpan`) | [#1081](https://github.com/koalyptus/TableFilter/issues/1081) |
 | `<tf-checklist>` | `static/style/filter-checklist.styl` | [#1082](https://github.com/koalyptus/TableFilter/issues/1082) |
 | `<tf-help>` | `static/style/help.styl` | [#1083](https://github.com/koalyptus/TableFilter/issues/1083) |
 
@@ -51,7 +53,8 @@ component issue closes.
 2. Host class the bridge applies, and the legacy class to `::part` mapping.
 3. An explicit statement when a part has **no** legacy equivalent, so "parity"
    is not claimed where it cannot exist (checklist trigger, help modal,
-   results-per-page under `enable_icons` state changes).
+   `results-label`/`results-text` — the legacy label is a sibling `span.rspgSpan`
+   with no association to the select, `src/modules/paging.js:833-848`).
 4. The demo page that proves the component with zero page CSS.
 5. Themes: `default`, `mytheme`, `skyblue`, `transparent`.
 6. Bridge-state coupling, e.g. `<tf-pager>` requires `enable_icons: false`
