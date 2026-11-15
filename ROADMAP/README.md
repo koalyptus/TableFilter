@@ -32,3 +32,8 @@ This directory contains the complete technical specification, architectural inve
    - Inventory of every legacy `innerHTML` config option (`btn_reset.html`, `loader.html`, `help_instructions.*`, `no_results_message.content`, pager button HTML, extension button HTML, colOps `write_method`).
    - One mechanism for all: default `<slot>` + `part`s, with per-option mapping rules.
    - Per-milestone execution plan and the `<tf-status>` HTML-message regression. Owned by [#1012](https://github.com/koalyptus/TableFilter/issues/1012).
+
+6. [**Visual Parity Gate**](./visual-parity.md)
+   - One parity issue per `tf-*` component; legacy class to `::part` mapping; four-theme matrix.
+   - Release gate [#1075](https://github.com/koalyptus/TableFilter/issues/1075): per-theme screenshots plus explicit sign-off; visual-regression tooling out of scope.
+   - Scaffold-time rule: a new element adds its parity issue in the same PR. Owned by [#1049](https://github.com/koalyptus/TableFilter/issues/1049).

@@ -16,6 +16,13 @@ logic that a later task removes):
 
 Never leave a bare `TODO` without an issue number.
 
+## Visual parity
+
+A new `tf-*` custom element adds its visual-parity issue in the same PR that
+scaffolds it, and adds an evidence line to the release gate
+[#1075](https://github.com/koalyptus/TableFilter/issues/1075). A scaffold PR
+without the parity issue is not complete. See `ROADMAP/visual-parity.md`.
+
 ## Code comments
 
 Comments document behaviour, not the reasoning behind it. Never reference
