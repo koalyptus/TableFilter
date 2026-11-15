@@ -20,8 +20,8 @@ The bridges apply the legacy class to the **host** only
 the shipped stylesheet: `grep -rn "::part" static/style` returns nothing.
 `demos/tf-pager.html` and `demos/tf-checklist.html` carry no component
 presentation CSS (the shared `partials/style.html` partial styles page chrome
-only) and render unstyled native controls; `<tf-help>` is not on this branch
-(see #913).
+only) and render unstyled native controls; the `<tf-help>` demo styles the
+trigger with `::part(trigger)` rules, the gap #1083 removes.
 
 Parity is a target, not a property of the current build.
 
