@@ -693,7 +693,7 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
     });
 });
 
-test('clicking the instructions container closes the dialog',
+test('clicking the dialog content keeps the dialog open',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -714,7 +714,7 @@ test('clicking the instructions container closes the dialog',
             return state;
         }, COMPONENT);
 
-        expect(result).toEqual({ open: false, attr: false });
+        expect(result).toEqual({ open: true, attr: true });
     });
 
 test('clicking the dialog backdrop closes the dialog',
@@ -829,7 +829,7 @@ test('Escape closes the dialog and syncs the host attribute',
         expect(result).toEqual({ open: false, attr: false });
     });
 
-test('open-change fires on instructions container dismissal',
+test('open-change does not fire on instructions content click',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -850,7 +850,7 @@ test('open-change fires on instructions container dismissal',
             return seen;
         }, COMPONENT);
 
-        expect(result).toEqual([true, false]);
+        expect(result).toEqual([true]);
     });
 
 test('open-change fires on dialog backdrop dismissal',
@@ -1012,7 +1012,7 @@ test('the backdrop dismissal returns focus to the trigger',
         expect(result).toEqual({ open: false, onTrigger: true });
     });
 
-test('the instructions dismissal returns focus to the trigger',
+test('clicking the dialog content keeps the dialog open and focus in it',
     async ({ page }) => {
         await page.goto(FIXTURE);
         await mountHelp(page, '', {});
@@ -1024,19 +1024,22 @@ test('the instructions dismissal returns focus to the trigger',
                 .dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        await page.waitForFunction(() => {
+        const result = await page.evaluate(() => {
             const el = document.getElementById('tf-help-focus');
-            return el && !el.hasAttribute('open') &&
-                el.shadowRoot.activeElement ===
-                    el.shadowRoot.querySelector('[part="trigger"]');
+            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
+            return {
+                open: dialog.open,
+                attr: el.hasAttribute('open'),
+                inDialog: Boolean(el.shadowRoot.activeElement) &&
+                    dialog.contains(el.shadowRoot.activeElement)
+            };
         });
 
-        const result = await readFocusState(page);
+        expect(result).toEqual({ open: true, attr: true, inDialog: true });
+
         await page.evaluate(() => {
             document.getElementById('tf-help-focus').remove();
         });
-
-        expect(result).toEqual({ open: false, onTrigger: true });
     });
 
 test('the trigger toggle returns focus to the element button',

@@ -18,7 +18,7 @@
  *
  * The dialog opens with `showModal()`, which traps focus inside it and
  * closes it on `Escape`. A user dismissal (`Escape`, backdrop,
- * instructions container, close control, trigger toggle) returns focus
+ * close control, trigger toggle) returns focus
  * to the trigger control: the slotted trigger when one is assigned, the
  * element button otherwise, the host when slotted markup hides it. A
  * programmatic close keeps the platform focus restore. Setting `open`
@@ -71,8 +71,6 @@ export class TfHelpElement extends HTMLElement {
         this._triggerText =
             this.shadowRoot.querySelector('[part="trigger-text"]');
         this._dialog = this.shadowRoot.querySelector('[part="dialog"]');
-        this._instructions =
-            this.shadowRoot.querySelector('[part="instructions"]');
         this._instructionsSlot =
             this.shadowRoot.querySelector('slot[name="instructions"]');
         this._instructionsText =
@@ -89,9 +87,17 @@ export class TfHelpElement extends HTMLElement {
             'slotchange', () => this._syncLayout());
         this._instructionsSlot.addEventListener(
             'slotchange', () => this._syncLayout());
-        this._instructions.addEventListener('click', () => this._toggle());
         this._dialog.addEventListener('click', (event) => {
             if (event.target === this._dialog) {
+                this._dismiss();
+                return;
+            }
+            // A slotted element with class `close`
+            // (src/modules/help.js:119) dismisses; other content
+            // clicks keep the dialog open.
+            if (event.composedPath().some((node) =>
+                node.nodeType === 1 && node.classList &&
+                node.classList.contains('close'))) {
                 this._dismiss();
             }
         });

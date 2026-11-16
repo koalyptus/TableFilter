@@ -67,9 +67,10 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
             attr: host.hasAttribute('open')
         };
 
-        // Clicking inside the instructions container closes the dialog.
-        sr.querySelector('[part="instructions"]').click();
-        const dismissed = { open: dialog.open };
+        // Clicking content inside the dialog body keeps it open.
+        sr.querySelector('slot[name="instructions"]')
+            .assignedElements()[0].querySelector('a').click();
+        const contentKeptOpen = { open: dialog.open };
 
         trigger.click();
         sr.querySelector('[part="close"]').click();
@@ -86,7 +87,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
             attr: host.hasAttribute('open')
         };
 
-        return { initial, opened, dismissed, closed, footerClosed };
+        return { initial, opened, contentKeptOpen, closed, footerClosed };
     });
 
     expect(result.initial.defined).toBe(true);
@@ -103,7 +104,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
     expect(result.opened).toEqual({
         open: true, modal: true, attr: true
     });
-    expect(result.dismissed).toEqual({ open: false });
+    expect(result.contentKeptOpen).toEqual({ open: true });
     expect(result.closed).toEqual({ open: false, attr: false });
     expect(result.footerClosed).toEqual({ open: false, attr: false });
     expect(pageErrors).toEqual([]);
