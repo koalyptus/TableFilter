@@ -721,22 +721,67 @@ test('clicking the dialog backdrop closes the dialog',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
-        const result = await page.evaluate(async (component) => {
+        await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-help');
+            el.id = 'backdrop-check';
             document.body.appendChild(el);
             el.setOpen(true);
-            const dialog = el.shadowRoot.querySelector('[part="dialog"]');
-            dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        }, COMPONENT);
+
+        const rect = await page.evaluate(() => document
+            .getElementById('backdrop-check')
+            .shadowRoot.querySelector('[part="dialog"]')
+            .getBoundingClientRect().toJSON());
+
+        await page.mouse.click(Math.max(2, Math.round(rect.left) - 24),
+            Math.round(rect.top + rect.height / 2));
+
+        const result = await page.evaluate(() => {
+            const el = document.getElementById('backdrop-check');
             const state = {
-                open: dialog.open,
+                open: el.shadowRoot.querySelector('[part="dialog"]').open,
                 attr: el.hasAttribute('open')
             };
             el.remove();
             return state;
-        }, COMPONENT);
+        });
 
         expect(result).toEqual({ open: false, attr: false });
+    });
+
+test('clicking the dialog border or padding keeps the dialog open',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-help');
+            el.id = 'border-check';
+            document.body.appendChild(el);
+            el.setOpen(true);
+        }, COMPONENT);
+
+        const rect = await page.evaluate(() => document
+            .getElementById('border-check')
+            .shadowRoot.querySelector('[part="dialog"]')
+            .getBoundingClientRect().toJSON());
+
+        // 2px inside the border box: hits the dialog itself, not content.
+        await page.mouse.click(Math.round(rect.left) + 2,
+            Math.round(rect.top + rect.height / 2));
+
+        const result = await page.evaluate(() => {
+            const el = document.getElementById('border-check');
+            const state = {
+                open: el.shadowRoot.querySelector('[part="dialog"]').open,
+                attr: el.hasAttribute('open')
+            };
+            el.remove();
+            return state;
+        });
+
+        expect(result).toEqual({ open: true, attr: true });
     });
 
 test('disabled blocks a slotted trigger control',

@@ -88,7 +88,11 @@ export class TfHelpElement extends HTMLElement {
         this._instructionsSlot.addEventListener(
             'slotchange', () => this._syncLayout());
         this._dialog.addEventListener('click', (event) => {
-            if (event.target === this._dialog) {
+            // A backdrop click lands outside the dialog box; a click on
+            // the dialog's border or padding lands on the dialog
+            // element but inside the box.
+            if (event.target === this._dialog &&
+                !this._isInsideDialogBox(event)) {
                 this._dismiss();
                 return;
             }
@@ -259,6 +263,17 @@ export class TfHelpElement extends HTMLElement {
             this._userClosed = true;
         }
         this.setOpen(!this._dialog.open);
+    }
+
+    /**
+     * Report whether a pointer event's coordinates fall inside the
+     * dialog's border box.
+     * @param {MouseEvent} event Pointer event
+     */
+    _isInsideDialogBox(event) {
+        const rect = this._dialog.getBoundingClientRect();
+        return event.clientX >= rect.left && event.clientX <= rect.right &&
+            event.clientY >= rect.top && event.clientY <= rect.bottom;
     }
 
     /**
