@@ -1,7 +1,7 @@
-// Component demo gate: the demo page mounts <tf-help> in a real
-// TableFilter page — the dedicated template — with the trigger, the
-// instructions slot and the native dialog working from declarative
-// markup. The page lives in static/templates/ and is built into the
+// Component demo gate: the demo page mounts <tf-help> through the Help
+// bridge in a real TableFilter page — the dedicated template — with the
+// trigger, the instructions slot and the native dialog working from
+// config. The page lives in static/templates/ and is built into the
 // gitignored demos/ by grunt build-demos; the Vite dev server that
 // serves the repo root compiles the element module it imports. Fails
 // CI on regression.
@@ -9,7 +9,7 @@ const { test, expect } = require('@playwright/test');
 
 const DEMO_PAGE = 'demos/tf-help.html';
 
-test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
+test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
     const pageErrors = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -51,12 +51,16 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
             })(),
             triggerText:
                 sr.querySelector('[part="trigger-text"]').textContent,
-            dialogName: dialog.getAttribute('aria-label'),
+            triggerLabel: trigger.getAttribute('aria-label'),
+            dialogLabelledby: dialog.getAttribute('aria-labelledby'),
+            closeText:
+                sr.querySelector('[part="close-text"]').textContent,
             instructions: instructions.textContent
                 .replace(/\s+/g, ' ').trim().length > 0,
             footer: instructions.textContent.includes('TableFilter v') &&
                 instructions.textContent.includes('www.tablefilter.com') &&
-                Boolean(instructions.querySelector('a.close')),
+                Boolean(instructions.querySelector('.helpFooter')),
+            footerClose: Boolean(instructions.querySelector('a.close')),
             open: dialog.open
         };
 
@@ -97,9 +101,12 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
         helpBeforeClear: true, clearIsLast: true
     });
     expect(result.initial.triggerText).toBe('?');
-    expect(result.initial.dialogName).toBe('Help instructions');
+    expect(result.initial.triggerLabel).toBe('Help');
+    expect(result.initial.dialogLabelledby).toBe('trigger');
+    expect(result.initial.closeText).toBe('Close');
     expect(result.initial.instructions).toBe(true);
     expect(result.initial.footer).toBe(true);
+    expect(result.initial.footerClose).toBe(true);
     expect(result.initial.open).toBe(false);
     expect(result.opened).toEqual({
         open: true, modal: true, attr: true

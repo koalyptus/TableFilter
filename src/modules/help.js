@@ -5,6 +5,7 @@ import {NONE} from '../const';
 import {root} from '../root';
 import {isEmpty, isNull} from '../types';
 import {defaultsStr, defaultsNb} from '../settings';
+import {sanitizeHtml} from '../sanitize';
 import {RIGHT} from './toolbar';
 
 const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
@@ -69,6 +70,12 @@ export class Help extends Feature {
         this.btnHtml = defaultsStr(f.btn_html, null);
 
         /**
+         * Accessible name for the help button
+         * @type {String}
+         */
+        this.label = defaultsStr(f.label, null);
+
+        /**
          * Css class for help button
          * @type {String}
          */
@@ -93,6 +100,13 @@ export class Help extends Feature {
         this.cont = null;
 
         /**
+         * `<tf-help>` host element
+         * @type {DOMElement}
+         * @private
+         */
+        this.el = null;
+
+        /**
          * Adjust container left position when table's horizontal scroll is
          * on, typically when `responsive` option is enabled.
          * @type {Number}
@@ -100,6 +114,14 @@ export class Help extends Feature {
          */
         this.contAdjustLeftPosition =
             defaultsNb(f.container_adjust_left_position, 25);
+
+        /**
+         * Whether `container_adjust_left_position` is explicitly configured
+         * @type {Boolean}
+         * @private
+         */
+        this.hasContAdjustLeftPosition =
+            f.container_adjust_left_position != null;
 
         /**
          * Bound mouseup wrapper
@@ -157,15 +179,106 @@ export class Help extends Feature {
 
         let tf = this.tf;
 
+        //help button is added to defined element
+        let targetEl = !this.tgtId ?
+            tf.feature('toolbar').container(this.toolbarPosition) :
+            elm(this.tgtId);
+
+        // Bridge to <tf-help> (scaffold #913). `target_id`,
+        // `container_target_id` and `container_adjust_left_position` have
+        // no element counterpart (help.js:32-38, help.js:101-102), so those
+        // configurations use the legacy span/div structure.
+        // TODO(#965): restore static import once namespace migration lands.
+        if (this.canUseCE()) {
+            this.initCE(targetEl);
+        } else {
+            this.initLegacy(targetEl);
+        }
+
+        /** @inherited */
+        this.initialized = true;
+
+        this.emitter.emit('feature-initialized', this);
+    }
+
+    /**
+     * Whether the feature renders through `<tf-help>`.
+     * @returns {Boolean} True when the element is registered and the
+     * configuration has no custom containers or scroll adjustment
+     * @private
+     */
+    canUseCE() {
+        return typeof customElements !== 'undefined' &&
+            Boolean(customElements.get('tf-help')) &&
+            !this.tgtId && !this.contTgtId &&
+            !this.hasContAdjustLeftPosition;
+    }
+
+    /**
+     * Initialize using the <tf-help> custom element
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initCE(targetEl) {
+        const host = document.createElement('tf-help');
+        host.setAttribute('trigger-text', this.btnText);
+        host.setAttribute('close-text', 'Close');
+        if (this.label) {
+            host.setAttribute('label', this.label);
+        }
+
+        if (this.btnHtml) {
+            const trigger = createElm('span');
+            trigger.innerHTML = sanitizeHtml(this.btnHtml);
+            while (trigger.firstChild) {
+                const node = trigger.firstChild;
+                if (node.nodeType === 1) {
+                    node.slot = 'trigger';
+                    if (this.label && !node.hasAttribute('aria-label')) {
+                        node.setAttribute('aria-label', this.label);
+                    }
+                } else if (node.nodeType === 3 && node.textContent.trim()) {
+                    const text = createElm('span');
+                    text.slot = 'trigger';
+                    text.appendChild(node);
+                    host.appendChild(text);
+                    continue;
+                }
+                host.appendChild(node);
+            }
+        }
+
+        const instructions = createElm('div');
+        instructions.slot = 'instructions';
+        instructions.innerHTML = sanitizeHtml(
+            (this.instrHtml || this.instrText) + this.defaultHtml);
+        host.appendChild(instructions);
+
+        // The clear button stays the last control in the toolbar.
+        const clearFeature = this.tf.feature('clearButton');
+        const clearEl = clearFeature && clearFeature.container;
+        if (clearEl && clearEl.parentNode === targetEl) {
+            targetEl.insertBefore(host, clearEl);
+        } else {
+            targetEl.appendChild(host);
+        }
+
+        this.el = host;
+        this.btn = host;
+        this.cont = host;
+    }
+
+    /**
+     * Initialize using the legacy span/div structure
+     * @param {DOMElement} targetEl Target container element
+     * @private
+     */
+    initLegacy(targetEl) {
         let btn = createElm('span');
         let cont = createElm('div');
 
         this.boundMouseup = this.onMouseup.bind(this);
 
-        //help button is added to defined element
-        let targetEl = !this.tgtId ?
-            tf.feature('toolbar').container(this.toolbarPosition) :
-            elm(this.tgtId);
         targetEl.appendChild(btn);
 
         let divContainer = !this.contTgtId ? btn : elm(this.contTgtId);
@@ -201,10 +314,6 @@ export class Help extends Feature {
 
         this.cont = cont;
         this.btn = btn;
-        /** @inherited */
-        this.initialized = true;
-
-        this.emitter.emit('feature-initialized', this);
     }
 
     /**
@@ -214,6 +323,11 @@ export class Help extends Feature {
         // check only if explicitily disabled as in this case undefined
         // signifies the help feature is enabled by default
         if (!this.isEnabled()) {
+            return;
+        }
+
+        if (this.el) {
+            this.el.setOpen(!this.el.hasAttribute('open'));
             return;
         }
 
@@ -251,8 +365,11 @@ export class Help extends Feature {
         removeElm(this.btn);
         this.btn = null;
 
-        removeElm(this.cont);
+        if (this.cont !== this.el) {
+            removeElm(this.cont);
+        }
         this.cont = null;
+        this.el = null;
 
         this.boundMouseup = null;
         this.initialized = false;

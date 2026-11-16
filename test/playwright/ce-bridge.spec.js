@@ -1956,3 +1956,704 @@ test('checklist destroy safe on uninitialized', async ({ page }) => {
     expect(result.threwOnSecond).toBeNull();
     expect(result.removed).toBe(true);
 });
+
+// Help bridge (#915): the feature routes through <tf-help> when the
+// source registers it, projecting the legacy instructions, trigger
+// markup and footer through the element slots.
+const HELP_TABLE_HTML =
+    '<thead><tr><th>City</th><th>Country</th></tr></thead>' +
+    '<tbody><tr><td>Sydney</td><td>Australia</td></tr>' +
+    '<tr><td>Paris</td><td>France</td></tr></tbody>';
+
+const HELP_MOUNT = `
+window.helpHost = function (tf) { return tf.feature('help').btn; };
+window.helpPart = function (host, name) {
+    return host.shadowRoot.querySelector('[part="' + name + '"]');
+};
+window.helpAssigned = function (host, name) {
+    const slot = host.shadowRoot.querySelector('slot[name="' + name + '"]');
+    return slot ? slot.assignedElements() : [];
+};
+window.mountHelp = async function (id, config, html) {
+    await import('/src/components/tf-help.js');
+    const table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = html;
+    document.body.appendChild(table);
+    const tf = new TableFilter(id, Object.assign({
+        base_path: '/dist/tablefilter/',
+        rows_counter: true
+    }, config));
+    tf.init();
+    return tf;
+};
+`;
+
+test('help bridge uses tf-help with the legacy config', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: HELP_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountHelp('ce-help', {
+            btn_reset: true,
+            help_instructions: {
+                btn_text: '??',
+                label: 'Help',
+                text: 'hello <b>world</b>'
+            }
+        }, html);
+        const help = tf.feature('help');
+        const host = window.helpHost(tf);
+        const toolbar = tf.feature('toolbar');
+        const clear = tf.feature('clearButton').container;
+        const instructions = window.helpAssigned(host, 'instructions')[0];
+
+        const state = {
+            isCE: host.nodeName === 'TF-HELP',
+            contIsHost: help.cont === host,
+            inRight: host.parentElement === toolbar.innerCont.right,
+            beforeClear: host.nextElementSibling === clear,
+            clearLast: toolbar.innerCont.right.lastElementChild === clear,
+            triggerText: window.helpPart(host, 'trigger-text').textContent,
+            triggerLabel:
+                window.helpPart(host, 'trigger').getAttribute('aria-label'),
+            instructionsHtml: instructions.innerHTML,
+            footer: instructions.textContent.includes('TableFilter v') &&
+                instructions.textContent.includes('www.tablefilter.com') &&
+                Boolean(instructions.querySelector('.helpFooter')),
+            footerClose: Boolean(instructions.querySelector('a.close')),
+            closeText: window.helpPart(host, 'close-text').textContent,
+            legacy: Boolean(document.querySelector('.helpBtn')) ||
+                Boolean(document.querySelector('.helpCont'))
+        };
+
+        tf.destroy();
+        return Object.assign(state, { removed: !host.isConnected });
+    }, HELP_TABLE_HTML);
+
+    expect(result.isCE).toBe(true);
+    expect(result.contIsHost).toBe(true);
+    expect(result.inRight).toBe(true);
+    expect(result.beforeClear).toBe(true);
+    expect(result.clearLast).toBe(true);
+    expect(result.triggerText).toBe('??');
+    expect(result.triggerLabel).toBe('Help');
+    expect(result.instructionsHtml).toContain('hello <b>world</b>');
+    expect(result.footer).toBe(true);
+    expect(result.footerClose).toBe(true);
+    expect(result.closeText).toBe('Close');
+    expect(result.legacy).toBe(false);
+    expect(result.removed).toBe(true);
+});
+
+test('help bridge maps btn_html and instructions html onto the slots',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-markup', {
+                help_instructions: {
+                    btn_html: '<a class="customHelp" href="#">?</a>',
+                    label: 'Custom help',
+                    html: '<p class="customInstr"><b>Operators</b>' +
+                        '<a class="close" href="#">Close</a></p>'
+                }
+            }, html);
+            const host = window.helpHost(tf);
+            const trigger = window.helpAssigned(host, 'trigger')[0];
+            const instructions = window.helpAssigned(host, 'instructions')[0];
+            const dialog = window.helpPart(host, 'dialog');
+            const elementTrigger = window.helpPart(host, 'trigger');
+
+            const state = {
+                triggerClass: trigger.className,
+                triggerText: trigger.textContent,
+                triggerLabel: trigger.getAttribute('aria-label'),
+                elementTriggerHidden: elementTrigger.hidden,
+                instructionsClass:
+                    instructions.querySelector('.customInstr').className,
+                hasBold: Boolean(instructions.querySelector('b')),
+                hasClose: Boolean(instructions.querySelector('a.close'))
+            };
+
+            trigger.click();
+            const opened = dialog.open;
+            instructions.querySelector('a.close').click();
+            const closed = dialog.open;
+
+            tf.feature('help').toggle();
+            const toggledOpen = dialog.open;
+            tf.feature('help').toggle();
+            const toggledClosed = dialog.open;
+
+            tf.destroy();
+            return Object.assign(state, {
+                opened, closed, toggledOpen, toggledClosed
+            });
+        }, HELP_TABLE_HTML);
+
+        expect(result.triggerClass).toBe('customHelp');
+        expect(result.triggerText).toBe('?');
+        expect(result.triggerLabel).toBe('Custom help');
+        expect(result.elementTriggerHidden).toBe(true);
+        expect(result.instructionsClass).toBe('customInstr');
+        expect(result.hasBold).toBe(true);
+        expect(result.hasClose).toBe(true);
+        expect(result.opened).toBe(true);
+        expect(result.closed).toBe(false);
+        expect(result.toggledOpen).toBe(true);
+        expect(result.toggledClosed).toBe(false);
+    });
+
+test('help bridge maps a multi-node btn_html onto the trigger slot',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-multi', {
+                help_instructions: {
+                    btn_html: '<b class="q">?</b> and <i class="i">help</i>'
+                }
+            }, html);
+            const host = window.helpHost(tf);
+            const trigger = window.helpAssigned(host, 'trigger');
+            const elementTrigger = window.helpPart(host, 'trigger');
+            const state = {
+                count: trigger.length,
+                tags: trigger.map((node) => node.nodeName),
+                classes: trigger.map((node) => node.className),
+                labels: trigger.map((node) => node.getAttribute('aria-label')),
+                hidden: elementTrigger.hidden,
+                triggerText:
+                    window.helpPart(host, 'trigger-text').textContent
+            };
+            host.querySelector('.i').click();
+            state.opened = host.hasAttribute('open');
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.count).toBe(3);
+        expect(result.tags).toEqual(['B', 'SPAN', 'I']);
+        expect(result.classes).toEqual(['q', '', 'i']);
+        expect(result.labels).toEqual([null, null, null]);
+        expect(result.hidden).toBe(true);
+        expect(result.triggerText).toBe('?');
+        expect(result.opened).toBe(true);
+    });
+
+test('help bridge maps btn_html with a bare text node onto the slot',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-text', {
+                help_instructions: {
+                    btn_html: 'Help me'
+                }
+            }, html);
+            const host = window.helpHost(tf);
+            const trigger = window.helpAssigned(host, 'trigger');
+            host.querySelector('[slot=trigger]').click();
+            const state = {
+                count: trigger.length,
+                text: trigger.map((node) => node.textContent),
+                hidden: window.helpPart(host, 'trigger').hidden,
+                opened: host.hasAttribute('open')
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.count).toBe(1);
+        expect(result.text).toEqual(['Help me']);
+        expect(result.hidden).toBe(true);
+        expect(result.opened).toBe(true);
+    });
+
+test('help bridge sanitises config markup', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: HELP_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountHelp('ce-help-sanitise', {
+            help_instructions: {
+                btn_html: '<span class="customHelp" ' +
+                    'onclick="window.__helpXss = 3">?</span>',
+                html: '<p id="help-ok">Operators</p>' +
+                    '<script>window.__helpXss = 1<\/script>' +
+                    '<img src="x" onerror="window.__helpXss = 2">'
+            }
+        }, html);
+        const host = window.helpHost(tf);
+        const instructions = window.helpAssigned(host, 'instructions')[0];
+        const trigger = window.helpAssigned(host, 'trigger')[0];
+
+        const state = {
+            xss: window.__helpXss,
+            scripts: instructions.querySelectorAll('script').length,
+            onerror: instructions.querySelectorAll('[onerror]').length,
+            onclick: trigger.querySelectorAll('[onclick]').length,
+            instruction: Boolean(instructions.querySelector('#help-ok')),
+            triggerClass: trigger.className,
+            triggerText: trigger.textContent
+        };
+
+        tf.destroy();
+        return state;
+    }, HELP_TABLE_HTML);
+
+    expect(result.xss).toBeUndefined();
+    expect(result.scripts).toBe(0);
+    expect(result.onerror).toBe(0);
+    expect(result.onclick).toBe(0);
+    expect(result.instruction).toBe(true);
+    expect(result.triggerClass).toBe('customHelp');
+    expect(result.triggerText).toBe('?');
+});
+
+test('help bridge keeps custom containers and scroll adjustment on the ' +
+    'legacy path', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: HELP_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const variants = [
+            { target_id: 'help-target' },
+            { container_target_id: 'help-cont' },
+            { container_adjust_left_position: 30 },
+            { container_adjust_left_position: 0 }
+        ];
+        const targets = { 'help-target': 'div', 'help-cont': 'div' };
+        for (const id of Object.keys(targets)) {
+            const el = document.createElement(targets[id]);
+            el.id = id;
+            document.body.appendChild(el);
+        }
+
+        const state = [];
+        for (let i = 0; i < variants.length; i++) {
+            const tf = await window.mountHelp(`ce-help-legacy-${i}`, {
+                btn_reset: true,
+                help_instructions: variants[i]
+            }, html);
+            const help = tf.feature('help');
+            state.push({
+                tag: help.btn ? help.btn.nodeName : null,
+                element: Boolean(help.btn && help.btn.nodeName === 'TF-HELP'),
+                anchor: Boolean(help.btn &&
+                    help.btn.querySelector('.helpBtn')),
+                parentId: help.btn && help.btn.parentNode ?
+                    help.btn.parentNode.id : null,
+                contParentId: help.cont && help.cont.parentNode ?
+                    help.cont.parentNode.id : null,
+                contClass: help.cont ? help.cont.className : null,
+                contIsBtn: help.cont === help.btn
+            });
+            tf.destroy();
+        }
+        return state;
+    }, HELP_TABLE_HTML);
+
+    for (const entry of result) {
+        expect(entry.tag).toBe('SPAN');
+        expect(entry.element).toBe(false);
+        expect(entry.anchor).toBe(true);
+        expect(entry.contIsBtn).toBe(false);
+    }
+    expect(result[0].parentId).toBe('help-target');
+    expect(result[1].contParentId).toBe('help-cont');
+    expect(result[1].contClass).toBe('helpCont');
+});
+
+test('help bridge treats an explicit null adjust position as unset',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-null-adjust', {
+                help_instructions: {
+                    container_adjust_left_position: null
+                }
+            }, html);
+            const host = window.helpHost(tf);
+            const state = {
+                isCE: host.nodeName === 'TF-HELP',
+                legacy: Boolean(document.querySelector('.helpBtn')) ||
+                    Boolean(document.querySelector('.helpCont'))
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.legacy).toBe(false);
+    });
+
+test('help bridge falls back to the legacy markup without the element',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate((html) => {
+            const table = document.createElement('table');
+            table.id = 'ce-help-no-element';
+            table.innerHTML = html;
+            document.body.appendChild(table);
+
+            const tf = new TableFilter('ce-help-no-element', {
+                base_path: '/dist/tablefilter/',
+                help_instructions: true
+            });
+            tf.init();
+
+            const help = tf.feature('help');
+            const state = {
+                registered: Boolean(customElements.get('tf-help')),
+                tag: help.btn.nodeName,
+                anchor: help.btn.querySelector('.helpBtn') !== null,
+                contTag: help.cont.nodeName,
+                contClass: help.cont.className,
+                instructions:
+                    help.cont.textContent.includes('Use the filters'),
+                footer: help.cont.textContent.includes('TableFilter v') &&
+                    help.cont.textContent.includes('www.tablefilter.com'),
+                close: help.cont.querySelector('a.close') !== null
+            };
+
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.registered).toBe(false);
+        expect(result.tag).toBe('SPAN');
+        expect(result.anchor).toBe(true);
+        expect(result.contTag).toBe('DIV');
+        expect(result.contClass).toBe('helpCont');
+        expect(result.instructions).toBe(true);
+        expect(result.footer).toBe(true);
+        expect(result.close).toBe(true);
+    });
+
+
+test('help bridge does not mount when help_instructions is false',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-off', {
+                help_instructions: false
+            }, html);
+            const help = tf.feature('help');
+            const state = {
+                initialized: help.initialized,
+                btn: help.btn,
+                element: Boolean(document.querySelector('tf-help'))
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.initialized).toBe(false);
+        expect(result.btn).toBe(null);
+        expect(result.element).toBe(false);
+    });
+
+test('help bridge projects the default instructions and footer',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-default', {
+                help_instructions: true
+            }, html);
+            const host = window.helpHost(tf);
+            const instructions = window.helpAssigned(host, 'instructions')[0];
+            const dialog = window.helpPart(host, 'dialog');
+            const state = {
+                triggerText:
+                    window.helpPart(host, 'trigger-text').textContent,
+                instructions: instructions.textContent,
+                hasOperators: Boolean(instructions.querySelector('b')),
+                footer: instructions.textContent.includes('TableFilter v') &&
+                    instructions.textContent.includes('www.tablefilter.com'),
+                footerClose: Boolean(instructions.querySelector('a.close')),
+                footerHref: instructions.querySelector('a.close')
+                    .getAttribute('href'),
+                closeText: window.helpPart(host, 'close-text').textContent
+            };
+
+            window.helpPart(host, 'trigger').click();
+            state.open = dialog.open;
+            state.modal = dialog.matches(':modal');
+            instructions.querySelector('a.close').click();
+            state.closedByFooter = dialog.open;
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.triggerText).toBe('?');
+        expect(result.instructions).toContain('Use the filters above each ' +
+            'column');
+        expect(result.instructions).toContain('rgx:');
+        expect(result.hasOperators).toBe(true);
+        expect(result.footer).toBe(true);
+        expect(result.footerClose).toBe(true);
+        expect(result.footerHref).toBe(null);
+        expect(result.closeText).toBe('Close');
+        expect(result.open).toBe(true);
+        expect(result.modal).toBe(true);
+        expect(result.closedByFooter).toBe(false);
+    });
+
+test('help bridge mounts by default and leaves the trigger unnamed',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-enabled', {}, html);
+            const help = tf.feature('help');
+            const toolbar = tf.feature('toolbar');
+            const host = window.helpHost(tf);
+            const trigger = window.helpPart(host, 'trigger');
+            const instructions =
+                window.helpAssigned(host, 'instructions')[0];
+            const state = {
+                initialized: help.initialized,
+                isCE: host.nodeName === 'TF-HELP',
+                inRight: host.parentElement === toolbar.innerCont.right,
+                triggerText: window.helpPart(host, 'trigger-text').textContent,
+                triggerLabel: trigger.getAttribute('aria-label'),
+                dialogLabelledby:
+                    window.helpPart(host, 'dialog')
+                        .getAttribute('aria-labelledby'),
+                instructions:
+                    instructions.textContent.includes('Use the filters above'),
+                footer: instructions.textContent
+                    .includes('TableFilter v' + tf.version),
+                closeText: window.helpPart(host, 'close-text').textContent,
+                legacy: Boolean(document.querySelector('.helpBtn')) ||
+                    Boolean(document.querySelector('.helpCont'))
+            };
+
+            tf.destroy();
+            return Object.assign(state, { removed: !host.isConnected });
+        }, HELP_TABLE_HTML);
+
+        expect(result.initialized).toBe(true);
+        expect(result.isCE).toBe(true);
+        expect(result.inRight).toBe(true);
+        expect(result.triggerText).toBe('?');
+        expect(result.triggerLabel).toBe(null);
+        expect(result.dialogLabelledby).toBe('trigger');
+        expect(result.instructions).toBe(true);
+        expect(result.footer).toBe(true);
+        expect(result.closeText).toBe('Close');
+        expect(result.legacy).toBe(false);
+        expect(result.removed).toBe(true);
+    });
+
+test('help bridge honours toolbar_position and btn_text',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const positions = ['left', 'center', 'right'];
+            const state = [];
+            for (let i = 0; i < positions.length; i++) {
+                const tf = await window.mountHelp(`ce-help-pos-${i}`, {
+                    help_instructions: {
+                        toolbar_position: positions[i],
+                        btn_text: `Q${i}`
+                    }
+                }, html);
+                const host = window.helpHost(tf);
+                const toolbar = tf.feature('toolbar');
+                state.push({
+                    placed:
+                        host.parentElement === toolbar.innerCont[positions[i]],
+                    text: window.helpPart(host, 'trigger-text').textContent
+                });
+                tf.destroy();
+            }
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result).toEqual([
+            { placed: true, text: 'Q0' },
+            { placed: true, text: 'Q1' },
+            { placed: true, text: 'Q2' }
+        ]);
+    });
+
+test('help bridge treats empty text as unset and html over text',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const empty = await window.mountHelp('ce-help-empty-text', {
+                help_instructions: { text: '' }
+            }, html);
+            const emptyInstructions = window.helpAssigned(
+                window.helpHost(empty), 'instructions')[0];
+            const emptyText = {
+                defaultShown:
+                    emptyInstructions.textContent.includes('Use the filters'),
+                hasOperators: Boolean(emptyInstructions.querySelector('b'))
+            };
+            empty.destroy();
+
+            const htmlWins = await window.mountHelp('ce-help-html-wins', {
+                help_instructions: {
+                    text: 'ignored legacy text',
+                    html: '<p id="html-wins">HTML wins</p>'
+                }
+            }, html);
+            const htmlInstructions = window.helpAssigned(
+                window.helpHost(htmlWins), 'instructions')[0];
+            const htmlText = {
+                hasHtml: Boolean(htmlInstructions.querySelector('#html-wins')),
+                ignoredText:
+                    !htmlInstructions.textContent.includes('ignored legacy'),
+                hasDefault: htmlInstructions.textContent
+                    .includes('Use the filters')
+            };
+            htmlWins.destroy();
+
+            return { emptyText, htmlText };
+        }, HELP_TABLE_HTML);
+
+        expect(result.emptyText).toEqual({
+            defaultShown: true,
+            hasOperators: true
+        });
+        expect(result.htmlText).toEqual({
+            hasHtml: true,
+            ignoredText: true,
+            hasDefault: false
+        });
+    });
+
+test('help bridge keeps the element with legacy css class hooks',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-css', {
+                help_instructions: {
+                    btn_css_class: 'legacyHelpBtn',
+                    container_css_class: 'legacyHelpCont'
+                }
+            }, html);
+            const host = window.helpHost(tf);
+            const state = {
+                isCE: host.nodeName === 'TF-HELP',
+                hostClass: host.className,
+                legacyBtn: document.querySelectorAll('.legacyHelpBtn').length,
+                legacyCont:
+                    document.querySelectorAll('.legacyHelpCont').length
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.hostClass).toBe('');
+        expect(result.legacyBtn).toBe(0);
+        expect(result.legacyCont).toBe(0);
+    });
+
+test('help bridge instances are independent and re-init mounts one',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tfA = await window.mountHelp('ce-help-instance-a', {
+                help_instructions: { btn_text: 'A' }
+            }, html);
+            const hostA = window.helpHost(tfA);
+            const tfB = await window.mountHelp('ce-help-instance-b', {
+                help_instructions: { btn_text: 'B' }
+            }, html);
+            const hostB = window.helpHost(tfB);
+
+            const initial = {
+                distinct: hostA !== hostB,
+                a: window.helpPart(hostA, 'trigger-text').textContent,
+                b: window.helpPart(hostB, 'trigger-text').textContent
+            };
+
+            tfA.destroy();
+            const removed = !hostA.isConnected;
+            tfA.init();
+            const remounted = window.helpHost(tfA);
+            const remountedState = {
+                newHost: remounted !== hostA,
+                hosts: remounted.parentElement
+                    .querySelectorAll('tf-help').length,
+                text: window.helpPart(remounted, 'trigger-text').textContent,
+                bUntouched: hostB.isConnected
+            };
+
+            tfA.destroy();
+            tfB.destroy();
+            return { initial, removed, remountedState };
+        }, HELP_TABLE_HTML);
+
+        expect(result.initial).toEqual({
+            distinct: true,
+            a: 'A',
+            b: 'B'
+        });
+        expect(result.removed).toBe(true);
+        expect(result.remountedState).toEqual({
+            newHost: true,
+            hosts: 1,
+            text: 'A',
+            bUntouched: true
+        });
+    });
+
+test('help bridge keeps the paging results control before the trigger',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-paging', {
+                btn_reset: true,
+                paging: {
+                    length: 1,
+                    results_per_page: ['Rows: ', [1, 2]]
+                },
+                help_instructions: true
+            }, html);
+            const host = window.helpHost(tf);
+            const paging = tf.feature('paging');
+            const toolbar = tf.feature('toolbar');
+            const clear = tf.feature('clearButton').container;
+            const state = {
+                inRight: host.parentElement === toolbar.innerCont.right,
+                selectBefore: paging.pageLengthSlc.nextSibling === host,
+                beforeClear: host.nextElementSibling === clear,
+                clearLast: toolbar.innerCont.right.lastElementChild === clear
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.inRight).toBe(true);
+        expect(result.selectBefore).toBe(true);
+        expect(result.beforeClear).toBe(true);
+        expect(result.clearLast).toBe(true);
+    });
