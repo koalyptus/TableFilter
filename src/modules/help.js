@@ -12,6 +12,22 @@ const WIKI_URL = 'https://github.com/koalyptus/TableFilter/wiki/' +
     '4.-Filter-operators';
 const WEBSITE_URL = 'https://www.tablefilter.com/';
 
+// Default instructions markup, used when neither `text` nor `html` is
+// configured (ROADMAP/content-projection-parity.md P3).
+const DEFAULT_INSTR_HTML = 'Use the filters above each column to filter ' +
+    'and limit table data. Advanced searches can be performed by using ' +
+    'the following operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
+    '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
+    '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
+    '<b>rgx:</b><br/><a href="' + WIKI_URL + '" target="_blank">' +
+    'Learn more</a><hr/>';
+
+// Focusable trigger controls; slotted trigger markup without one is
+// wrapped in a button (mirrors tf-help.js:38-40).
+const FOCUSABLE_TRIGGER = 'button:not([disabled]), a[href], ' +
+    'input:not([disabled]), select:not([disabled]), ' +
+    'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /**
  * Help UI component
  */
@@ -39,17 +55,10 @@ export class Help extends Feature {
         this.contTgtId = defaultsStr(f.container_target_id, null);
 
         /**
-         * Instructions text (accepts HTML)
+         * Instructions text, rendered with textContent
          * @type {String}
          */
-        this.instrText = !isEmpty(f.text) ? f.text :
-            'Use the filters above each column to filter and limit table ' +
-            'data. Advanced searches can be performed by using the following ' +
-            'operators: <br /><b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, ' +
-            '<b>&gt;=</b>, <b>=</b>, <b>*</b>, <b>!</b>, <b>{</b>, <b>}</b>, ' +
-            '<b>||</b>,<b>&amp;&amp;</b>, <b>[empty]</b>, <b>[nonempty]</b>, ' +
-            '<b>rgx:</b><br/><a href="' + WIKI_URL + '" target="_blank">' +
-            'Learn more</a><hr/>';
+        this.instrText = !isEmpty(f.text) ? f.text : null;
 
         /**
          * Instructions HTML
@@ -130,17 +139,6 @@ export class Help extends Feature {
         this.boundMouseup = null;
 
         /**
-         * Default HTML appended to instructions text
-         * @type {String}
-         */
-        this.defaultHtml = '<div class="helpFooter"><h4>TableFilter ' +
-            'v' + tf.version + '</h4>' + '<a href="' + WEBSITE_URL +
-            '" target="_blank">' + WEBSITE_URL + '</a>' +
-            '<br/><span>&copy;2015-' + tf.year + ' {AUTHOR}</span>' +
-            '<div align="center" style="margin-top:8px;">' +
-            '<a href="javascript:void(0);" class="close">Close</a></div></div>';
-
-        /**
          * Default position in toolbar ('left'|'center'|'right')
          * @type {String}
          */
@@ -184,10 +182,10 @@ export class Help extends Feature {
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.tgtId);
 
-        // Bridge to <tf-help> (scaffold #913). `target_id`,
-        // `container_target_id` and `container_adjust_left_position` have
-        // no element counterpart (help.js:32-38, help.js:101-102), so those
-        // configurations use the legacy span/div structure.
+        // Bridge to <tf-help> (scaffold #913): `target_id` (help.js:49),
+        // `container_target_id` (help.js:55) and an explicit
+        // `container_adjust_left_position` (help.js:118-133) keep the
+        // legacy span/div structure.
         // TODO(#965): restore static import once namespace migration lands.
         if (this.canUseCE()) {
             this.initCE(targetEl);
@@ -204,14 +202,51 @@ export class Help extends Feature {
     /**
      * Whether the feature renders through `<tf-help>`.
      * @returns {Boolean} True when the element is registered and the
-     * configuration has no custom containers or scroll adjustment
+     * configuration has no custom containers, scroll adjustment or CSS
+     * classes
      * @private
      */
     canUseCE() {
         return typeof customElements !== 'undefined' &&
             Boolean(customElements.get('tf-help')) &&
             !this.tgtId && !this.contTgtId &&
-            !this.hasContAdjustLeftPosition;
+            !this.hasContAdjustLeftPosition &&
+            this.btnCssClass === 'helpBtn' &&
+            this.contCssClass === 'helpCont';
+    }
+
+    /**
+     * Footer markup appended after the instructions
+     * @param {Boolean} withCloseLink Whether to include the legacy
+     * close link
+     * @returns {String} Footer HTML
+     * @private
+     */
+    footerMarkup(withCloseLink) {
+        return '<div class="helpFooter"><h4>TableFilter v' +
+            this.tf.version + '</h4>' + '<a href="' + WEBSITE_URL +
+            '" target="_blank">' + WEBSITE_URL + '</a>' +
+            '<br/><span>&copy;2015-' + this.tf.year + ' {AUTHOR}</span>' +
+            (withCloseLink ?
+                '<div align="center" style="margin-top:8px;">' +
+                '<a href="javascript:void(0);" class="close">Close</a>' +
+                '</div>' :
+                '') +
+            '</div>';
+    }
+
+    /**
+     * Append markup nodes to the target element
+     * @param {DOMElement} target Node to append the markup to
+     * @param {String} markup Markup; passed through `sanitizeHtml()`
+     * @private
+     */
+    appendMarkup(target, markup) {
+        const wrapper = createElm('div');
+        wrapper.innerHTML = sanitizeHtml(markup);
+        while (wrapper.firstChild) {
+            target.appendChild(wrapper.firstChild);
+        }
     }
 
     /**
@@ -230,28 +265,55 @@ export class Help extends Feature {
         if (this.btnHtml) {
             const trigger = createElm('span');
             trigger.innerHTML = sanitizeHtml(this.btnHtml);
-            while (trigger.firstChild) {
-                const node = trigger.firstChild;
-                if (node.nodeType === 1) {
-                    node.slot = 'trigger';
-                    if (this.label && !node.hasAttribute('aria-label')) {
-                        node.setAttribute('aria-label', this.label);
+            if (trigger.querySelector(FOCUSABLE_TRIGGER)) {
+                while (trigger.firstChild) {
+                    const node = trigger.firstChild;
+                    if (node.nodeType === 1) {
+                        node.slot = 'trigger';
+                        if (this.label && !node.hasAttribute('aria-label')) {
+                            node.setAttribute('aria-label', this.label);
+                        }
+                    } else if (node.nodeType === 3 &&
+                        node.textContent.trim()) {
+                        const text = createElm('span');
+                        text.slot = 'trigger';
+                        text.appendChild(node);
+                        host.appendChild(text);
+                        continue;
                     }
-                } else if (node.nodeType === 3 && node.textContent.trim()) {
-                    const text = createElm('span');
-                    text.slot = 'trigger';
-                    text.appendChild(node);
-                    host.appendChild(text);
-                    continue;
+                    host.appendChild(node);
                 }
-                host.appendChild(node);
+            } else {
+                // The element hides its own trigger while the slot has
+                // nodes (tf-help.js:220-224); non-focusable markup is
+                // wrapped in a button so the trigger stays
+                // keyboard-activatable.
+                const button = createElm('button');
+                button.type = 'button';
+                button.slot = 'trigger';
+                if (this.label) {
+                    button.setAttribute('aria-label', this.label);
+                }
+                while (trigger.firstChild) {
+                    button.appendChild(trigger.firstChild);
+                }
+                host.appendChild(button);
             }
         }
 
         const instructions = createElm('div');
         instructions.slot = 'instructions';
-        instructions.innerHTML = sanitizeHtml(
-            (this.instrHtml || this.instrText) + this.defaultHtml);
+        if (this.instrHtml) {
+            instructions.innerHTML = sanitizeHtml(this.instrHtml);
+        } else if (this.instrText) {
+            instructions.appendChild(createText(this.instrText));
+        } else {
+            instructions.innerHTML = sanitizeHtml(DEFAULT_INSTR_HTML);
+        }
+
+        // TODO(#1083): the projected footer keeps no close link; the
+        // element renders its own close control.
+        this.appendMarkup(instructions, this.footerMarkup(false));
         host.appendChild(instructions);
 
         // The clear button stays the last control in the toolbar.
@@ -291,25 +353,29 @@ export class Help extends Feature {
             btn.appendChild(helplink);
             addEvt(helplink, 'click', () => this.toggle());
         } else {
-            btn.innerHTML = this.btnHtml;
+            btn.innerHTML = sanitizeHtml(this.btnHtml);
             let helpEl = btn.firstChild;
             addEvt(helpEl, 'click', () => this.toggle());
             divContainer.appendChild(cont);
         }
 
         if (!this.instrHtml) {
-            cont.innerHTML = this.instrText;
+            if (this.instrText) {
+                cont.appendChild(createText(this.instrText));
+            } else {
+                cont.innerHTML = sanitizeHtml(DEFAULT_INSTR_HTML);
+            }
             cont.className = this.contCssClass;
         } else {
             if (this.contTgtId) {
                 divContainer.appendChild(cont);
             }
-            cont.innerHTML = this.instrHtml;
+            cont.innerHTML = sanitizeHtml(this.instrHtml);
             if (!this.contTgtId) {
                 cont.className = this.contCssClass;
             }
         }
-        cont.innerHTML += this.defaultHtml;
+        this.appendMarkup(cont, this.footerMarkup(true));
         addEvt(cont, 'click', () => this.toggle());
 
         this.cont = cont;

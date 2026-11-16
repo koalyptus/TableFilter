@@ -60,7 +60,6 @@ test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
             footer: instructions.textContent.includes('TableFilter v') &&
                 instructions.textContent.includes('www.tablefilter.com') &&
                 Boolean(instructions.querySelector('.helpFooter')),
-            footerClose: Boolean(instructions.querySelector('a.close')),
             open: dialog.open
         };
 
@@ -83,15 +82,12 @@ test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
             attr: host.hasAttribute('open')
         };
 
-        trigger.click();
-        sr.querySelector('slot[name="instructions"]')
-            .assignedElements()[0].querySelector('a.close').click();
-        const footerClosed = {
-            open: dialog.open,
-            attr: host.hasAttribute('open')
-        };
+        // The projected footer keeps no close link; the element close
+        // control is the only one in the dialog.
+        const footerLink =
+            instructions.querySelector('a.close') !== null;
 
-        return { initial, opened, contentKeptOpen, closed, footerClosed };
+        return { initial, opened, contentKeptOpen, closed, footerLink };
     });
 
     expect(result.initial.defined).toBe(true);
@@ -106,14 +102,13 @@ test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
     expect(result.initial.closeText).toBe('Close');
     expect(result.initial.instructions).toBe(true);
     expect(result.initial.footer).toBe(true);
-    expect(result.initial.footerClose).toBe(true);
     expect(result.initial.open).toBe(false);
     expect(result.opened).toEqual({
         open: true, modal: true, attr: true
     });
     expect(result.contentKeptOpen).toEqual({ open: true });
     expect(result.closed).toEqual({ open: false, attr: false });
-    expect(result.footerClosed).toEqual({ open: false, attr: false });
+    expect(result.footerLink).toBe(false);
     expect(pageErrors).toEqual([]);
 });
 
