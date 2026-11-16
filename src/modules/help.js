@@ -422,6 +422,26 @@ export class Help extends Feature {
     }
 
     /**
+     * Disable help and reflect the state on the `<tf-help>` host
+     */
+    disable() {
+        super.disable();
+        if (this.el) {
+            this.el.setAttribute('disabled', '');
+        }
+    }
+
+    /**
+     * Enable help and reflect the state on the `<tf-help>` host
+     */
+    enable() {
+        super.enable();
+        if (this.el) {
+            this.el.removeAttribute('disabled');
+        }
+    }
+
+    /**
      * Remove help UI
      */
     destroy() {

@@ -2310,7 +2310,9 @@ test('help bridge keeps custom containers and scroll adjustment on the ' +
                 contParentId: help.cont && help.cont.parentNode ?
                     help.cont.parentNode.id : null,
                 contClass: help.cont ? help.cont.className : null,
-                contIsBtn: help.cont === help.btn
+                contIsBtn: help.cont === help.btn,
+                contAdjustLeftPosition: help.contAdjustLeftPosition,
+                hasContAdjustLeftPosition: help.hasContAdjustLeftPosition
             });
             tf.destroy();
         }
@@ -2326,6 +2328,14 @@ test('help bridge keeps custom containers and scroll adjustment on the ' +
     expect(result[0].parentId).toBe('help-target');
     expect(result[1].contParentId).toBe('help-cont');
     expect(result[1].contClass).toBe('helpCont');
+    expect(result[0].contAdjustLeftPosition).toBe(25);
+    expect(result[0].hasContAdjustLeftPosition).toBe(false);
+    expect(result[1].contAdjustLeftPosition).toBe(25);
+    expect(result[1].hasContAdjustLeftPosition).toBe(false);
+    expect(result[2].contAdjustLeftPosition).toBe(30);
+    expect(result[2].hasContAdjustLeftPosition).toBe(true);
+    expect(result[3].contAdjustLeftPosition).toBe(0);
+    expect(result[3].hasContAdjustLeftPosition).toBe(true);
 });
 
 test('help bridge treats an explicit null adjust position as unset',
@@ -2351,6 +2361,116 @@ test('help bridge treats an explicit null adjust position as unset',
 
         expect(result.isCE).toBe(true);
         expect(result.legacy).toBe(false);
+    });
+
+test('help bridge reflects disable()/enable() on the <tf-help> host',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-disable', {}, html);
+            const help = tf.feature('help');
+            const host = window.helpHost(tf);
+            const trigger = window.helpPart(host, 'trigger');
+            const state = {};
+
+            state.initial = {
+                hostDisabled: host.hasAttribute('disabled'),
+                triggerDisabled: trigger.hasAttribute('disabled'),
+                enabled: help.isEnabled()
+            };
+
+            help.toggle();
+            state.toggleOpened = host.hasAttribute('open');
+            help.toggle();
+            state.toggleClosed = !host.hasAttribute('open');
+
+            help.disable();
+            state.disabled = {
+                hostDisabled: host.hasAttribute('disabled'),
+                triggerDisabled: trigger.hasAttribute('disabled'),
+                enabled: help.isEnabled()
+            };
+            trigger.click();
+            help.toggle();
+            state.openWhileDisabled = host.hasAttribute('open');
+
+            help.enable();
+            state.enabled = {
+                hostDisabled: host.hasAttribute('disabled'),
+                triggerDisabled: trigger.hasAttribute('disabled'),
+                enabled: help.isEnabled()
+            };
+            trigger.click();
+            state.openAfterEnable = host.hasAttribute('open');
+
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.initial).toEqual({
+            hostDisabled: false,
+            triggerDisabled: false,
+            enabled: true
+        });
+        expect(result.toggleOpened).toBe(true);
+        expect(result.toggleClosed).toBe(true);
+        expect(result.disabled).toEqual({
+            hostDisabled: true,
+            triggerDisabled: true,
+            enabled: false
+        });
+        expect(result.openWhileDisabled).toBe(false);
+        expect(result.enabled).toEqual({
+            hostDisabled: false,
+            triggerDisabled: false,
+            enabled: true
+        });
+        expect(result.openAfterEnable).toBe(true);
+    });
+
+test('help bridge blocks a wrapped slotted trigger while disabled',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-disable-slot', {
+                help_instructions: {
+                    btn_html: 'Help me'
+                }
+            }, html);
+            const help = tf.feature('help');
+            const host = window.helpHost(tf);
+            const wrapped = window.helpAssigned(host, 'trigger')[0];
+            const state = {};
+
+            state.wrappedTag = wrapped.nodeName;
+            state.wrappedType = wrapped.getAttribute('type');
+            state.initialDisabled = host.hasAttribute('disabled');
+
+            help.disable();
+            state.disabledAttribute = host.hasAttribute('disabled');
+            wrapped.click();
+            state.openWhileDisabled = host.hasAttribute('open');
+
+            help.enable();
+            state.enabledAttribute = host.hasAttribute('disabled');
+            wrapped.click();
+            state.openAfterEnable = host.hasAttribute('open');
+
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.wrappedTag).toBe('BUTTON');
+        expect(result.wrappedType).toBe('button');
+        expect(result.initialDisabled).toBe(false);
+        expect(result.disabledAttribute).toBe(true);
+        expect(result.openWhileDisabled).toBe(false);
+        expect(result.enabledAttribute).toBe(false);
+        expect(result.openAfterEnable).toBe(true);
     });
 
 test('help bridge falls back to the legacy markup without the element',
