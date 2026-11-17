@@ -23,7 +23,7 @@ const DEFAULT_INSTR_HTML = 'Use the filters above each column to filter ' +
     'Learn more</a><hr/>';
 
 // Focusable trigger controls; slotted trigger markup without one is
-// wrapped in a button (mirrors tf-help.js:38-40).
+// wrapped in a button.
 const FOCUSABLE_TRIGGER = 'button:not([disabled]), a[href], ' +
     'input:not([disabled]), select:not([disabled]), ' +
     'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -182,10 +182,10 @@ export class Help extends Feature {
             tf.feature('toolbar').container(this.toolbarPosition) :
             elm(this.tgtId);
 
-        // Bridge to <tf-help> (scaffold #913): `target_id` (help.js:49),
-        // `container_target_id` (help.js:55) and an explicit
-        // `container_adjust_left_position` (help.js:118-133) keep the
-        // legacy span/div structure.
+        // Bridge to <tf-help> (scaffold #913): `target_id`,
+        // `container_target_id` and an explicit
+        // `container_adjust_left_position` keep the legacy span/div
+        // structure.
         // TODO(#965): remove once the legacy webpack pipeline is retired.
         if (this.canUseCE()) {
             this.initCE(targetEl);
@@ -299,9 +299,8 @@ export class Help extends Feature {
                 }
             } else {
                 // The element hides its own trigger while the slot has
-                // nodes (tf-help.js:220-224); non-focusable markup is
-                // wrapped in a button so the trigger stays
-                // keyboard-activatable.
+                // nodes; non-focusable markup is wrapped in a button so
+                // the trigger stays keyboard-activatable.
                 const button = createElm('button');
                 button.type = 'button';
                 button.slot = 'trigger';

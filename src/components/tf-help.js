@@ -96,9 +96,8 @@ export class TfHelpElement extends HTMLElement {
                 this._dismiss();
                 return;
             }
-            // A slotted element with class `close`
-            // (src/modules/help.js:232) dismisses; other content
-            // clicks keep the dialog open.
+            // A slotted element with class `close` dismisses; other
+            // content clicks keep the dialog open.
             if (event.composedPath().some((node) =>
                 node.nodeType === 1 && node.classList &&
                 node.classList.contains('close'))) {

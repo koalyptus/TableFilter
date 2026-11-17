@@ -255,9 +255,9 @@ test('paging bridge uses tf-pager with the legacy config',
 
 // With `enable_icons` on, legacy renders an `<input>` whose
 // `.nextPage`/`.previousPage`/`.firstPage`/`.lastPage` classes the themes
-// paint the icon on (tablefilter.css, paging.js:152-182). Those classes
-// cannot reach the shadow button, so this configuration stays on the
-// legacy markup with its icon intact (clearButton.js:97-110).
+// paint the icon on (tablefilter.css). Those classes cannot reach the
+// shadow button, so this configuration stays on the legacy markup with
+// its icon intact.
 test('paging stays on the legacy path when enable_icons is on',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -299,8 +299,8 @@ test('paging stays on the legacy path when enable_icons is on',
     });
 
 // A configured `btn_next_page_html` stays on the legacy markup, where the
-// custom HTML is injected into the button span (paging.js:399-401) and
-// the click is bound on that span.
+// custom HTML is injected into the button span and the click is bound on
+// that span.
 test('paging keeps configured button html on the legacy path',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -348,7 +348,7 @@ test('paging keeps configured button html on the legacy path',
     });
 
 // A click on a <tf-pager> button reaches the legacy handlers, which hold
-// the paging arithmetic and its wrap-around (paging.js:303-318).
+// the paging arithmetic and its wrap-around.
 test('paging bridge forwards button clicks to the legacy feature',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -394,8 +394,7 @@ test('paging bridge forwards button clicks to the legacy feature',
     });
 
 // The select's `change` is not composed, so <tf-pager> relays the pick
-// as `page-change` (paging.js:363-366) and the bridge resolves the page
-// number to an index.
+// as `page-change` and the bridge resolves the page number to an index.
 test('paging bridge forwards a page pick from the select',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -440,8 +439,8 @@ test('paging bridge forwards a page pick from the select',
 
 // With `page_selector_type: 'input'` the page control is a shadow
 // `<input>`, which has no `.options`. Changing results-per-page reads the
-// page position from `.value` instead (paging.js:955-956) and clamps it
-// to the last page before handing it to the element.
+// page position from `.value` and clamps it to the last page before
+// handing it to the element.
 test('changing results per page works with the input selector',
     async ({ page }) => {
         await page.goto(FIXTURE);
