@@ -27,18 +27,23 @@ Parity is a target, not a property of the current build.
 ## 3. Work units: one issue per component
 
 Each component has its own parity issue with its own checklist, tests and
-closing gate:
+closing gate. A parity issue rides the milestone its component's bridge
+landed in: milestone 4 for the table-filter, tf-status, tf-rows-counter and
+tf-clear-button work, milestone 2 for the pager, results-per-page and
+checklist work, milestone 3 for tf-help. The "Styling modernization
+(post-1.0)" milestone tracks only post-v1.0.0 work (#943, #944, #945, #969),
+not parity.
 
-| Component | Legacy stylesheet | Issue |
-|---|---|---|
-| `<table-filter>` | `static/style/table.styl`, `filters.styl`, `toolbar.styl` | [#1076](https://github.com/koalyptus/TableFilter/issues/1076) |
-| `<tf-status>` | `static/style/status-bar.styl` | [#1077](https://github.com/koalyptus/TableFilter/issues/1077) |
-| `<tf-rows-counter>` | `static/style/rows-counter.styl` | [#1078](https://github.com/koalyptus/TableFilter/issues/1078) |
-| `<tf-clear-button>` | `static/style/reset-button.styl` | [#1079](https://github.com/koalyptus/TableFilter/issues/1079) |
-| `<tf-pager>` | `static/style/paging.styl` | [#1080](https://github.com/koalyptus/TableFilter/issues/1080) |
-| `<tf-results-per-page>` | `static/style/paging.styl:66` (`select.rspg`), `:72` (`span.rspgSpan`) | [#1081](https://github.com/koalyptus/TableFilter/issues/1081) |
-| `<tf-checklist>` | `static/style/filter-checklist.styl` | [#1082](https://github.com/koalyptus/TableFilter/issues/1082) |
-| `<tf-help>` | `static/style/help.styl` | [#1083](https://github.com/koalyptus/TableFilter/issues/1083) |
+| Component | Legacy stylesheet | Issue | Milestone |
+|---|---|---|---|
+| `<table-filter>` | `static/style/table.styl`, `filters.styl`, `toolbar.styl` | [#1076](https://github.com/koalyptus/TableFilter/issues/1076) | 4 — CI maintenance & release |
+| `<tf-status>` | `static/style/status-bar.styl` | [#1077](https://github.com/koalyptus/TableFilter/issues/1077) | 4 — CI maintenance & release |
+| `<tf-rows-counter>` | `static/style/rows-counter.styl` | [#1078](https://github.com/koalyptus/TableFilter/issues/1078) | 4 — CI maintenance & release |
+| `<tf-clear-button>` | `static/style/reset-button.styl` | [#1079](https://github.com/koalyptus/TableFilter/issues/1079) | 4 — CI maintenance & release |
+| `<tf-pager>` | `static/style/paging.styl` | [#1080](https://github.com/koalyptus/TableFilter/issues/1080) | 2 — Accessibility pass & feature bridges |
+| `<tf-results-per-page>` | `static/style/paging.styl:66` (`select.rspg`), `:72` (`span.rspgSpan`) | [#1081](https://github.com/koalyptus/TableFilter/issues/1081) | 2 — Accessibility pass & feature bridges |
+| `<tf-checklist>` | `static/style/filter-checklist.styl` | [#1082](https://github.com/koalyptus/TableFilter/issues/1082) | 2 — Accessibility pass & feature bridges |
+| `<tf-help>` | `static/style/help.styl` | [#1083](https://github.com/koalyptus/TableFilter/issues/1083) | 3 — Accessible overlays & instructions |
 
 The epic [#1049](https://github.com/koalyptus/TableFilter/issues/1049) holds
 only the cross-cutting work (`::part` naming, host-class to part mapping,
@@ -66,7 +71,7 @@ component issue closes.
 The gate is [#1075](https://github.com/koalyptus/TableFilter/issues/1075)
 ("Release v1.0.0: visual parity gate", milestone "v1.0.0 Release"). It lists
 every component issue and cannot be closed without evidence. It also tracks the
-non-styling blockers (#1027, #1012, #965) and the closure of milestones 1-3.
+non-styling blockers (#1027, #1012, #965) and the closure of milestones 1-4.
 
 "Legacy default look" means the legacy visual language, not pixel identity. A
 component may deviate where its accessible implementation requires it — for
