@@ -18,10 +18,9 @@ The bridges apply the legacy class to the **host** only
 (`src/modules/statusBar.js:240`, `src/modules/rowsCounter.js:141`,
 `src/modules/paging.js:419`). Shadow internals are therefore unreachable from
 the shipped stylesheet: `grep -rn "::part" static/style` returns nothing.
-`demos/tf-pager.html` and `demos/tf-checklist.html` carry no component
-presentation CSS (the shared `partials/style.html` partial styles page chrome
-only) and render unstyled native controls; the `<tf-help>` demo styles the
-trigger with `::part(trigger)` rules, the gap #1083 removes.
+The `<tf-*>` demos carry no component presentation CSS (the shared
+`partials/style.html` partial styles page chrome only) and render unstyled
+native controls.
 
 Parity is a target, not a property of the current build.
 
