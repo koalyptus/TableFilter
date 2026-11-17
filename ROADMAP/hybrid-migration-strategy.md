@@ -172,6 +172,19 @@ export class StatusBar extends Feature {
 3. The DOM element now carries `role="status"` and `aria-live="polite"` automatically.
 4. If a consumer prefers to write `<tf-status>` manually in their markup, TableFilter can bind to it via `target_id`.
 
+### Component attribute conventions
+Element attributes expose behaviour. They are not ARIA attributes, so they never
+use `aria-*` names: `<tf-help aria-label="Help">` would name the host shell, not
+the focusable control in its shadow root.
+
+- `label` names the element's primary control.
+- `<part>-label` names a specific part: `dialog-label`, `listbox-label`,
+  `selector-label`, `first-label`, `prev-label`, `next-label`, `last-label`.
+- `<part>-text` (or `text`) is visible text; an accessible name and the visible
+  text are separate attributes.
+- The element renders a name as `aria-label` on the shadow control, never on the
+  host. An empty value removes the name.
+
 ### Bridge init convention (temporary, until #965 namespace migration)
 Bridged features split `init()` into two focused methods so the legacy path is a
 clean deletion boundary:
