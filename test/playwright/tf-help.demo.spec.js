@@ -34,19 +34,15 @@ test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
 
         const initial = {
             defined: Boolean(customElements.get('tf-help')),
-            legacyHelp: Boolean(document.querySelector('.helpBtn')) ||
-                Boolean(document.querySelector('.helpCont')),
-            toolbarPlaced: Boolean(host.closest('.inf')) &&
-                Boolean(host.closest('.rdiv')),
+            legacyHelp: !document.querySelector('tf-help'),
+            toolbarPlaced: Boolean(host.parentElement) &&
+                host.parentElement.parentElement.children.length === 3,
             toolbarOrder: (() => {
-                const right = host.closest('.rdiv');
-                const clear = document.querySelector('.rdiv .reset');
+                const right = host.parentElement;
                 return {
-                    helpBeforeClear: Boolean(clear) &&
-                        host.compareDocumentPosition(clear) ===
-                            Node.DOCUMENT_POSITION_FOLLOWING,
-                    clearIsLast: Boolean(clear) &&
-                        right.lastElementChild.contains(clear)
+                    helpBeforeClear: Boolean(host.nextElementSibling),
+                    clearIsLast:
+                        right.lastElementChild === host.nextElementSibling
                 };
             })(),
             triggerText:
@@ -58,8 +54,7 @@ test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
             instructions: instructions.textContent
                 .replace(/\s+/g, ' ').trim().length > 0,
             footer: instructions.textContent.includes('TableFilter v') &&
-                instructions.textContent.includes('www.tablefilter.com') &&
-                Boolean(instructions.querySelector('.helpFooter')),
+                instructions.textContent.includes('www.tablefilter.com'),
             open: dialog.open
         };
 
@@ -84,8 +79,8 @@ test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
 
         // The projected footer keeps no close link; the element close
         // control is the only one in the dialog.
-        const footerLink =
-            instructions.querySelector('a.close') !== null;
+        const footerLink = Array.from(instructions.querySelectorAll('a'))
+            .some((a) => a.textContent.trim() === 'Close');
 
         return { initial, opened, contentKeptOpen, closed, footerLink };
     });

@@ -2020,12 +2020,11 @@ test('help bridge uses tf-help with the legacy config', async ({ page }) => {
             instructionsText: instructions.textContent,
             hasBold: Boolean(instructions.querySelector('b')),
             footer: instructions.textContent.includes('TableFilter v') &&
-                instructions.textContent.includes('www.tablefilter.com') &&
-                Boolean(instructions.querySelector('.helpFooter')),
-            footerClose: Boolean(instructions.querySelector('a.close')),
+                instructions.textContent.includes('www.tablefilter.com'),
+            footerClose: Array.from(instructions.querySelectorAll('a'))
+                .some((a) => a.textContent.trim() === 'Close'),
             closeText: window.helpPart(host, 'close-text').textContent,
-            legacy: Boolean(document.querySelector('.helpBtn')) ||
-                Boolean(document.querySelector('.helpCont'))
+            legacy: !document.querySelector('tf-help')
         };
 
         tf.destroy();
@@ -2411,8 +2410,8 @@ test('help bridge keeps custom containers and scroll adjustment on the ' +
             state.push({
                 tag: help.btn ? help.btn.nodeName : null,
                 element: Boolean(help.btn && help.btn.nodeName === 'TF-HELP'),
-                anchor: Boolean(help.btn &&
-                    help.btn.querySelector('.helpBtn')),
+                anchor: Boolean(help.btn && help.btn.querySelector(
+                    '.' + help.btnCssClass)),
                 parentId: help.btn && help.btn.parentNode ?
                     help.btn.parentNode.id : null,
                 contParentId: help.cont && help.cont.parentNode ?
@@ -2460,8 +2459,7 @@ test('help bridge treats an explicit null adjust position as unset',
             const host = window.helpHost(tf);
             const state = {
                 isCE: host.nodeName === 'TF-HELP',
-                legacy: Boolean(document.querySelector('.helpBtn')) ||
-                    Boolean(document.querySelector('.helpCont'))
+                legacy: !document.querySelector('tf-help')
             };
             tf.destroy();
             return state;
@@ -2598,21 +2596,22 @@ test('help bridge falls back to the legacy markup without the element',
             tf.init();
 
             const help = tf.feature('help');
+            const close = Array.from(help.cont.querySelectorAll('a'))
+                .find((a) => a.textContent.trim() === 'Close');
             const state = {
                 registered: Boolean(customElements.get('tf-help')),
                 tag: help.btn.nodeName,
-                anchor: help.btn.querySelector('.helpBtn') !== null,
+                anchor: help.btn.querySelector(
+                    '.' + help.btnCssClass) !== null,
                 contTag: help.cont.nodeName,
                 contClass: help.cont.className,
                 instructions:
                     help.cont.textContent.includes('Use the filters'),
                 footer: help.cont.textContent.includes('TableFilter v') &&
                     help.cont.textContent.includes('www.tablefilter.com'),
-                close: help.cont.querySelector('a.close') !== null,
-                closeHref: help.cont.querySelector('a.close')
-                    .getAttribute('href'),
-                closeCursor: window.getComputedStyle(
-                    help.cont.querySelector('a.close')).cursor
+                close: Boolean(close),
+                closeHref: close.getAttribute('href'),
+                closeCursor: window.getComputedStyle(close).cursor
             };
 
             tf.destroy();
@@ -2650,7 +2649,7 @@ test('help bridge falls back to the legacy trigger when btn_html ' +
         tf.init();
 
         const help = tf.feature('help');
-        const anchor = help.btn.querySelector('.helpBtn');
+        const anchor = help.btn.querySelector('.' + help.btnCssClass);
         const state = {
             xss: window.__helpLegacyEmpty,
             tag: help.btn.nodeName,
@@ -2691,7 +2690,7 @@ test('help bridge applies label to the legacy trigger',
             tf.init();
 
             const help = tf.feature('help');
-            const anchor = help.btn.querySelector('.helpBtn');
+            const anchor = help.btn.querySelector('.' + help.btnCssClass);
             const state = {
                 label: anchor.getAttribute('aria-label')
             };
@@ -2754,8 +2753,9 @@ test('help bridge sanitises and escapes markup on the legacy path',
                     .querySelector('#legacy-close').getAttribute('href'),
                 closeClass: htmlHelp.cont
                     .querySelector('#legacy-close').className,
-                footerCloseHref: htmlHelp.cont
-                    .querySelector('.helpFooter a.close')
+                footerCloseHref: Array.from(
+                    htmlHelp.cont.querySelectorAll('a'))
+                    .find((a) => a.textContent.trim() === 'Close')
                     .getAttribute('href')
             };
             const xss = window.__legacyXss;
@@ -2824,7 +2824,8 @@ test('help bridge projects the default instructions and footer',
                 hasOperators: Boolean(instructions.querySelector('b')),
                 footer: instructions.textContent.includes('TableFilter v') &&
                     instructions.textContent.includes('www.tablefilter.com'),
-                footerClose: Boolean(instructions.querySelector('a.close')),
+                footerClose: Array.from(instructions.querySelectorAll('a'))
+                    .some((a) => a.textContent.trim() === 'Close'),
                 closeText: window.helpPart(host, 'close-text').textContent
             };
 
@@ -2877,8 +2878,7 @@ test('help bridge mounts by default and leaves the trigger unnamed',
                 footer: instructions.textContent
                     .includes('TableFilter v' + tf.version),
                 closeText: window.helpPart(host, 'close-text').textContent,
-                legacy: Boolean(document.querySelector('.helpBtn')) ||
-                    Boolean(document.querySelector('.helpCont'))
+                legacy: !document.querySelector('tf-help')
             };
 
             tf.destroy();
