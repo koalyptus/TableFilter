@@ -279,7 +279,8 @@ export class Help extends Feature {
                             const focusable =
                                 node.querySelector(FOCUSABLE_TRIGGER);
                             if (focusable) {
-                                focusable.setAttribute('aria-label', this.label);
+                                focusable.setAttribute('aria-label',
+                                    this.label);
                             } else {
                                 node.setAttribute('aria-label', this.label);
                             }
