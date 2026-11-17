@@ -336,7 +336,7 @@ tf.init();
 
 #### 6. High Contrast & Visual Accessibility
 - **Visible Focus Indicator (WCAG 2.4.11 / 2.4.13)**:
-  `outline: 2px solid var(--tf-focus-ring, #0969da); outline-offset: 2px;` with minimum 3:1 contrast against adjacent colors.
+  `outline: 2px solid var(--tf-focus-ring, #66AFE9); outline-offset: 2px;` with minimum 3:1 contrast against adjacent colors.
 - **Forced Colors Mode (`@media (forced-colors: active)`)**:
   Replace raster image icons with inline SVGs utilizing `currentColor` and `CanvasText` system colors.
 - **Color Contrast (WCAG 1.4.3 / 1.4.11)**:
@@ -462,22 +462,10 @@ flowchart TD
 > **Sequencing:** items 1–3 below (token API + docs, Stylus→CSS, SVG icons, dark mode / forced-colors) are **deferred to the "Styling modernization (post-1.0)" milestone** (after the v1.0.0 parity launch). Only item 4 — preserving the legacy styling configuration — stays on the parity path.
 
 1. **CSS Custom Properties**:
-   - Define token system:
-     ```css
-     :host, table-filter {
-       --tf-primary: #0969da;
-       --tf-primary-hover: #085fc4;
-       --tf-bg: #ffffff;
-       --tf-text: #24292f;
-       --tf-border: #d0d7de;
-       --tf-focus-ring: #0969da;
-       --tf-row-alt: #f6f8fa;
-       --tf-active-col: #ddf4ff;
-     }
-     ```
+   - Complete and document the token system introduced in #892 (the shipped colour-only set is `static/style/custom-properties.styl`; earlier revisions of this document showed a sample list that did not match it). Themes move to setting the tokens.
 2. **CSS Shadow Parts**:
    - Expose `::part(toolbar)`, `::part(filter-input)`, `::part(pager)`, `::part(status)` for custom styling. The configurable legacy class (`status_bar.css_class` and friends) stays on the host, so `.status::part(message)` keeps consumer/theme styling working across the shadow boundary.
-3. **Theme Ports**:
+3. **Theme Ports** (tracked in #1096):
    - Port legacy themes (`default`, `mytheme`, `skyblue`, `transparent`) to clean CSS files setting the custom properties.
    - Replace raster `.gif`/`.png` icons with crisp, theme-aware inline SVGs.
 4. **Preserve the legacy styling configuration (additive, not a rewrite)**:

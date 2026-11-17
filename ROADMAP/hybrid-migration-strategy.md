@@ -108,7 +108,7 @@ export class TfStatus extends HTMLElement {
     }
 
     render() {
-        // Themed via ::part(label) / ::part(message) and inherited --tf-* tokens
+        // Themed via ::part(label) / ::part(message) and the host class
         this.shadowRoot.querySelector('[part="label"]').textContent =
             this.getAttribute('text') || '';
         this.shadowRoot.querySelector('[part="message"]').textContent =
@@ -215,7 +215,7 @@ A crucial challenge in hybrid Web Component systems is boundary traversal:
 - **Rule 1: Never place the table inside closed Shadow DOM during hybrid migration.**
   Legacy features and external extensions query table rows directly via `this.dom().rows[i]`. The table must remain in the **Light DOM** (projected through a `<slot>` into `<table-filter>`).
 - **Rule 2: Leaf UI components (`<tf-status>`, `<tf-rows-counter>`, `<tf-clear-button>`) can use Shadow DOM immediately.**
-  Because TableFilter communicates with them via their JS element references (`this.statusEl.setMessage(...)`), their internal template can be fully encapsulated in Shadow DOM. Their styling stays configurable: the configurable class (`status_bar.css_class` and friends) is applied to the **host**, internals are reached through `::part()`, and colours come from the inherited `--tf-*` tokens, so the class + stylesheet + theme system is never bypassed.
+  Because TableFilter communicates with them via their JS element references (`this.statusEl.setMessage(...)`), their internal template can be fully encapsulated in Shadow DOM. Their styling stays configurable: the configurable class (`status_bar.css_class` and friends) is applied to the **host**, internals are reached through `::part()`, and colours come from the shipped stylesheet and themes, so the class + stylesheet + theme system is never bypassed.
 - **Rule 3: Slotted header controls use Light DOM or CSS Shadow Parts.**
   Filter inputs inserted into the table header row (`fltrow`) must remain accessible to the table accessibility tree and standard DOM queries (`tf.getFilterElement(colIndex)`).
 - **Rule 4: Preserve the core styling configuration.**
