@@ -2149,6 +2149,86 @@ test('help bridge maps a multi-node btn_html onto the trigger slot',
         expect(result.opened).toBe(true);
     });
 
+test('help bridge labels the nested focusable trigger inside btn_html',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const authored = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-label-nested', {
+                help_instructions: {
+                    label: 'Configured label',
+                    btn_html: '<span><button aria-label="Authored label">' +
+                        '?</button></span>'
+                }
+            }, html);
+            const host = window.helpHost(tf);
+            const trigger = window.helpAssigned(host, 'trigger')[0];
+            const button = trigger.querySelector('button');
+            const state = {
+                wrapperAriaLabel: trigger.getAttribute('aria-label'),
+                buttonAriaLabel: button.getAttribute('aria-label')
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(authored.wrapperAriaLabel).toBeNull();
+        expect(authored.buttonAriaLabel).toBe('Authored label');
+
+        const wrapped = await page.evaluate(async (html) => {
+            const tf = await window.mountHelp('ce-help-label-nested2', {
+                help_instructions: {
+                    label: 'Configured label',
+                    btn_html: '<span><button>?</button></span>'
+                }
+            }, html);
+            const host = window.helpHost(tf);
+            const trigger = window.helpAssigned(host, 'trigger')[0];
+            const button = trigger.querySelector('button');
+            const state = {
+                wrapperAriaLabel: trigger.getAttribute('aria-label'),
+                buttonAriaLabel: button.getAttribute('aria-label')
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(wrapped.wrapperAriaLabel).toBeNull();
+        expect(wrapped.buttonAriaLabel).toBe('Configured label');
+    });
+
+test('help bridge falls back to its own trigger when btn_html ' +
+    'sanitises to nothing', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: HELP_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountHelp('ce-help-empty-btn', {
+            help_instructions: {
+                btn_html: '<script>window.__helpEmpty = true</script>'
+            }
+        }, html);
+        const host = window.helpHost(tf);
+        const triggerPart = window.helpPart(host, 'trigger');
+        const state = {
+            triggered: window.__helpEmpty,
+            assignedTrigger: window.helpAssigned(host, 'trigger').length,
+            hasElementTrigger: !!triggerPart,
+            elementTriggerVisible: !triggerPart.hidden,
+            triggerText: host.getAttribute('trigger-text')
+        };
+        tf.destroy();
+        return state;
+    }, HELP_TABLE_HTML);
+
+    expect(result.triggered).toBeUndefined();
+    expect(result.assignedTrigger).toBe(0);
+    expect(result.hasElementTrigger).toBe(true);
+    expect(result.elementTriggerVisible).toBe(true);
+    expect(result.triggerText).toBe('?');
+});
+
 test('help bridge maps btn_html with a bare text node onto the slot',
     async ({ page }) => {
         await page.goto(FIXTURE);

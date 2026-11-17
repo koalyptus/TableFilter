@@ -275,13 +275,15 @@ export class Help extends Feature {
                     const node = trigger.firstChild;
                     if (node.nodeType === 1) {
                         node.slot = 'trigger';
-                        if (this.label && !node.hasAttribute('aria-label')) {
+                        if (this.label) {
                             const focusable =
                                 node.querySelector(FOCUSABLE_TRIGGER);
                             if (focusable) {
-                                focusable.setAttribute('aria-label',
-                                    this.label);
-                            } else {
+                                if (!focusable.hasAttribute('aria-label')) {
+                                    focusable.setAttribute('aria-label',
+                                        this.label);
+                                }
+                            } else if (!node.hasAttribute('aria-label')) {
                                 node.setAttribute('aria-label', this.label);
                             }
                         }
