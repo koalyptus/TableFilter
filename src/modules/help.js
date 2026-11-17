@@ -186,7 +186,7 @@ export class Help extends Feature {
         // `container_target_id` (help.js:55) and an explicit
         // `container_adjust_left_position` (help.js:118-133) keep the
         // legacy span/div structure.
-        // TODO(#965): restore static import once namespace migration lands.
+        // TODO(#965): remove once the legacy webpack pipeline is retired.
         if (this.canUseCE()) {
             this.initCE(targetEl);
         } else {
@@ -265,13 +265,24 @@ export class Help extends Feature {
         if (this.btnHtml) {
             const trigger = createElm('span');
             trigger.innerHTML = sanitizeHtml(this.btnHtml);
-            if (trigger.querySelector(FOCUSABLE_TRIGGER)) {
+            if (!trigger.firstChild) {
+                // Fallback when btn_html is empty after sanitisation
+                // (e.g. script-only markup). tf-help renders its own
+                // default trigger, so skip assigning a custom trigger to
+                // avoid null‑ref crashes elsewhere in the bridge.
+            } else if (trigger.querySelector(FOCUSABLE_TRIGGER)) {
                 while (trigger.firstChild) {
                     const node = trigger.firstChild;
                     if (node.nodeType === 1) {
                         node.slot = 'trigger';
                         if (this.label && !node.hasAttribute('aria-label')) {
-                            node.setAttribute('aria-label', this.label);
+                            const focusable =
+                                node.querySelector(FOCUSABLE_TRIGGER);
+                            if (focusable) {
+                                focusable.setAttribute('aria-label', this.label);
+                            } else {
+                                node.setAttribute('aria-label', this.label);
+                            }
                         }
                     } else if (node.nodeType === 3 &&
                         node.textContent.trim()) {
