@@ -2197,6 +2197,35 @@ test('help bridge labels the nested focusable trigger inside btn_html',
         expect(wrapped.buttonAriaLabel).toBe('Configured label');
     });
 
+test('help bridge labels an outer focusable trigger before its nested ' +
+    'control', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: HELP_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountHelp('ce-help-label-outer', {
+            help_instructions: {
+                label: 'Outer label',
+                btn_html: '<a href="#"><span tabindex="0">?</span></a>'
+            }
+        }, html);
+        const host = window.helpHost(tf);
+        const trigger = window.helpAssigned(host, 'trigger')[0];
+        const nested = trigger.querySelector('span');
+        const state = {
+            tag: trigger.nodeName,
+            outerLabel: trigger.getAttribute('aria-label'),
+            nestedLabel: nested.getAttribute('aria-label')
+        };
+        tf.destroy();
+        return state;
+    }, HELP_TABLE_HTML);
+
+    expect(result.tag).toBe('A');
+    expect(result.outerLabel).toBe('Outer label');
+    expect(result.nestedLabel).toBeNull();
+});
+
 test('help bridge falls back to its own trigger when btn_html ' +
     'sanitises to nothing', async ({ page }) => {
     await page.goto(FIXTURE);
@@ -2594,6 +2623,77 @@ test('help bridge falls back to the legacy markup without the element',
         expect(result.instructions).toBe(true);
         expect(result.footer).toBe(true);
         expect(result.close).toBe(true);
+    });
+
+test('help bridge falls back to the legacy trigger when btn_html ' +
+    'sanitises to nothing', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate((html) => {
+        const table = document.createElement('table');
+        table.id = 'ce-help-legacy-empty';
+        table.innerHTML = html;
+        document.body.appendChild(table);
+
+        const tf = new TableFilter('ce-help-legacy-empty', {
+            base_path: '/dist/tablefilter/',
+            help_instructions: {
+                btn_html: '<script>window.__helpLegacyEmpty = true</script>'
+            }
+        });
+        tf.init();
+
+        const help = tf.feature('help');
+        const anchor = help.btn.querySelector('.helpBtn');
+        const state = {
+            xss: window.__helpLegacyEmpty,
+            tag: help.btn.nodeName,
+            anchor: Boolean(anchor),
+            text: anchor ? anchor.textContent : null,
+            contTag: help.cont.nodeName
+        };
+        anchor.click();
+        state.opened = help.cont.style.display === 'inline';
+        tf.destroy();
+        return state;
+    }, HELP_TABLE_HTML);
+
+    expect(result.xss).toBeUndefined();
+    expect(result.tag).toBe('SPAN');
+    expect(result.anchor).toBe(true);
+    expect(result.text).toBe('?');
+    expect(result.contTag).toBe('DIV');
+    expect(result.opened).toBe(true);
+});
+
+test('help bridge applies label to the legacy trigger',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate((html) => {
+            const table = document.createElement('table');
+            table.id = 'ce-help-legacy-label';
+            table.innerHTML = html;
+            document.body.appendChild(table);
+
+            const tf = new TableFilter('ce-help-legacy-label', {
+                base_path: '/dist/tablefilter/',
+                help_instructions: {
+                    label: 'Legacy help'
+                }
+            });
+            tf.init();
+
+            const help = tf.feature('help');
+            const anchor = help.btn.querySelector('.helpBtn');
+            const state = {
+                label: anchor.getAttribute('aria-label')
+            };
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.label).toBe('Legacy help');
     });
 
 test('help bridge sanitises and escapes markup on the legacy path',

@@ -23,7 +23,7 @@ const DEFAULT_INSTR_HTML = 'Use the filters above each column to filter ' +
     'Learn more</a><hr/>';
 
 // Focusable trigger controls; slotted trigger markup without one is
-// wrapped in a button.
+// wrapped in a button. Matches FOCUSABLE in components/tf-help.js.
 const FOCUSABLE_TRIGGER = 'button:not([disabled]), a[href], ' +
     'input:not([disabled]), select:not([disabled]), ' +
     'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -275,18 +275,7 @@ export class Help extends Feature {
                     const node = trigger.firstChild;
                     if (node.nodeType === 1) {
                         node.slot = 'trigger';
-                        if (this.label) {
-                            const focusable =
-                                node.querySelector(FOCUSABLE_TRIGGER);
-                            if (focusable) {
-                                if (!focusable.hasAttribute('aria-label')) {
-                                    focusable.setAttribute('aria-label',
-                                        this.label);
-                                }
-                            } else if (!node.hasAttribute('aria-label')) {
-                                node.setAttribute('aria-label', this.label);
-                            }
-                        }
+                        this.applyTriggerLabel(node);
                     } else if (node.nodeType === 3 &&
                         node.textContent.trim()) {
                         const text = createElm('span');
@@ -304,9 +293,7 @@ export class Help extends Feature {
                 const button = createElm('button');
                 button.type = 'button';
                 button.slot = 'trigger';
-                if (this.label) {
-                    button.setAttribute('aria-label', this.label);
-                }
+                this.applyTriggerLabel(button);
                 while (trigger.firstChild) {
                     button.appendChild(trigger.firstChild);
                 }
@@ -344,6 +331,41 @@ export class Help extends Feature {
     }
 
     /**
+     * Apply the configured label to a trigger element, preferring the
+     * focusable control in its subtree and preserving an existing
+     * `aria-label`.
+     * @param {DOMElement} node Trigger element
+     * @private
+     */
+    applyTriggerLabel(node) {
+        if (!this.label) {
+            return;
+        }
+        const target = node.matches(FOCUSABLE_TRIGGER) ?
+            node : node.querySelector(FOCUSABLE_TRIGGER) || node;
+        if (!target.hasAttribute('aria-label')) {
+            target.setAttribute('aria-label', this.label);
+        }
+    }
+
+    /**
+     * Append the default help anchor to the legacy button container
+     * @param {DOMElement} btn Button container
+     * @param {DOMElement} divContainer Container receiving the pop-up
+     * @param {DOMElement} cont Help pop-up container
+     * @private
+     */
+    appendDefaultTrigger(btn, divContainer, cont) {
+        divContainer.appendChild(cont);
+        let helplink = createElm('a', ['href', 'javascript:void(0);']);
+        helplink.className = this.btnCssClass;
+        helplink.appendChild(createText(this.btnText));
+        this.applyTriggerLabel(helplink);
+        btn.appendChild(helplink);
+        addEvt(helplink, 'click', () => this.toggle());
+    }
+
+    /**
      * Initialize using the legacy span/div structure
      * @param {DOMElement} targetEl Target container element
      * @private
@@ -359,17 +381,19 @@ export class Help extends Feature {
         let divContainer = !this.contTgtId ? btn : elm(this.contTgtId);
 
         if (!this.btnHtml) {
-            divContainer.appendChild(cont);
-            let helplink = createElm('a', ['href', 'javascript:void(0);']);
-            helplink.className = this.btnCssClass;
-            helplink.appendChild(createText(this.btnText));
-            btn.appendChild(helplink);
-            addEvt(helplink, 'click', () => this.toggle());
+            this.appendDefaultTrigger(btn, divContainer, cont);
         } else {
             btn.innerHTML = sanitizeHtml(this.btnHtml);
-            let helpEl = btn.firstChild;
-            addEvt(helpEl, 'click', () => this.toggle());
-            divContainer.appendChild(cont);
+            if (!btn.firstChild) {
+                this.appendDefaultTrigger(btn, divContainer, cont);
+            } else {
+                let helpEl = btn.firstChild;
+                if (helpEl.nodeType === 1) {
+                    this.applyTriggerLabel(helpEl);
+                }
+                addEvt(helpEl, 'click', () => this.toggle());
+                divContainer.appendChild(cont);
+            }
         }
 
         if (!this.instrHtml) {

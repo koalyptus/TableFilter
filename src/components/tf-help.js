@@ -34,7 +34,8 @@ const TRIGGER_ID = 'trigger';
 const DIALOG_ID = 'dialog';
 
 // Controls and widgets that take focus; used to pick the focus target
-// inside slotted trigger markup.
+// inside slotted trigger markup. Matches FOCUSABLE_TRIGGER in
+// modules/help.js.
 const FOCUSABLE = 'button:not([disabled]), a[href], ' +
     'input:not([disabled]), select:not([disabled]), ' +
     'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';

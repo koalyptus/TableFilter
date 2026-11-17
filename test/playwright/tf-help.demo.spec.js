@@ -72,7 +72,7 @@ test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
 
         // Clicking content inside the dialog body keeps it open.
         sr.querySelector('slot[name="instructions"]')
-            .assignedElements()[0].querySelector('a').click();
+            .assignedElements()[0].querySelector('b').click();
         const contentKeptOpen = { open: dialog.open };
 
         trigger.click();
