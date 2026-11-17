@@ -239,14 +239,17 @@ export class Help extends Feature {
      * Append markup nodes to the target element
      * @param {DOMElement} target Node to append the markup to
      * @param {String} markup Markup; passed through `sanitizeHtml()`
+     * @returns {Array} Appended top-level nodes
      * @private
      */
     appendMarkup(target, markup) {
         const wrapper = createElm('div');
         wrapper.innerHTML = sanitizeHtml(markup);
+        const nodes = [];
         while (wrapper.firstChild) {
-            target.appendChild(wrapper.firstChild);
+            nodes.push(target.appendChild(wrapper.firstChild));
         }
+        return nodes;
     }
 
     /**
@@ -412,7 +415,15 @@ export class Help extends Feature {
                 cont.className = this.contCssClass;
             }
         }
-        this.appendMarkup(cont, this.footerMarkup(true));
+        const footer = this.appendMarkup(
+            cont, this.footerMarkup(true))[0];
+        // sanitizeHtml() drops `javascript:` URLs, which also drops the
+        // link cursor and focusability from the close link. The footer is
+        // internal markup, so its href is restored after sanitising.
+        const close = footer && footer.querySelector('a.close');
+        if (close) {
+            close.setAttribute('href', 'javascript:void(0);');
+        }
         addEvt(cont, 'click', () => this.toggle());
 
         this.cont = cont;

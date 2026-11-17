@@ -2608,7 +2608,11 @@ test('help bridge falls back to the legacy markup without the element',
                     help.cont.textContent.includes('Use the filters'),
                 footer: help.cont.textContent.includes('TableFilter v') &&
                     help.cont.textContent.includes('www.tablefilter.com'),
-                close: help.cont.querySelector('a.close') !== null
+                close: help.cont.querySelector('a.close') !== null,
+                closeHref: help.cont.querySelector('a.close')
+                    .getAttribute('href'),
+                closeCursor: window.getComputedStyle(
+                    help.cont.querySelector('a.close')).cursor
             };
 
             tf.destroy();
@@ -2623,6 +2627,8 @@ test('help bridge falls back to the legacy markup without the element',
         expect(result.instructions).toBe(true);
         expect(result.footer).toBe(true);
         expect(result.close).toBe(true);
+        expect(result.closeHref).toBe('javascript:void(0);');
+        expect(result.closeCursor).toBe('pointer');
     });
 
 test('help bridge falls back to the legacy trigger when btn_html ' +
@@ -2730,7 +2736,9 @@ test('help bridge sanitises and escapes markup on the legacy path',
                         'onclick="window.__legacyXss = 1">?</span>',
                     html: '<p id="legacy-ok">Operators</p>' +
                         '<script>window.__legacyXss = 2<\/script>' +
-                        '<img src="x" onerror="window.__legacyXss = 3">'
+                        '<img src="x" onerror="window.__legacyXss = 3">' +
+                        '<a id="legacy-close" class="close" ' +
+                        'href="javascript:window.__legacyXss = 4">x</a>'
                 }
             });
             const htmlHelp = htmlTf.feature('help');
@@ -2742,9 +2750,13 @@ test('help bridge sanitises and escapes markup on the legacy path',
                     Boolean(htmlHelp.cont.querySelector('#legacy-ok')),
                 scripts: htmlHelp.cont.querySelectorAll('script').length,
                 onerror: htmlHelp.cont.querySelectorAll('[onerror]').length,
-                closeHref: htmlHelp.cont.querySelector('a.close')
-                    .getAttribute('href'),
-                closeClass: htmlHelp.cont.querySelector('a.close').className
+                closeHref: htmlHelp.cont
+                    .querySelector('#legacy-close').getAttribute('href'),
+                closeClass: htmlHelp.cont
+                    .querySelector('#legacy-close').className,
+                footerCloseHref: htmlHelp.cont
+                    .querySelector('.helpFooter a.close')
+                    .getAttribute('href')
             };
             const xss = window.__legacyXss;
             htmlTf.destroy();
@@ -2764,6 +2776,8 @@ test('help bridge sanitises and escapes markup on the legacy path',
         expect(result.htmlState.onerror).toBe(0);
         expect(result.htmlState.closeHref).toBe(null);
         expect(result.htmlState.closeClass).toBe('close');
+        expect(result.htmlState.footerCloseHref).toBe(
+            'javascript:void(0);');
     });
 
 
