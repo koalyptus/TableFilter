@@ -25,7 +25,9 @@
  * opens the dialog, removing it closes the dialog, and `open-change`
  * reports the state with `detail: {open}`.
  *
- * The element ships no class or presentational style; theme it via
+ * The shadow root carries the trigger's layout contract (the legacy
+ * toolbar footprint and hover fill), so the element renders like the
+ * legacy markup without page CSS. Looks stay themeable through
  * `::part()` and `--tf-*` custom properties. Importing this module
  * registers the element.
  */
@@ -40,10 +42,36 @@ const FOCUSABLE = 'button:not([disabled]), a[href], ' +
     'input:not([disabled]), select:not([disabled]), ' +
     'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-// Cloned into every instance's shadow root. Structure and `part` hooks
-// only: no class or presentational style is baked in.
+// Cloned into every instance's shadow root: structure, `part` hooks and
+// the trigger layout contract (legacy toolbar footprint: content-box,
+// glyph laid out from the top, full-height hover fill).
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
+    <style>
+        :host {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        [part="trigger"] {
+            box-sizing: content-box;
+            display: flex;
+            align-items: flex-start;
+            height: 27px;
+            margin: 0;
+            padding: 8px 15px 0 15px;
+            border: 0;
+            background: transparent;
+            color: var(--tf-text, #333);
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        [part="trigger"]:hover {
+            background-color: var(--tf-border-light, #F4F4F4);
+        }
+    </style>
     <slot name="trigger" part="trigger-slot"></slot>
     <button type="button" part="trigger" id="${TRIGGER_ID}"
         aria-haspopup="dialog" aria-expanded="false"

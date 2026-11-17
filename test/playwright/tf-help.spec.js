@@ -43,7 +43,8 @@ test('registers an open shadow root exposing the dialog parts',
                 hasPopup: trigger && trigger.getAttribute('aria-haspopup'),
                 controls: trigger && trigger.getAttribute('aria-controls'),
                 classless: nodes.every((n) => !n.hasAttribute('class')),
-                styleless: nodes.every((n) => n.tagName !== 'STYLE')
+                layoutStyle: Array.from(sr.querySelectorAll('style'))
+                    .map((n) => n.textContent).join('')
             };
         }, COMPONENT);
 
@@ -59,7 +60,7 @@ test('registers an open shadow root exposing the dialog parts',
         expect(result.hasPopup).toBe('dialog');
         expect(result.controls).toBe('dialog');
         expect(result.classless).toBe(true);
-        expect(result.styleless).toBe(true);
+        expect(result.layoutStyle).toContain('[part="trigger"]');
     });
 
 test('projects trigger markup as the trigger control',

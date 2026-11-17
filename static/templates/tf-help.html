@@ -3,35 +3,6 @@
 <head>
     <title>{NAME} v{VERSION} - Web Components Help Demo</title>
     <!-- @import partials/style.html -->
-    <style>
-        /* TODO(#1083): move these rules into static/style/help.styl so
-           the demo needs no page CSS. */
-        tf-help {
-            display: inline-block;
-            vertical-align: top;
-        }
-
-        tf-help::part(trigger) {
-            box-sizing: content-box;
-            /* The `<button>` user-agent style centres its content; the
-               legacy anchor lays the glyph out from the content-box top. */
-            display: flex;
-            align-items: flex-start;
-            height: 27px;
-            margin: 0;
-            padding: 8px 15px 0 15px;
-            border: 0;
-            background: transparent;
-            color: var(--tf-text, #333);
-            font: inherit;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        tf-help::part(trigger):hover {
-            background-color: var(--tf-border-light, #F4F4F4);
-        }
-    </style>
 </head>
 <body>
 <h1>{NAME} v{VERSION}</h1>
