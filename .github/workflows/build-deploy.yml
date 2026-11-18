@@ -34,6 +34,10 @@ jobs:
       - name: Check CSS token fallbacks
         run: npm run lint:css-tokens
 
+      # The tracked browser <script> artifact (#1095).
+      - name: Check committed legacy bundle version
+        run: node scripts/check-bundle-version.js
+
       - uses: actions/setup-node@v7
         with:
           node-version: 8.9.4
@@ -139,13 +143,12 @@ jobs:
           npm install --global npm@12.0.1
           npm --version
 
-      # Publish the bundles built and validated by the `build` job (#1020).
-      # 0.7.4 and 0.7.5 were tagged, released and deployed but never
-      # published because this step did not exist. Keep it ahead of the S3
-      # sync: a failed publish must not leave the website ahead of npm.
-      # The version only changes in the release issue, so the guard makes
-      # every other master merge a no-op instead of a failed publish.
-      # Requires the NPM_TOKEN repository secret: a granular access token
+      # The built browser <script> artifact (#1095).
+      - name: Check legacy bundle version
+        run: node scripts/check-bundle-version.js
+
+      # Publishes when package.json's version is not on npm yet. Runs before
+      # the S3 sync. Requires the NPM_TOKEN secret: a granular access token
       # with read/write (publish) access to tablefilter.
       - name: Publish to npm
         env:
@@ -240,11 +243,6 @@ jobs:
 
           if [ -z "${WEBSITE_REPO_TOKEN:-}" ]; then
             echo "::error::WEBSITE_REPO_TOKEN is unset - cannot sync tablefilter-website"
-            exit 1
-          fi
-
-          if ! grep -qF "this.version=\"${version}\"" dist/tablefilter/tablefilter.js; then
-            echo "::error::dist/tablefilter/tablefilter.js does not report ${version}"
             exit 1
           fi
 

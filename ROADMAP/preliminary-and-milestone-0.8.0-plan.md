@@ -84,18 +84,7 @@ export default defineConfig({
 
 - Retain existing CSS class names (`.flt`, `.fltsRow`, `.status`, `.pgSlc`, `.div_checklist`) to guarantee that consumer styling does not break.
 - Preserve the **core** styling configuration, not just the per-feature classes: the stylesheet/theme loader (`base_path`, `style_path`, `stylesheet`, `themes`, `themes_path`, `enable_default_theme`) and the core class options (`flts_row_css_class`, `flt_css_class`, `flt_multi_css_class`, `flt_small_css_class`, `single_filter.css_class`, `btn_css_class`). Porting these into `<table-filter>` is tracked by **#993**.
-- Modernize styles by substituting hardcoded colors with **CSS Custom Properties** (additive — the class/stylesheet/theme system stays authoritative):
-  ```css
-  :root, table-filter {
-      --tf-primary: #0969da;
-      --tf-primary-hover: #085fc4;
-      --tf-bg: #ffffff;
-      --tf-text: #24292f;
-      --tf-border: #d0d7de;
-      --tf-focus-ring: #0969da;
-      --tf-row-alt: #f6f8fa;
-  }
-  ```
+- Modernize styles by substituting hardcoded colors with **CSS Custom Properties** (additive — the class/stylesheet/theme system stays authoritative). The shipped colour-only scaffold is `static/style/custom-properties.styl`; the fuller token work is deferred to the "Styling modernization (post-1.0)" milestone.
 
 ---
 
@@ -248,7 +237,7 @@ customElements.define('table-filter', TableFilterElement);
 ```
 
 ### Component 2: `<tf-status>` Component (`src/components/tf-status.js`)
-An accessible status message component encapsulating Open Shadow DOM with `::part()` hooks. The element is **structure and behaviour only**: it ships no `<style>` and hardcodes no CSS class, so it does not invent a parallel styling surface. The configurable status class (`status_bar.css_class`, default `status`) is applied to the **host** by the bridge (see below), and the default look belongs to the stylesheet/themes as `.status` / `.status::part(label|message)`, with colours from the inherited `--tf-*` tokens. Porting the core stylesheet/theme loader and class options is tracked by **#993**.
+An accessible status message component encapsulating Open Shadow DOM with `::part()` hooks. The element is **structure and behaviour only**: it ships no `<style>` and hardcodes no CSS class, so it does not invent a parallel styling surface. The configurable status class (`status_bar.css_class`, default `status`) is applied to the **host** by the bridge (see below), and the default look belongs to the stylesheet/themes as `.status` / `.status::part(label|message)`, with colours from the shipped stylesheet and themes, and `::part()` as the override surface. Porting the core stylesheet/theme loader and class options is tracked by **#993**.
 
 ```javascript
 const template = document.createElement('template');

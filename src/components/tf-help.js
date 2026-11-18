@@ -16,10 +16,14 @@
  * (blocks trigger activation). Empty or absent attributes render
  * empty.
  *
- * The dialog opens with `showModal()`. `Escape`, the backdrop and the
- * instructions container close it. Setting `open` opens the dialog,
- * removing it closes the dialog, and `open-change` reports the state
- * with `detail: {open}`.
+ * The dialog opens with `showModal()`, which traps focus inside it and
+ * closes it on `Escape`. A user dismissal (`Escape`, backdrop,
+ * close control, trigger toggle) returns focus
+ * to the trigger control: the slotted trigger when one is assigned, the
+ * element button otherwise, the host when slotted markup hides it. A
+ * programmatic close keeps the platform focus restore. Setting `open`
+ * opens the dialog, removing it closes the dialog, and `open-change`
+ * reports the state with `detail: {open}`.
  *
  * The element ships no class or presentational style; theme it via
  * `::part()` and `--tf-*` custom properties. Importing this module
@@ -28,6 +32,13 @@
 
 const TRIGGER_ID = 'trigger';
 const DIALOG_ID = 'dialog';
+
+// Controls and widgets that take focus; used to pick the focus target
+// inside slotted trigger markup. Matches FOCUSABLE_TRIGGER in
+// modules/help.js.
+const FOCUSABLE = 'button:not([disabled]), a[href], ' +
+    'input:not([disabled]), select:not([disabled]), ' +
+    'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 // Cloned into every instance's shadow root. Structure and `part` hooks
 // only: no class or presentational style is baked in.
@@ -61,8 +72,6 @@ export class TfHelpElement extends HTMLElement {
         this._triggerText =
             this.shadowRoot.querySelector('[part="trigger-text"]');
         this._dialog = this.shadowRoot.querySelector('[part="dialog"]');
-        this._instructions =
-            this.shadowRoot.querySelector('[part="instructions"]');
         this._instructionsSlot =
             this.shadowRoot.querySelector('slot[name="instructions"]');
         this._instructionsText =
@@ -71,6 +80,7 @@ export class TfHelpElement extends HTMLElement {
         this._closeText =
             this.shadowRoot.querySelector('[part="close-text"]');
         this._reportedOpen = false;
+        this._userClosed = false;
 
         this._trigger.addEventListener('click', () => this._toggle());
         this._triggerSlot.addEventListener('click', () => this._toggle());
@@ -78,13 +88,26 @@ export class TfHelpElement extends HTMLElement {
             'slotchange', () => this._syncLayout());
         this._instructionsSlot.addEventListener(
             'slotchange', () => this._syncLayout());
-        this._instructions.addEventListener('click', () => this._toggle());
         this._dialog.addEventListener('click', (event) => {
-            if (event.target === this._dialog) {
-                this.setOpen(false);
+            // A backdrop click lands outside the dialog box; a click on
+            // the dialog's border or padding lands on the dialog
+            // element but inside the box.
+            if (event.target === this._dialog &&
+                !this._isInsideDialogBox(event)) {
+                this._dismiss();
+                return;
+            }
+            // A slotted element with class `close` dismisses; other
+            // content clicks keep the dialog open.
+            if (event.composedPath().some((node) =>
+                node.nodeType === 1 && node.classList &&
+                node.classList.contains('close'))) {
+                this._dismiss();
             }
         });
-        this._close.addEventListener('click', () => this.setOpen(false));
+        this._close.addEventListener('click', () => this._dismiss());
+        this._dialog.addEventListener(
+            'cancel', () => { this._userClosed = true; });
         this._dialog.addEventListener('close', () => this._onClose());
     }
 
@@ -236,7 +259,29 @@ export class TfHelpElement extends HTMLElement {
         if (this.hasAttribute('disabled')) {
             return;
         }
+        if (this._dialog.open) {
+            this._userClosed = true;
+        }
         this.setOpen(!this._dialog.open);
+    }
+
+    /**
+     * Report whether a pointer event's coordinates fall inside the
+     * dialog's border box.
+     * @param {MouseEvent} event Pointer event
+     */
+    _isInsideDialogBox(event) {
+        const rect = this._dialog.getBoundingClientRect();
+        return event.clientX >= rect.left && event.clientX <= rect.right &&
+            event.clientY >= rect.top && event.clientY <= rect.bottom;
+    }
+
+    /**
+     * Close the dialog from a user dismissal.
+     */
+    _dismiss() {
+        this._userClosed = true;
+        this.setOpen(false);
     }
 
     /**
@@ -293,6 +338,43 @@ export class TfHelpElement extends HTMLElement {
         }
         this._syncExpanded();
         this._reportOpen();
+        const userClosed = this._userClosed;
+        this._userClosed = false;
+        if (!userClosed) {
+            return;
+        }
+        // The platform restores focus to the element focused at
+        // showModal() after the close event; the deferred call runs
+        // after that restoration.
+        setTimeout(() => this._focusTrigger());
+    }
+
+    /**
+     * Move focus to the slotted trigger control, to the element button
+     * when the slot has none, or to the host when slotted markup hides
+     * the button.
+     */
+    _focusTrigger() {
+        if (!this.isConnected) {
+            return;
+        }
+        const assigned = this._triggerSlot
+            .assignedNodes({ flatten: true })
+            .filter((node) => node.nodeType === Node.ELEMENT_NODE);
+        const slotted = assigned
+            .map((el) => el.matches(FOCUSABLE) ? el
+                : el.querySelector(FOCUSABLE))
+            .find(Boolean);
+        if (slotted) {
+            slotted.focus();
+            return;
+        }
+        if (this._trigger.hidden) {
+            this.tabIndex = -1;
+            this.focus();
+            return;
+        }
+        this._trigger.focus();
     }
 }
 

@@ -108,7 +108,7 @@ export class TfStatus extends HTMLElement {
     }
 
     render() {
-        // Themed via ::part(label) / ::part(message) and inherited --tf-* tokens
+        // Themed via ::part(label) / ::part(message) and the host class
         this.shadowRoot.querySelector('[part="label"]').textContent =
             this.getAttribute('text') || '';
         this.shadowRoot.querySelector('[part="message"]').textContent =
@@ -172,6 +172,19 @@ export class StatusBar extends Feature {
 3. The DOM element now carries `role="status"` and `aria-live="polite"` automatically.
 4. If a consumer prefers to write `<tf-status>` manually in their markup, TableFilter can bind to it via `target_id`.
 
+### Component attribute conventions
+Element attributes expose behaviour. They are not ARIA attributes, so they never
+use `aria-*` names: `<tf-help aria-label="Help">` would name the host shell, not
+the focusable control in its shadow root.
+
+- `label` names the element's primary control.
+- `<part>-label` names a specific part: `dialog-label`, `listbox-label`,
+  `selector-label`, `first-label`, `prev-label`, `next-label`, `last-label`.
+- `<part>-text` (or `text`) is visible text; an accessible name and the visible
+  text are separate attributes.
+- The element renders a name as `aria-label` on the shadow control, never on the
+  host. An empty value removes the name.
+
 ### Bridge init convention (temporary, until #965 namespace migration)
 Bridged features split `init()` into two focused methods so the legacy path is a
 clean deletion boundary:
@@ -215,7 +228,7 @@ A crucial challenge in hybrid Web Component systems is boundary traversal:
 - **Rule 1: Never place the table inside closed Shadow DOM during hybrid migration.**
   Legacy features and external extensions query table rows directly via `this.dom().rows[i]`. The table must remain in the **Light DOM** (projected through a `<slot>` into `<table-filter>`).
 - **Rule 2: Leaf UI components (`<tf-status>`, `<tf-rows-counter>`, `<tf-clear-button>`) can use Shadow DOM immediately.**
-  Because TableFilter communicates with them via their JS element references (`this.statusEl.setMessage(...)`), their internal template can be fully encapsulated in Shadow DOM. Their styling stays configurable: the configurable class (`status_bar.css_class` and friends) is applied to the **host**, internals are reached through `::part()`, and colours come from the inherited `--tf-*` tokens, so the class + stylesheet + theme system is never bypassed.
+  Because TableFilter communicates with them via their JS element references (`this.statusEl.setMessage(...)`), their internal template can be fully encapsulated in Shadow DOM. Their styling stays configurable: the configurable class (`status_bar.css_class` and friends) is applied to the **host**, internals are reached through `::part()`, and colours come from the shipped stylesheet and themes, so the class + stylesheet + theme system is never bypassed.
 - **Rule 3: Slotted header controls use Light DOM or CSS Shadow Parts.**
   Filter inputs inserted into the table header row (`fltrow`) must remain accessible to the table accessibility tree and standard DOM queries (`tf.getFilterElement(colIndex)`).
 - **Rule 4: Preserve the core styling configuration.**
