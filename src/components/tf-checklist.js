@@ -7,10 +7,10 @@
  *
  * Attributes:
  * - `trigger-text` — visible trigger text, rendered as text content.
- * - `label` — `aria-label` on the trigger. Unset keeps the trigger's text
- *   as its accessible name.
- * - `listbox-label` — `aria-label` on the listbox. Unset names the listbox
- *   from the trigger through `aria-labelledby`.
+ * - `accessible-label` — `aria-label` on the trigger. Unset keeps the
+ *   trigger's text as its accessible name.
+ * - `accessible-listbox-label` — `aria-label` on the listbox. Unset names
+ *   the listbox from the trigger through `aria-labelledby`.
  * - `open` — whether the popover is expanded. The trigger click toggles
  *   it; `aria-expanded` and the listbox's `hidden` state follow.
  * - `disabled` — disables the trigger.
@@ -120,7 +120,8 @@ export class TfChecklistElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['trigger-text', 'label', 'listbox-label', 'open',
+        return ['trigger-text', 'accessible-label',
+            'accessible-listbox-label', 'open',
             'disabled', 'col']; // 'col' reserved for #929 column mapping
     }
 
@@ -137,7 +138,8 @@ export class TfChecklistElement extends HTMLElement {
      * @param {*} label Accessible name
      */
     setLabel(label) {
-        this.setAttribute('label', label == null ? '' : String(label));
+        this.setAttribute('accessible-label',
+            label == null ? '' : String(label));
     }
 
     /**
@@ -145,7 +147,7 @@ export class TfChecklistElement extends HTMLElement {
      * @param {*} label Accessible name
      */
     setListboxLabel(label) {
-        this.setAttribute('listbox-label',
+        this.setAttribute('accessible-listbox-label',
             label == null ? '' : String(label));
     }
 
@@ -503,7 +505,7 @@ export class TfChecklistElement extends HTMLElement {
             return;
         }
 
-        this._setAriaLabel(this._trigger, 'label');
+        this._setAriaLabel(this._trigger, 'accessible-label');
         this._triggerText.textContent =
             this.getAttribute('trigger-text') || '';
         this._setListboxName();
@@ -520,7 +522,7 @@ export class TfChecklistElement extends HTMLElement {
      * Name the listbox from its own attribute, or from the trigger.
      */
     _setListboxName() {
-        const label = this.getAttribute('listbox-label');
+        const label = this.getAttribute('accessible-listbox-label');
         if (label) {
             this._listbox.setAttribute('aria-label', label);
             this._listbox.removeAttribute('aria-labelledby');

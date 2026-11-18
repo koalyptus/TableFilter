@@ -7,21 +7,23 @@
  * page indicator (`part="page-status"`) carrying `aria-current="page"`.
  *
  * Attributes:
- * - `label` — `aria-label` on the landmark.
- * - `first-label`, `prev-label`, `next-label`, `last-label` — `aria-label`
- *   on each button.
+ * - `accessible-label` — `aria-label` on the landmark.
+ * - `accessible-first-label`, `accessible-prev-label`,
+ *   `accessible-next-label`, `accessible-last-label` — `aria-label` on
+ *   each button.
  * - `first-text`, `prev-text`, `next-text`, `last-text` — button text.
  * - `page` — current page number, 1-based.
  * - `total-pages` — page count, rendered as supplied. The host resolves
  *   it from the legacy Paging feature.
  * - `page-text`, `of-text` — text rendered either side of the selector.
  * - `selector-type` — `select` (default) or `input`.
- * - `selector-label` — `aria-label` on the page selector; defaults to
- *   `Current page`, and an empty value opts out of the name.
+ * - `accessible-selector-label` — `aria-label` on the page selector;
+ *   defaults to `Current page`, and an empty value opts out of the name.
  * - `disabled` — disables all four buttons.
  * - `buttons` — `false` hides the four buttons, any other value renders
  *   them.
- * No accessible name is rendered unless its attribute is set.
+ * Only `accessible-selector-label` has a default name (`Current page`);
+ * the other `accessible-*` attributes render a name only when set.
  *
  * Events:
  * - `page-change` — dispatched when the user picks a page, with
@@ -101,9 +103,10 @@ export class TfPagerElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['label', 'disabled', 'buttons', 'page', 'total-pages',
-            'page-text', 'of-text', 'selector-type', 'selector-label']
-            .concat(BUTTONS.map((btn) => `${btn.part}-label`))
+        return ['accessible-label', 'disabled', 'buttons', 'page',
+            'total-pages', 'page-text', 'of-text', 'selector-type',
+            'accessible-selector-label']
+            .concat(BUTTONS.map((btn) => `accessible-${btn.part}-label`))
             .concat(BUTTONS.map((btn) => `${btn.part}-text`));
     }
 
@@ -121,7 +124,8 @@ export class TfPagerElement extends HTMLElement {
      * @param {*} label Accessible name
      */
     setLabel(label) {
-        this.setAttribute('label', label == null ? '' : String(label));
+        this.setAttribute('accessible-label',
+            label == null ? '' : String(label));
     }
 
     /**
@@ -151,12 +155,13 @@ export class TfPagerElement extends HTMLElement {
             return;
         }
 
-        this._setAriaLabel(this._nav, 'label');
+        this._setAriaLabel(this._nav, 'accessible-label');
 
         const showButtons = this.getAttribute('buttons') !== 'false';
 
         BUTTONS.forEach((btn, idx) => {
-            this._setAriaLabel(this._buttons[idx], `${btn.part}-label`);
+            this._setAriaLabel(this._buttons[idx],
+                `accessible-${btn.part}-label`);
             this._texts[idx].textContent =
                 this.getAttribute(`${btn.part}-text`) || '';
 
@@ -288,17 +293,17 @@ export class TfPagerElement extends HTMLElement {
     }
 
     /**
-     * Name the page selector. Absent `selector-label` renders the
-     * ROADMAP default, a non-empty value overrides it, and an explicit
+     * Name the page selector. Absent `accessible-selector-label` renders
+     * the ROADMAP default, a non-empty value overrides it, and an explicit
      * empty value removes the name so it can be opted out of.
      * @param {Element} el The selector control
      */
     _setSelectorLabel(el) {
-        if (!this.hasAttribute('selector-label')) {
+        if (!this.hasAttribute('accessible-selector-label')) {
             el.setAttribute('aria-label', DEFAULT_SELECTOR_LABEL);
             return;
         }
-        this._setAriaLabel(el, 'selector-label');
+        this._setAriaLabel(el, 'accessible-selector-label');
     }
 
     /**

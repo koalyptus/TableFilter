@@ -5,7 +5,7 @@
  * Scaffold (#911): an open shadow root exposing a semantic `<button>`
  * via the `button` part, with an accessible name and native keyboard
  * activation. Content may be projected through the default slot, or set
- * through the `text`/`label` attributes.
+ * through the `text`/`accessible-label` attributes.
  *
  * Styling is deliberately not shipped here. TableFilter themes through
  * the `--tf-*` custom properties (#892/#945 — inherited into shadow
@@ -37,7 +37,7 @@ export class TfClearButtonElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['label', 'text', 'disabled'];
+        return ['accessible-label', 'text', 'disabled'];
     }
 
     connectedCallback() {
@@ -53,7 +53,8 @@ export class TfClearButtonElement extends HTMLElement {
      * @param {*} label Accessible name
      */
     setLabel(label) {
-        this.setAttribute('label', label == null ? '' : String(label));
+        this.setAttribute('accessible-label',
+            label == null ? '' : String(label));
     }
 
     /**
@@ -71,7 +72,7 @@ export class TfClearButtonElement extends HTMLElement {
         if (!this._button) {
             return;
         }
-        const label = this.getAttribute('label');
+        const label = this.getAttribute('accessible-label');
         if (label) {
             this._button.setAttribute('aria-label', label);
         } else {

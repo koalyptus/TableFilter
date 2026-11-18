@@ -235,7 +235,7 @@ export class CheckList extends BaseDropdown {
 
         host.setAttribute('trigger-text',
             count ? `${name} (${count})` : name);
-        host.setAttribute('listbox-label', `${name} options`);
+        host.setAttribute('accessible-listbox-label', `${name} options`);
     }
 
     /**
@@ -351,7 +351,8 @@ export class CheckList extends BaseDropdown {
             this.build(colIndex);
         } else {
             host.setAttribute('trigger-text', this.activateText);
-            host.setAttribute('listbox-label', `${this.activateText} options`);
+            host.setAttribute('accessible-listbox-label',
+                `${this.activateText} options`);
         }
     }
 

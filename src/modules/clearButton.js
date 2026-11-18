@@ -137,7 +137,7 @@ export class ClearButton extends Feature {
             cont.setAttribute('text', this.text);
         }
         if (this.tooltip) {
-            cont.setAttribute('label', this.tooltip);
+            cont.setAttribute('accessible-label', this.tooltip);
             cont.setAttribute('title', this.tooltip);
         }
         targetEl.appendChild(cont);
