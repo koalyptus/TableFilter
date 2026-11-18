@@ -37,13 +37,7 @@ jobs:
       # dist/tablefilter/tablefilter.js is the tracked browser <script>
       # artifact (#1095).
       - name: Check committed legacy bundle version
-        run: |
-          set -euo pipefail
-          version=$(node -p "require('./package.json').version")
-          if ! grep -qF "this.version=\"${version}\"" dist/tablefilter/tablefilter.js; then
-            echo "::error::dist/tablefilter/tablefilter.js does not report ${version} - rebuild and commit it"
-            exit 1
-          fi
+        run: node scripts/check-bundle-version.js
 
       - uses: actions/setup-node@v7
         with:
@@ -254,10 +248,7 @@ jobs:
             exit 1
           fi
 
-          if ! grep -qF "this.version=\"${version}\"" dist/tablefilter/tablefilter.js; then
-            echo "::error::dist/tablefilter/tablefilter.js does not report ${version}"
-            exit 1
-          fi
+          node scripts/check-bundle-version.js
 
           git clone --depth 1 --branch master \
             "https://x-access-token:${WEBSITE_REPO_TOKEN}@github.com/koalyptus/tablefilter-website.git" \
