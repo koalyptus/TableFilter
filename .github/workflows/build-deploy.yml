@@ -144,12 +144,17 @@ jobs:
           npm install --global npm@12.0.1
           npm --version
 
+      # dist/tablefilter/tablefilter.js is the tracked browser <script>
+      # artifact (#1095); the build job uploads it in website-files.
+      - name: Check legacy bundle version
+        run: node scripts/check-bundle-version.js
+
       # Publish the bundles built and validated by the `build` job (#1020).
       # 0.7.4 and 0.7.5 were tagged, released and deployed but never
       # published because this step did not exist. Keep it ahead of the S3
       # sync: a failed publish must not leave the website ahead of npm.
-      # The version only changes in the release issue, so the guard makes
-      # every other master merge a no-op instead of a failed publish.
+      # A merge whose version is already on npm skips publication; a merge
+      # that bumps the version publishes it (#1020, AGENTS.md versioning).
       # Requires the NPM_TOKEN repository secret: a granular access token
       # with read/write (publish) access to tablefilter.
       - name: Publish to npm
@@ -247,8 +252,6 @@ jobs:
             echo "::error::WEBSITE_REPO_TOKEN is unset - cannot sync tablefilter-website"
             exit 1
           fi
-
-          node scripts/check-bundle-version.js
 
           git clone --depth 1 --branch master \
             "https://x-access-token:${WEBSITE_REPO_TOKEN}@github.com/koalyptus/tablefilter-website.git" \
