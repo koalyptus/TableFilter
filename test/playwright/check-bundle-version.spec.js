@@ -20,7 +20,12 @@ const run = (bundlePath, extraEnv) => {
         const stdout = execFileSync(
             process.execPath,
             [SCRIPT, bundlePath],
-            { cwd: REPO_ROOT, encoding: 'utf8', env }
+            {
+                cwd: REPO_ROOT,
+                encoding: 'utf8',
+                env,
+                stdio: ['ignore', 'pipe', 'pipe']
+            }
         );
         return { code: 0, stdout, stderr: '' };
     } catch (err) {
