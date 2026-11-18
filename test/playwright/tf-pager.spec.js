@@ -1,8 +1,9 @@
 // Component gate (#923/#924): the <tf-pager> element registers an open
 // shadow root exposing a `nav` landmark with four semantic buttons —
 // first, prev, next and last — each via its own part and each with an
-// accessible name — plus a page indicator carrying `aria-current="page"`
-// and configurable page-number state. Per the theming model (--tf-*
+// accessible name — plus a page indicator and a selector that exposes the
+// current page through its native selected state. Per the theming model
+// (--tf-*
 // custom properties + ::part()), it ships structure and hooks only: no
 // invented classes and no baked-in presentational CSS. The
 // results-per-page select (#925) and the Paging bridge (#926) are
@@ -283,24 +284,34 @@ test('disabled attribute is reflected onto every button',
         expect(result.removed).toBe(false);
     });
 
-// Page-number state (#924): the indicator is the accessible home of the
-// current page, so it always carries `aria-current="page"`. Like the rest
-// of the element it ships parts and no CSS class — the legacy keys
+// Page-number state (#924): the selector exposes the current page through
+// its selected option or input value. The indicator is a status container
+// and carries no `aria-current`. Like the rest of the element it ships
+// parts and no CSS class — the legacy keys
 // (nb_pages_css_class, slc_css_class, inp_css_class) are themed through
 // ::part(), applied to the host by the bridge (#926).
-test('exposes the page indicator with aria-current="page"',
+test('exposes the current page through the selector, not aria-current',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
+            el.setAttribute('page', '2');
+            el.setTotalPages(5);
+            el.setPages([
+                { text: '1', value: '0' },
+                { text: '2', value: '10' }
+            ]);
             document.body.appendChild(el);
             const sr = el.shadowRoot;
             const status = sr.querySelector('[part="page-status"]');
+            const select = sr.querySelector('[part="page-select"]');
             const nodes = Array.from(sr.querySelectorAll('*'));
             return {
                 current: status.getAttribute('aria-current'),
+                selected:
+                    select.options[select.selectedIndex].textContent,
                 text: sr.querySelector('[part="page-text"]').textContent,
                 of: sr.querySelector('[part="of-text"]').textContent,
                 total: sr.querySelector('[part="total-pages"]').textContent,
@@ -310,11 +321,12 @@ test('exposes the page indicator with aria-current="page"',
             };
         }, COMPONENT);
 
-        expect(result.current).toBe('page');
-        // Empty until page-text and total-pages are configured.
+        expect(result.current).toBeNull();
+        expect(result.selected).toBe('2');
+        // Empty until page-text and of-text are configured.
         expect(result.text).toBe('');
         expect(result.of).toBe('');
-        expect(result.total).toBe('');
+        expect(result.total).toBe('5');
         expect(result.index).toBe(2);
         expect(result.classless).toBe(true);
     });

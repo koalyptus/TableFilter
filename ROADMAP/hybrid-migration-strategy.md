@@ -186,8 +186,13 @@ the focusable control in its shadow root.
   `accessible-last-label`.
 - `<part>-text` (or `text`) is visible text; an accessible name and the visible
   text are separate attributes.
+- A component whose visible text is its control's label uses that text as the
+  name; `accessible-label` overrides it (`tf-results-per-page`).
 - The element renders a name as `aria-label` on the shadow control, never on the
   host. An empty value removes the name.
+
+`aria-current` marks an item within a set. Pager status containers do not use
+it; the page selector's selected option or input value exposes the current page.
 
 Legacy config keys keep their names (`help_instructions.label`,
 `btn_reset.tooltip`); the bridges map them to the element's `accessible-*`

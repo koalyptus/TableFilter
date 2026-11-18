@@ -1,11 +1,12 @@
 // Component gate (#925): the <tf-results-per-page> element registers an
 // open shadow root exposing a <label> that wraps the label text and a
 // native <select>, so the rendered text is the select's accessible name
-// and activating the text focuses it. Legacy keeps the text in a sibling
-// <span> and names the select nowhere (paging.js:662-669). Per the
-// theming model (--tf-* custom properties + ::part()), it ships structure
-// and hooks only: no invented classes and no baked-in presentational
-// CSS. Fails CI on regression.
+// and activating the text focuses it. `accessible-label` overrides that
+// name. Legacy keeps the text in a sibling <span> and names the select
+// nowhere (src/modules/paging.js). Per the theming model (--tf-*
+// custom properties + ::part()), it ships structure and hooks only: no
+// invented classes and no baked-in presentational CSS. Fails CI on
+// regression.
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -121,6 +122,48 @@ test('falls back to the default name when no label text is set',
         expect(result.empty).toBe('Rows per page');
         expect(result.text).toBeNull();
         expect(result.cleared).toBe('Rows per page');
+    });
+
+test('names the select from accessible-label when it is set',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-results-per-page');
+            el.setAttribute('results-text', 'Records: ');
+            el.setAttribute('accessible-label', 'Page size');
+            document.body.appendChild(el);
+            const select = el.shadowRoot.querySelector(
+                '[part="results-select"]');
+            const read = () => ({
+                label: select.getAttribute('aria-label'),
+                text: el.shadowRoot.querySelector('[part="results-text"]')
+                    .textContent
+            });
+
+            const overridden = read();
+            el.setAttribute('accessible-label', '');
+            const cleared = read();
+            el.removeAttribute('results-text');
+            const fallback = read();
+            el.setLabel('Rows shown');
+            const setter = read();
+
+            return { overridden, cleared, fallback, setter };
+        }, COMPONENT);
+
+        expect(result.overridden).toEqual({
+            label: 'Page size', text: 'Records: '
+        });
+        // Empty removes the override; the visible text names the select.
+        expect(result.cleared).toEqual({ label: null, text: 'Records: ' });
+        expect(result.fallback).toEqual({
+            label: 'Rows per page', text: ''
+        });
+        expect(result.setter).toEqual({
+            label: 'Rows shown', text: ''
+        });
     });
 
 test('renders results-text as text content', async ({ page }) => {
@@ -396,6 +439,11 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         const unlabelled = document.createElement('tf-results-per-page');
         scope.appendChild(unlabelled);
         unlabelled.setPageLengths([10, 25, 50]);
+
+        const overridden = document.createElement('tf-results-per-page');
+        overridden.setAttribute('accessible-label', 'Rows shown');
+        scope.appendChild(overridden);
+        overridden.setPageLengths([10, 25, 50]);
     }, COMPONENT);
 
     const violations = await scanAccessibility(

@@ -4,7 +4,9 @@
  * An open shadow root exposing a `nav` landmark (`part="nav"`) with four
  * semantic `<button type="button">` elements in first/prev/next/last
  * order — each via its own `part`, a named slot and a text hook — plus a
- * page indicator (`part="page-status"`) carrying `aria-current="page"`.
+ * page indicator (`part="page-status"`) around the page text, the
+ * selector and the total. The selector exposes the current page through
+ * its native selected state.
  *
  * Attributes:
  * - `accessible-label` — `aria-label` on the landmark.
@@ -66,7 +68,7 @@ TEMPLATE.innerHTML = `
         <button type="button" part="prev">
             <slot name="prev"></slot><span part="prev-text"></span>
         </button>
-        <span part="page-status" aria-current="page">
+        <span part="page-status">
             <span part="page-text"></span>
             <span part="page-selector"></span>
             <span part="of-text"></span>
