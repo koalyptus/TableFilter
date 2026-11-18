@@ -34,7 +34,8 @@ const TRIGGER_ID = 'trigger';
 const DIALOG_ID = 'dialog';
 
 // Controls and widgets that take focus; used to pick the focus target
-// inside slotted trigger markup.
+// inside slotted trigger markup. Matches FOCUSABLE_TRIGGER in
+// modules/help.js.
 const FOCUSABLE = 'button:not([disabled]), a[href], ' +
     'input:not([disabled]), select:not([disabled]), ' +
     'textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -96,9 +97,8 @@ export class TfHelpElement extends HTMLElement {
                 this._dismiss();
                 return;
             }
-            // A slotted element with class `close`
-            // (src/modules/help.js:119) dismisses; other content
-            // clicks keep the dialog open.
+            // A slotted element with class `close` dismisses; other
+            // content clicks keep the dialog open.
             if (event.composedPath().some((node) =>
                 node.nodeType === 1 && node.classList &&
                 node.classList.contains('close'))) {

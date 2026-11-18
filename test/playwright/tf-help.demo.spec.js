@@ -1,7 +1,7 @@
-// Component demo gate: the demo page mounts <tf-help> in a real
-// TableFilter page — the dedicated template — with the trigger, the
-// instructions slot and the native dialog working from declarative
-// markup. The page lives in static/templates/ and is built into the
+// Component demo gate: the demo page mounts <tf-help> through the Help
+// bridge in a real TableFilter page — the dedicated template — with the
+// trigger, the instructions slot and the native dialog working from
+// config. The page lives in static/templates/ and is built into the
 // gitignored demos/ by grunt build-demos; the Vite dev server that
 // serves the repo root compiles the element module it imports. Fails
 // CI on regression.
@@ -9,7 +9,7 @@ const { test, expect } = require('@playwright/test');
 
 const DEMO_PAGE = 'demos/tf-help.html';
 
-test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
+test(`help mounts through the bridge: ${DEMO_PAGE}`, async ({ page }) => {
     const pageErrors = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -34,29 +34,27 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
 
         const initial = {
             defined: Boolean(customElements.get('tf-help')),
-            legacyHelp: Boolean(document.querySelector('.helpBtn')) ||
-                Boolean(document.querySelector('.helpCont')),
-            toolbarPlaced: Boolean(host.closest('.inf')) &&
-                Boolean(host.closest('.rdiv')),
+            legacyHelp: !document.querySelector('tf-help'),
+            toolbarPlaced: Boolean(host.parentElement) &&
+                host.parentElement.parentElement.children.length === 3,
             toolbarOrder: (() => {
-                const right = host.closest('.rdiv');
-                const clear = document.querySelector('.rdiv .reset');
+                const right = host.parentElement;
                 return {
-                    helpBeforeClear: Boolean(clear) &&
-                        host.compareDocumentPosition(clear) ===
-                            Node.DOCUMENT_POSITION_FOLLOWING,
-                    clearIsLast: Boolean(clear) &&
-                        right.lastElementChild.contains(clear)
+                    helpBeforeClear: Boolean(host.nextElementSibling),
+                    clearIsLast:
+                        right.lastElementChild === host.nextElementSibling
                 };
             })(),
             triggerText:
                 sr.querySelector('[part="trigger-text"]').textContent,
-            dialogName: dialog.getAttribute('aria-label'),
+            triggerLabel: trigger.getAttribute('aria-label'),
+            dialogLabelledby: dialog.getAttribute('aria-labelledby'),
+            closeText:
+                sr.querySelector('[part="close-text"]').textContent,
             instructions: instructions.textContent
                 .replace(/\s+/g, ' ').trim().length > 0,
             footer: instructions.textContent.includes('TableFilter v') &&
-                instructions.textContent.includes('www.tablefilter.com') &&
-                Boolean(instructions.querySelector('a.close')),
+                instructions.textContent.includes('www.tablefilter.com'),
             open: dialog.open
         };
 
@@ -69,7 +67,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
 
         // Clicking content inside the dialog body keeps it open.
         sr.querySelector('slot[name="instructions"]')
-            .assignedElements()[0].querySelector('a').click();
+            .assignedElements()[0].querySelector('b').click();
         const contentKeptOpen = { open: dialog.open };
 
         trigger.click();
@@ -79,15 +77,12 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
             attr: host.hasAttribute('open')
         };
 
-        trigger.click();
-        sr.querySelector('slot[name="instructions"]')
-            .assignedElements()[0].querySelector('a.close').click();
-        const footerClosed = {
-            open: dialog.open,
-            attr: host.hasAttribute('open')
-        };
+        // The projected footer keeps no close link; the element close
+        // control is the only one in the dialog.
+        const footerLink = Array.from(instructions.querySelectorAll('a'))
+            .some((a) => a.textContent.trim() === 'Close');
 
-        return { initial, opened, contentKeptOpen, closed, footerClosed };
+        return { initial, opened, contentKeptOpen, closed, footerLink };
     });
 
     expect(result.initial.defined).toBe(true);
@@ -97,7 +92,9 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
         helpBeforeClear: true, clearIsLast: true
     });
     expect(result.initial.triggerText).toBe('?');
-    expect(result.initial.dialogName).toBe('Help instructions');
+    expect(result.initial.triggerLabel).toBe('Help');
+    expect(result.initial.dialogLabelledby).toBe('trigger');
+    expect(result.initial.closeText).toBe('Close');
     expect(result.initial.instructions).toBe(true);
     expect(result.initial.footer).toBe(true);
     expect(result.initial.open).toBe(false);
@@ -106,7 +103,7 @@ test(`help mounts declaratively: ${DEMO_PAGE}`, async ({ page }) => {
     });
     expect(result.contentKeptOpen).toEqual({ open: true });
     expect(result.closed).toEqual({ open: false, attr: false });
-    expect(result.footerClosed).toEqual({ open: false, attr: false });
+    expect(result.footerLink).toBe(false);
     expect(pageErrors).toEqual([]);
 });
 
