@@ -34,6 +34,17 @@ jobs:
       - name: Check CSS token fallbacks
         run: npm run lint:css-tokens
 
+      # dist/tablefilter/tablefilter.js is the tracked browser <script>
+      # artifact (#1095).
+      - name: Check committed legacy bundle version
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          if ! grep -qF "this.version=\"${version}\"" dist/tablefilter/tablefilter.js; then
+            echo "::error::dist/tablefilter/tablefilter.js does not report ${version} - rebuild and commit it"
+            exit 1
+          fi
+
       - uses: actions/setup-node@v7
         with:
           node-version: 8.9.4
