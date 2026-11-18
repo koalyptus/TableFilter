@@ -230,7 +230,7 @@ test('dispatches open-change across the shadow boundary',
         ]);
     });
 
-test('names the dialog from dialog-label or from the trigger',
+test('names the dialog from accessible-dialog-label or from the trigger',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -247,10 +247,10 @@ test('names the dialog from dialog-label or from the trigger',
 
             const initial = state();
 
-            el.setAttribute('dialog-label', 'Filter instructions');
+            el.setAttribute('accessible-dialog-label', 'Filter instructions');
             const configured = state();
 
-            el.removeAttribute('dialog-label');
+            el.removeAttribute('accessible-dialog-label');
             const cleared = state();
 
             el.remove();
@@ -284,14 +284,14 @@ test('renders the trigger text and accessible name from attributes',
                 label: trigger().getAttribute('aria-label')
             };
 
-            el.setAttribute('label', 'Help');
+            el.setAttribute('accessible-label', 'Help');
             el.setText('?');
             const configured = {
                 text: text(),
                 label: trigger().getAttribute('aria-label')
             };
 
-            el.setAttribute('label', '');
+            el.setAttribute('accessible-label', '');
             el.setText('');
             const cleared = {
                 text: text(),
@@ -628,15 +628,16 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         const labelled = document.createElement('tf-help');
         labelled.id = 'help-named';
         labelled.setAttribute('trigger-text', '?');
-        labelled.setAttribute('label', 'Help');
+        labelled.setAttribute('accessible-label', 'Help');
         labelled.setAttribute('close-text', 'Close');
         scope.appendChild(labelled);
 
         const defaultNamed = document.createElement('tf-help');
         defaultNamed.id = 'help-dialog-named';
         defaultNamed.setAttribute('trigger-text', '?');
-        defaultNamed.setAttribute('label', 'Help');
-        defaultNamed.setAttribute('dialog-label', 'Help instructions');
+        defaultNamed.setAttribute('accessible-label', 'Help');
+        defaultNamed.setAttribute('accessible-dialog-label',
+            'Help instructions');
         defaultNamed.setAttribute('close-text', 'Close');
         defaultNamed.setAttribute('instructions-text',
             'Use the operators');
@@ -645,7 +646,7 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         const openTriggerNamed = document.createElement('tf-help');
         openTriggerNamed.id = 'help-open-trigger-named';
         openTriggerNamed.setAttribute('trigger-text', '?');
-        openTriggerNamed.setAttribute('label', 'Help');
+        openTriggerNamed.setAttribute('accessible-label', 'Help');
         openTriggerNamed.setAttribute('close-text', 'Close');
         openTriggerNamed.setAttribute('instructions-text',
             'Use the operators');
@@ -655,8 +656,8 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         const expanded = document.createElement('tf-help');
         expanded.id = 'help-open-dialog-named';
         expanded.setAttribute('trigger-text', '?');
-        expanded.setAttribute('label', 'Help');
-        expanded.setAttribute('dialog-label', 'Help instructions');
+        expanded.setAttribute('accessible-label', 'Help');
+        expanded.setAttribute('accessible-dialog-label', 'Help instructions');
         expanded.setAttribute('close-text', 'Close');
         expanded.setAttribute('instructions-text',
             'Use the operators');
@@ -842,7 +843,7 @@ test('Escape closes the dialog and syncs the host attribute',
             const el = document.createElement('tf-help');
             el.id = 'escape-help';
             el.setAttribute('trigger-text', '?');
-            el.setAttribute('label', 'Help');
+            el.setAttribute('accessible-label', 'Help');
             document.body.appendChild(el);
             el.setOpen(true);
         }, COMPONENT);
@@ -932,10 +933,10 @@ test('setLabel, setDialogLabel and setInstructionsText set their attributes',
             document.body.appendChild(el);
 
             el.setLabel('Help');
-            const labelled = el.getAttribute('label');
+            const labelled = el.getAttribute('accessible-label');
 
             el.setDialogLabel('Filter instructions');
-            const named = el.getAttribute('dialog-label');
+            const named = el.getAttribute('accessible-dialog-label');
 
             el.setInstructionsText('Use the operators');
             const instructed = el.getAttribute('instructions-text');

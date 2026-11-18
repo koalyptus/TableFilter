@@ -1281,7 +1281,7 @@ test('checklist bridge uses tf-checklist with the legacy config',
                 byTypeIdx: tf.getFiltersByType('checklist', true),
                 filterElement: tf.getFilterElement(0) === host,
                 triggerText: host.getAttribute('trigger-text'),
-                listboxLabel: host.getAttribute('listbox-label'),
+                listboxLabel: host.getAttribute('accessible-listbox-label'),
                 parts: ['trigger', 'listbox'].map((name) =>
                     Boolean(sr.querySelector(`[part="${name}"]`))),
                 options: window.checklistOptions(host),
@@ -1662,7 +1662,7 @@ test('checklist bridge builds on demand from the open state',
 
             const before = {
                 triggerText: host.getAttribute('trigger-text'),
-                listboxLabel: host.getAttribute('listbox-label'),
+                listboxLabel: host.getAttribute('accessible-listbox-label'),
                 filled: host.getAttribute('filled'),
                 options: window.checklistOptions(host).length
             };

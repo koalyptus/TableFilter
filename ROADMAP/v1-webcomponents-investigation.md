@@ -300,7 +300,7 @@ tf.init();
     <svg aria-hidden="true">...</svg>
   </button>
   
-  <span class="tf-pager-status" aria-current="page">
+  <span class="tf-pager-status">
     Page <input type="number" min="1" max="10" value="1" aria-label="Current page" /> of 10
   </span>
   
@@ -319,6 +319,8 @@ tf.init();
   </select>
 </nav>
 ```
+The page selector exposes the current page through its selected option or
+input value. The status container carries no `aria-current`.
 
 #### 5. Live Regions & Dynamic Announcements (WCAG 4.1.3)
 *Legacy Problem*: Filtering and sorting execute silently without notifying assistive technologies.

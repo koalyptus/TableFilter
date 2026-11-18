@@ -7,27 +7,30 @@
  * (`part="results-select"`). The select is the label's control: the
  * rendered text is its accessible name, and activating the text focuses
  * the select. Legacy keeps the text in a sibling `<span>` and names the
- * select nowhere (src/modules/paging.js:662-669).
+ * select nowhere (src/modules/paging.js).
  *
  * Attributes:
  * - `results-text` — label text, rendered as text content.
+ * - `accessible-label` — `aria-label` on the select. A non-empty value
+ *   overrides the rendered label text; an empty value leaves the text,
+ *   or the default when there is none, as the name.
  * - `page-length` — the selected page length. The matching option is
  *   selected, or the first option when the attribute is empty or matches
  *   none, and the effective value is reflected back into the attribute,
  *   so the attribute always reports what the select shows.
  *
- * The label text names the select. When `results-text` is absent or
- * empty, `aria-label` (`Rows per page`, from ROADMAP
- * v1-webcomponents-investigation.md:313) names it instead.
+ * The label text names the select. When `accessible-label` and
+ * `results-text` are absent or empty, `aria-label` (`Rows per page`, from
+ * ROADMAP/v1-webcomponents-investigation.md) names it instead.
  *
  * Events:
  * - `page-length-change` — dispatched when the user picks a length, with
  *   `detail: {pageLength}`. That value is the select's raw value, a
- *   string; the host parses it (paging.js:778).
+ *   string; the host parses it (src/modules/paging.js).
  *
  * `setPageLengths()` takes the page lengths from the host, and each
  * entry becomes an option whose value and text are both that entry
- * (legacy `new Option(v, v)`, paging.js:681).
+ * (legacy `new Option(v, v)`, src/modules/paging.js).
  *
  * Styling is left to the theme via `--tf-*` custom properties and
  * `::part()`; the legacy `results_slc_css_class` and
@@ -74,7 +77,7 @@ export class TfResultsPerPageElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['results-text', 'page-length'];
+        return ['accessible-label', 'results-text', 'page-length'];
     }
 
     connectedCallback() {
@@ -91,6 +94,15 @@ export class TfResultsPerPageElement extends HTMLElement {
      */
     setText(text) {
         this.setAttribute('results-text', text == null ? '' : String(text));
+    }
+
+    /**
+     * Set the select's accessible name, rendered as `aria-label`.
+     * @param {*} label Accessible name
+     */
+    setLabel(label) {
+        this.setAttribute('accessible-label',
+            label == null ? '' : String(label));
     }
 
     /**
@@ -123,11 +135,14 @@ export class TfResultsPerPageElement extends HTMLElement {
     }
 
     /**
-     * Name the select from the label text, or from the default when
-     * `results-text` is absent or empty.
+     * Name the select from `accessible-label`, the label text, or the
+     * default, in that order.
      */
     _setSelectName() {
-        if (this.getAttribute('results-text')) {
+        const label = this.getAttribute('accessible-label');
+        if (label) {
+            this._select.setAttribute('aria-label', label);
+        } else if (this.getAttribute('results-text')) {
             this._select.removeAttribute('aria-label');
         } else {
             this._select.setAttribute('aria-label', DEFAULT_RESULTS_LABEL);

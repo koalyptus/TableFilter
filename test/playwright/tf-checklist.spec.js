@@ -231,8 +231,10 @@ test('renders accessible names from attributes when set',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-checklist');
-            el.setAttribute('label', 'Filter Category, 2 items selected');
-            el.setAttribute('listbox-label', 'Filter Category options');
+            el.setAttribute('accessible-label',
+                'Filter Category, 2 items selected');
+            el.setAttribute('accessible-listbox-label',
+                'Filter Category options');
             document.body.appendChild(el);
             const sr = el.shadowRoot;
             const trigger = sr.querySelector('[part="trigger"]');
@@ -874,8 +876,9 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
 
         const labelled = document.createElement('tf-checklist');
         labelled.setAttribute('trigger-text', 'Category');
-        labelled.setAttribute('label', 'Filter Category');
-        labelled.setAttribute('listbox-label', 'Filter Category options');
+        labelled.setAttribute('accessible-label', 'Filter Category');
+        labelled.setAttribute('accessible-listbox-label',
+            'Filter Category options');
         scope.appendChild(labelled);
 
         const defaultNamed = document.createElement('tf-checklist');

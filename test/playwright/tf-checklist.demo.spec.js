@@ -49,7 +49,7 @@ test(`checklist mounts on <tf-checklist>: ${DEMO_PAGE}`,
             const totalRows = rows().length;
             const before = {
                 triggerText: host.getAttribute('trigger-text'),
-                listboxLabel: host.getAttribute('listbox-label'),
+                listboxLabel: host.getAttribute('accessible-listbox-label'),
                 expanded: trigger.getAttribute('aria-expanded'),
                 role: listbox.getAttribute('role'),
                 multiselectable: listbox.getAttribute('aria-multiselectable')

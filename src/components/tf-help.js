@@ -8,9 +8,9 @@
  * `part="instructions-text"` text part; a `<button part="close">` with
  * `part="close-text"`.
  *
- * Attributes: `trigger-text`; `label` (trigger `aria-label`);
- * `instructions-text`; `dialog-label` (dialog accessible name, falling
- * back to `aria-labelledby` on the trigger); `close-text` (close
+ * Attributes: `trigger-text`; `accessible-label` (trigger `aria-label`);
+ * `instructions-text`; `accessible-dialog-label` (dialog accessible name,
+ * falling back to `aria-labelledby` on the trigger); `close-text` (close
  * control text and accessible name; the control is unnamed when the
  * attribute is absent); `open` (reflects the dialog state); `disabled`
  * (blocks trigger activation). Empty or absent attributes render
@@ -112,7 +112,8 @@ export class TfHelpElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['label', 'trigger-text', 'dialog-label',
+        return ['accessible-label', 'trigger-text',
+            'accessible-dialog-label',
             'instructions-text', 'close-text', 'open', 'disabled'];
     }
 
@@ -139,7 +140,8 @@ export class TfHelpElement extends HTMLElement {
      * @param {*} label Accessible name
      */
     setLabel(label) {
-        this.setAttribute('label', label == null ? '' : String(label));
+        this.setAttribute('accessible-label',
+            label == null ? '' : String(label));
     }
 
     /**
@@ -156,7 +158,7 @@ export class TfHelpElement extends HTMLElement {
      * @param {*} label Accessible name
      */
     setDialogLabel(label) {
-        this.setAttribute('dialog-label',
+        this.setAttribute('accessible-dialog-label',
             label == null ? '' : String(label));
     }
 
@@ -189,7 +191,7 @@ export class TfHelpElement extends HTMLElement {
             return;
         }
 
-        this._setAriaLabel(this._trigger, 'label');
+        this._setAriaLabel(this._trigger, 'accessible-label');
         this._triggerText.textContent =
             this.getAttribute('trigger-text') || '';
         this._instructionsText.textContent =
@@ -227,7 +229,7 @@ export class TfHelpElement extends HTMLElement {
      * Name the dialog from its own attribute, or from the trigger.
      */
     _setDialogName() {
-        const label = this.getAttribute('dialog-label') || '';
+        const label = this.getAttribute('accessible-dialog-label') || '';
         if (label) {
             this._dialog.setAttribute('aria-label', label);
             this._dialog.removeAttribute('aria-labelledby');

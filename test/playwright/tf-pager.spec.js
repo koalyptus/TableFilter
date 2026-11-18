@@ -1,8 +1,9 @@
 // Component gate (#923/#924): the <tf-pager> element registers an open
 // shadow root exposing a `nav` landmark with four semantic buttons —
 // first, prev, next and last — each via its own part and each with an
-// accessible name — plus a page indicator carrying `aria-current="page"`
-// and configurable page-number state. Per the theming model (--tf-*
+// accessible name — plus a page indicator and a selector that exposes the
+// current page through its native selected state. Per the theming model
+// (--tf-*
 // custom properties + ::part()), it ships structure and hooks only: no
 // invented classes and no baked-in presentational CSS. The
 // results-per-page select (#925) and the Paging bridge (#926) are
@@ -102,9 +103,10 @@ test('renders accessible names from attributes when set',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
-            el.setAttribute('label', 'Table pages');
-            el.setAttribute('first-label', 'Go to first page');
-            el.setAttribute('next-label', 'Go to next page');
+            el.setAttribute('accessible-label', 'Table pages');
+            el.setAttribute('accessible-first-label', 'Go to first page');
+            el.setAttribute('accessible-prev-label', 'Go to previous page');
+            el.setAttribute('accessible-last-label', 'Go to last page');
             document.body.appendChild(el);
             const sr = el.shadowRoot;
             const labelOf = (part) =>
@@ -113,16 +115,18 @@ test('renders accessible names from attributes when set',
             return {
                 nav: labelOf('nav'),
                 first: labelOf('first'),
-                next: labelOf('next'),
+                prev: labelOf('prev'),
+                last: labelOf('last'),
                 // Unset buttons stay unnamed rather than defaulted.
-                prev: labelOf('prev')
+                next: labelOf('next')
             };
         }, COMPONENT);
 
         expect(result.nav).toBe('Table pages');
         expect(result.first).toBe('Go to first page');
-        expect(result.next).toBe('Go to next page');
-        expect(result.prev).toBeNull();
+        expect(result.prev).toBe('Go to previous page');
+        expect(result.last).toBe('Go to last page');
+        expect(result.next).toBeNull();
     });
 
 test('removes the accessible name when the attribute is cleared',
@@ -132,13 +136,13 @@ test('removes the accessible name when the attribute is cleared',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
-            el.setAttribute('next-label', 'Go to next page');
+            el.setAttribute('accessible-next-label', 'Go to next page');
             document.body.appendChild(el);
             const next = () => el.shadowRoot
                 .querySelector('[part="next"]');
 
             const set = next().getAttribute('aria-label');
-            el.removeAttribute('next-label');
+            el.removeAttribute('accessible-next-label');
             const removed = next().hasAttribute('aria-label');
 
             return { set, removed };
@@ -280,24 +284,34 @@ test('disabled attribute is reflected onto every button',
         expect(result.removed).toBe(false);
     });
 
-// Page-number state (#924): the indicator is the accessible home of the
-// current page, so it always carries `aria-current="page"`. Like the rest
-// of the element it ships parts and no CSS class — the legacy keys
+// Page-number state (#924): the selector exposes the current page through
+// its selected option or input value. The indicator is a status container
+// and carries no `aria-current`. Like the rest of the element it ships
+// parts and no CSS class — the legacy keys
 // (nb_pages_css_class, slc_css_class, inp_css_class) are themed through
 // ::part(), applied to the host by the bridge (#926).
-test('exposes the page indicator with aria-current="page"',
+test('exposes the current page through the selector, not aria-current',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-pager');
+            el.setAttribute('page', '2');
+            el.setTotalPages(5);
+            el.setPages([
+                { text: '1', value: '0' },
+                { text: '2', value: '10' }
+            ]);
             document.body.appendChild(el);
             const sr = el.shadowRoot;
             const status = sr.querySelector('[part="page-status"]');
+            const select = sr.querySelector('[part="page-select"]');
             const nodes = Array.from(sr.querySelectorAll('*'));
             return {
                 current: status.getAttribute('aria-current'),
+                selected:
+                    select.options[select.selectedIndex].textContent,
                 text: sr.querySelector('[part="page-text"]').textContent,
                 of: sr.querySelector('[part="of-text"]').textContent,
                 total: sr.querySelector('[part="total-pages"]').textContent,
@@ -307,11 +321,12 @@ test('exposes the page indicator with aria-current="page"',
             };
         }, COMPONENT);
 
-        expect(result.current).toBe('page');
-        // Empty until page-text and total-pages are configured.
+        expect(result.current).toBeNull();
+        expect(result.selected).toBe('2');
+        // Empty until page-text and of-text are configured.
         expect(result.text).toBe('');
         expect(result.of).toBe('');
-        expect(result.total).toBe('');
+        expect(result.total).toBe('5');
         expect(result.index).toBe(2);
         expect(result.classless).toBe(true);
     });
@@ -478,8 +493,8 @@ test('swaps the selector to a bounded number input when configured',
 
 // The page selector is the only accessible name that ships a default:
 // legacy names it nowhere, so the value comes from the ROADMAP, and
-// `selector-label` overrides it.
-test('defaults the selector name and honours selector-label',
+// `accessible-selector-label` overrides it.
+test('defaults the selector name and honours accessible-selector-label',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -493,15 +508,15 @@ test('defaults the selector name and honours selector-label',
 
             const initial = name();
 
-            el.setAttribute('selector-label', 'Go to page');
+            el.setAttribute('accessible-selector-label', 'Go to page');
             const overridden = name();
 
             // Absent falls back to the default rather than losing the name.
-            el.removeAttribute('selector-label');
+            el.removeAttribute('accessible-selector-label');
             const reverted = name();
 
             // An explicit empty value opts out entirely.
-            el.setAttribute('selector-label', '');
+            el.setAttribute('accessible-selector-label', '');
             const optedOut = name();
 
             return { initial, overridden, reverted, optedOut };
@@ -986,7 +1001,7 @@ test('Enter in the input dispatches the raw value', async ({ page }) => {
     expect(result.sanitised).toBe('');
 });
 
-test('selector-label defaults, overrides and opts out', async ({ page }) => {
+test('selector name defaults, overrides and opts out', async ({ page }) => {
     await page.goto(FIXTURE);
 
     const result = await page.evaluate(async (component) => {
@@ -998,11 +1013,11 @@ test('selector-label defaults, overrides and opts out', async ({ page }) => {
             .getAttribute('aria-label');
 
         const initial = label();
-        el.setAttribute('selector-label', 'Pick a page');
+        el.setAttribute('accessible-selector-label', 'Pick a page');
         const overridden = label();
-        el.setAttribute('selector-label', '');
+        el.setAttribute('accessible-selector-label', '');
         const optedOut = label();
-        el.removeAttribute('selector-label');
+        el.removeAttribute('accessible-selector-label');
         const restored = label();
 
         el.remove();

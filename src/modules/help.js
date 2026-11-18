@@ -262,7 +262,7 @@ export class Help extends Feature {
         host.setAttribute('trigger-text', this.btnText);
         host.setAttribute('close-text', 'Close');
         if (this.label) {
-            host.setAttribute('label', this.label);
+            host.setAttribute('accessible-label', this.label);
         }
 
         if (this.btnHtml) {

@@ -177,13 +177,31 @@ Element attributes expose behaviour. They are not ARIA attributes, so they never
 use `aria-*` names: `<tf-help aria-label="Help">` would name the host shell, not
 the focusable control in its shadow root.
 
-- `label` names the element's primary control.
-- `<part>-label` names a specific part: `dialog-label`, `listbox-label`,
-  `selector-label`, `first-label`, `prev-label`, `next-label`, `last-label`.
+- `accessible-label` names the element's primary control. It follows Adobe
+  Spectrum Web Components (gen2), which forwards its `accessible-label`
+  attribute to `aria-label` on the internal control.
+- `accessible-<part>-label` names a specific part: `accessible-dialog-label`,
+  `accessible-listbox-label`, `accessible-selector-label`,
+  `accessible-first-label`, `accessible-prev-label`, `accessible-next-label`,
+  `accessible-last-label`.
 - `<part>-text` (or `text`) is visible text; an accessible name and the visible
   text are separate attributes.
+- A component whose visible text is its control's label uses that text as the
+  name; `accessible-label` overrides it (`tf-results-per-page`).
 - The element renders a name as `aria-label` on the shadow control, never on the
   host. An empty value removes the name.
+
+`aria-current` marks an item within a set. Pager status containers do not use
+it; the page selector's selected option or input value exposes the current page.
+
+Legacy config keys keep their names (`help_instructions.label`,
+`btn_reset.tooltip`); the bridges map them to the element's `accessible-*`
+attributes.
+
+`accessible-label` and `accessible-<part>-label` replace the pre-1.0 `label`
+and `<part>-label` element attributes (#1089). The rename is breaking for
+consumers that set the attributes directly; the legacy `TableFilter`
+configuration keys are unchanged.
 
 ### Bridge init convention (temporary, until #965 namespace migration)
 Bridged features split `init()` into two focused methods so the legacy path is a

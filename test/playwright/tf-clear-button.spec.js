@@ -52,13 +52,13 @@ test('renders an accessible name from attributes and text content',
         const result = await page.evaluate(async (component) => {
             await import(component);
             const el = document.createElement('tf-clear-button');
-            el.setAttribute('label', 'Clear filters');
+            el.setAttribute('accessible-label', 'Clear filters');
             document.body.appendChild(el);
             const button = el.shadowRoot.querySelector('button');
 
             const fromLabel = button.getAttribute('aria-label');
 
-            el.removeAttribute('label');
+            el.removeAttribute('accessible-label');
             el.setAttribute('text', 'Clear');
             const fromText = button.textContent;
 
