@@ -105,10 +105,65 @@ test('projects light DOM content through the slot and hides the message part',
         }, COMPONENT);
 
         expect(result.assignedText).toContain('Loading');
-        // The message part hides while the slot has assigned nodes.
+        // The message part hides while the slot carries element content.
         expect(result.messageHidden).toBe(true);
         // The `text` attribute still renders into the message part.
         expect(result.messageText).toBe('fallback text');
+    });
+
+test('whitespace-only and comment-only children render the text fallback',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-loader');
+            el.innerHTML = '\n    <!-- loader.html placeholder -->\n';
+            el.setAttribute('text', 'Loading...');
+            document.body.appendChild(el);
+
+            const message =
+                el.shadowRoot.querySelector('[part=message]');
+            return {
+                hidden: message.hidden,
+                text: message.textContent
+            };
+        }, COMPONENT);
+
+        expect(result.hidden).toBe(false);
+        expect(result.text).toBe('Loading...');
+    });
+
+test('slotchange toggles the message part as projected content changes',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-loader');
+            el.setAttribute('text', 'fallback text');
+            document.body.appendChild(el);
+
+            const message =
+                el.shadowRoot.querySelector('[part=message]');
+            const visibleBefore = message.hidden;
+
+            const strong = document.createElement('strong');
+            strong.textContent = 'Loading';
+            el.appendChild(strong);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const hiddenWithSlot = message.hidden;
+
+            strong.remove();
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const visibleAfter = message.hidden;
+
+            return { visibleBefore, hiddenWithSlot, visibleAfter };
+        }, COMPONENT);
+
+        expect(result.visibleBefore).toBe(false);
+        expect(result.hiddenWithSlot).toBe(true);
+        expect(result.visibleAfter).toBe(false);
     });
 
 test('setText() sets and clears the rendered message',

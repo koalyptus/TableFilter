@@ -79,14 +79,16 @@ export class TfLoaderElement extends HTMLElement {
 
     /**
      * Show the element-rendered message part only when the default slot
-     * has no assigned nodes.
+     * carries no element or non-whitespace text nodes.
      */
     _syncLayout() {
         if (!this._messageEl) {
             return;
         }
         this._messageEl.hidden = this._messageSlot
-            .assignedNodes({ flatten: true }).length > 0;
+            .assignedNodes({ flatten: true })
+            .some((node) => node.nodeType === 1 ||
+                (node.nodeType === 3 && node.textContent.trim() !== ''));
     }
 }
 
