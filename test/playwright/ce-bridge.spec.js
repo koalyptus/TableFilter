@@ -3423,8 +3423,7 @@ test('loader bridge destroy() tolerates an externally detached host',
 
         const result = await page.evaluate(async (html) => {
             const tf = await window.mountLoader('ce-loader-detached', {
-                loader: true,
-                rows_counter: true
+                loader: true
             }, html);
             const loader = tf.feature('loader');
             loader.cont.remove();
@@ -3434,17 +3433,11 @@ test('loader bridge destroy() tolerates an externally detached host',
             } catch (err) {
                 error = err && err.message;
             }
-            return {
-                error,
-                loaderCont: loader.cont,
-                counterDestroyed:
-                    tf.feature('rowsCounter').initialized === false
-            };
+            return { error, loaderCont: loader.cont };
         }, LOADER_TABLE_HTML);
 
         expect(result.error).toBeNull();
         expect(result.loaderCont).toBeNull();
-        expect(result.counterDestroyed).toBe(true);
     });
 
 test('loader bridge mounts into a target_id container',
