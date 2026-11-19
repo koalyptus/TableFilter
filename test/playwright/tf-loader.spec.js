@@ -111,6 +111,83 @@ test('projects light DOM content through the slot and hides the message part',
         expect(result.messageText).toBe('fallback text');
     });
 
+test('renders a markup-valued text attribute as literal text',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-loader');
+            el.setAttribute('text',
+                '<img src="x" onerror="window.__pwned = true">');
+            document.body.appendChild(el);
+
+            const message =
+                el.shadowRoot.querySelector('[part=message]');
+            return {
+                text: message.textContent,
+                elements: message.querySelectorAll('*').length,
+                pwned: window.__pwned === true
+            };
+        }, COMPONENT);
+
+        expect(result.text)
+            .toBe('<img src="x" onerror="window.__pwned = true">');
+        expect(result.elements).toBe(0);
+        expect(result.pwned).toBe(false);
+    });
+
+test('projects bare text through the slot and hides the fallback part',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-loader');
+            el.textContent = 'Still loading\n';
+            el.setAttribute('text', 'fallback text');
+            document.body.appendChild(el);
+
+            const slot =
+                el.shadowRoot.querySelector('[part=message-slot]');
+            const message =
+                el.shadowRoot.querySelector('[part=message]');
+            return {
+                assignedText: slot.assignedNodes({ flatten: true })
+                    .map((n) => n.textContent),
+                hidden: message.hidden
+            };
+        }, COMPONENT);
+
+        expect(result.assignedText.join('')).toContain('Still loading');
+        expect(result.hidden).toBe(true);
+    });
+
+test('reconnecting re-enforces the live-region contract',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-loader');
+            document.body.appendChild(el);
+            el.setAttribute('role', 'note');
+            el.setAttribute('aria-live', 'off');
+            el.setAttribute('aria-atomic', 'false');
+            el.remove();
+            document.body.appendChild(el);
+            return {
+                role: el.getAttribute('role'),
+                live: el.getAttribute('aria-live'),
+                atomic: el.getAttribute('aria-atomic')
+            };
+        }, COMPONENT);
+
+        expect(result.role).toBe('status');
+        expect(result.live).toBe('polite');
+        expect(result.atomic).toBe('true');
+    });
+
 test('whitespace-only and comment-only children render the text fallback',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -207,17 +284,21 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
 
         const style = document.createElement('style');
         style.textContent = `
+            tf-loader::part(message-slot) { color: rgb(9, 8, 7); }
             tf-loader::part(message) { color: rgb(1, 2, 3); }
         `;
         document.head.appendChild(style);
 
         const message = el.shadowRoot.querySelector('[part=message]');
+        const slot = el.shadowRoot.querySelector('[part=message-slot]');
         return {
-            message: getComputedStyle(message).color
+            message: getComputedStyle(message).color,
+            slot: getComputedStyle(slot).color
         };
     }, COMPONENT);
 
     expect(result.message).toBe('rgb(1, 2, 3)');
+    expect(result.slot).toBe('rgb(9, 8, 7)');
 });
 
 // The host is the live region (#916); the shadow parts carry no ARIA
