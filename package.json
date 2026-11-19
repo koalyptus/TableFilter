@@ -83,7 +83,7 @@
     "uglifyjs-webpack-plugin": "2.2.0",
     "vite": "8.3.4",
     "webpack": "^4.38.0",
-    "webpack-cli": "^3.0.8",
+    "webpack-cli": "^7.3.1",
     "webpack-dev-server": "^4.15.2"
   },
   "bugs": {
