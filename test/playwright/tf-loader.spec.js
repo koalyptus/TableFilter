@@ -342,3 +342,208 @@ test('is exposed to assistive tech as a single status region',
         await expect(page.locator('tf-loader')).toHaveRole('status');
         await expect(page.getByRole('status')).toHaveCount(1);
     });
+
+test('renders empty and whitespace-only text attributes', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-loader');
+        document.body.appendChild(el);
+        const message = el.shadowRoot.querySelector('[part=message]');
+        const read = () => ({
+            text: message.textContent,
+            hidden: message.hidden
+        });
+
+        el.setAttribute('text', '');
+        const empty = read();
+
+        el.setAttribute('text', '   ');
+        const whitespace = read();
+
+        return { empty, whitespace };
+    }, COMPONENT);
+
+    expect(result.empty).toEqual({ text: '', hidden: false });
+    expect(result.whitespace).toEqual({ text: '   ', hidden: false });
+});
+
+test('hides the message part from layout when content is slotted',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-loader');
+            el.innerHTML = '<strong>Loading</strong>';
+            el.setAttribute('text', 'fallback text');
+            document.body.appendChild(el);
+        }, COMPONENT);
+
+        await expect(page.locator('tf-loader').locator('[part=message]'))
+            .toBeHidden();
+        await expect(page.locator('tf-loader strong')).toBeVisible();
+    });
+
+test('two instances on one page render independently', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const first = document.createElement('tf-loader');
+        first.setAttribute('text', 'First');
+        const second = document.createElement('tf-loader');
+        second.setAttribute('text', 'Second');
+        document.body.append(first, second);
+
+        const read = (el) => el.shadowRoot
+            .querySelector('[part=message]').textContent;
+
+        const before = { first: read(first), second: read(second) };
+
+        second.appendChild(document.createElement('em'));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        return {
+            before,
+            after: { first: read(first), second: read(second) },
+            separateRoots: first.shadowRoot !== second.shadowRoot,
+            firstHidden: first.shadowRoot
+                .querySelector('[part=message]').hidden,
+            secondHidden: second.shadowRoot
+                .querySelector('[part=message]').hidden
+        };
+    }, COMPONENT);
+
+    expect(result.before).toEqual({ first: 'First', second: 'Second' });
+    expect(result.after).toEqual({ first: 'First', second: 'Second' });
+    expect(result.separateRoots).toBe(true);
+    expect(result.firstHidden).toBe(false);
+    expect(result.secondHidden).toBe(true);
+});
+
+test('upgrades declarative markup present before the module loads',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            document.body.innerHTML =
+                '<tf-loader text="Loading..."><b>markup</b></tf-loader>';
+            const before = document.querySelector('tf-loader');
+            const upgradedBefore = Boolean(before.shadowRoot);
+
+            await import(component);
+
+            const el = document.querySelector('tf-loader');
+            const message = el.shadowRoot.querySelector('[part=message]');
+            return {
+                upgradedBefore,
+                upgradedAfter: Boolean(el.shadowRoot),
+                text: message.textContent,
+                hidden: message.hidden,
+                role: el.getAttribute('role'),
+                live: el.getAttribute('aria-live')
+            };
+        }, COMPONENT);
+
+        expect(result.upgradedBefore).toBe(false);
+        expect(result.upgradedAfter).toBe(true);
+        expect(result.text).toBe('Loading...');
+        expect(result.hidden).toBe(true);
+        expect(result.role).toBe('status');
+        expect(result.live).toBe('polite');
+    });
+
+test('importing the module again keeps a single definition',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const first = customElements.get('tf-loader');
+            let error = null;
+            try {
+                // A distinct module record re-executes the registration
+                // guard against an already-defined element.
+                await import(component + '?duplicate=1');
+            } catch (err) {
+                error = err && err.message;
+            }
+            return {
+                error,
+                same: customElements.get('tf-loader') === first
+            };
+        }, COMPONENT);
+
+        expect(result.error).toBeNull();
+        expect(result.same).toBe(true);
+    });
+
+test('does not replace an existing tf-loader definition',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            class Stub extends HTMLElement {}
+            customElements.define('tf-loader', Stub);
+            await import(component);
+            return {
+                kept: customElements.get('tf-loader') === Stub
+            };
+        }, COMPONENT);
+
+        expect(result.kept).toBe(true);
+    });
+
+test('does not define the element when customElements is unavailable',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            Object.defineProperty(window, 'customElements',
+                { value: undefined, configurable: true });
+            let error = null;
+            try {
+                await import(component);
+            } catch (err) {
+                error = err && err.message;
+            }
+            const state = {
+                error,
+                undefinedAfterImport: window.customElements === undefined
+            };
+            delete window.customElements;
+            return state;
+        }, COMPONENT);
+
+        expect(result.error).toBeNull();
+        expect(result.undefinedAfterImport).toBe(true);
+    });
+
+test('tolerates a shadow root without the message part', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-loader');
+        el.shadowRoot.querySelector('[part=message]').remove();
+        document.body.appendChild(el);
+
+        let error = null;
+        try {
+            el.setText('Loading...');
+            el.appendChild(document.createElement('em'));
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        } catch (err) {
+            error = err && err.message;
+        }
+        return {
+            error,
+            message: el.shadowRoot.querySelector('[part=message]')
+        };
+    }, COMPONENT);
+
+    expect(result.error).toBeNull();
+    expect(result.message).toBeNull();
+});
