@@ -198,7 +198,7 @@ export class Loader extends Feature {
         if (!this.html) {
             this.cont.appendChild(createText(this.text));
         } else {
-            this.cont.innerHTML = sanitizeHtml(this.html);
+            this.cont.innerHTML = this.html;
         }
     }
 
