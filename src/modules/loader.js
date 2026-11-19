@@ -120,13 +120,14 @@ export class Loader extends Feature {
             return;
         }
 
-        // Bridge to <tf-loader> (scaffold #916): a custom `css_class`, or
-        // an unresolvable `target_id`, routes to the legacy div container.
+        // Bridge to <tf-loader> (scaffold #916): a custom `css_class`, or an
+        // unresolvable `target_id`, routes to the legacy div container.
         // TODO(#965): remove once the legacy webpack pipeline is retired.
-        if (this.canUseCE()) {
-            this.initCE();
+        const targetEl = this.targetId ? elm(this.targetId) : null;
+        if (this.canUseCE(targetEl)) {
+            this.initCE(targetEl);
         } else {
-            this.initLegacy();
+            this.initLegacy(targetEl);
         }
 
         this.show(NONE);
@@ -143,29 +144,25 @@ export class Loader extends Feature {
 
     /**
      * Whether the feature renders through `<tf-loader>`.
-     * @returns {Boolean} True when the element is registered and the
-     * configuration keeps the default `loader` class
+     * @param {DOMElement} targetEl Resolved `target_id` container, if any
+     * @returns {Boolean} True when the element is registered, the
+     * configuration keeps the default `loader` class and a configured
+     * `target_id` resolves
      * @private
      */
-    canUseCE() {
-        if (typeof customElements === 'undefined' ||
-            !customElements.get('tf-loader')) {
-            return false;
-        }
-        if (this.cssClass !== 'loader') {
-            return false;
-        }
-        if (this.targetId) {
-            return Boolean(elm(this.targetId));
-        }
-        return true;
+    canUseCE(targetEl) {
+        return typeof customElements !== 'undefined' &&
+            Boolean(customElements.get('tf-loader')) &&
+            this.cssClass === 'loader' &&
+            (!this.targetId || Boolean(targetEl));
     }
 
     /**
      * Initialize using the <tf-loader> custom element
+     * @param {DOMElement} targetEl Target container element
      * @private
      */
-    initCE() {
+    initCE(targetEl) {
         const host = document.createElement('tf-loader');
         host.className = this.cssClass;
         host.setText(this.text);
@@ -173,8 +170,8 @@ export class Loader extends Feature {
             host.innerHTML = sanitizeHtml(this.html);
         }
 
-        if (this.targetId) {
-            elm(this.targetId).appendChild(host);
+        if (targetEl) {
+            targetEl.appendChild(host);
         } else {
             const dom = this.tf.dom();
             dom.parentNode.insertBefore(host, dom);
@@ -184,17 +181,17 @@ export class Loader extends Feature {
 
     /**
      * Initialize using the legacy div container
+     * @param {DOMElement} targetEl Target container element
      * @private
      */
-    initLegacy() {
+    initLegacy(targetEl) {
         let containerDiv = createElm('div');
         containerDiv.className = this.cssClass;
 
-        const dom = this.tf.dom();
-        const targetEl = this.targetId ? elm(this.targetId) : null;
         if (targetEl) {
             targetEl.appendChild(containerDiv);
         } else {
+            const dom = this.tf.dom();
             dom.parentNode.insertBefore(containerDiv, dom);
         }
         this.cont = containerDiv;
