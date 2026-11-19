@@ -4,6 +4,7 @@ import {EMPTY_FN} from '../types';
 import {root} from '../root';
 import {NONE} from '../const';
 import {defaultsStr, defaultsFn} from '../settings';
+import {sanitizeHtml} from '../sanitize';
 
 const BEFORE_ACTION_EVENTS = [
     'before-filtering',
@@ -95,6 +96,20 @@ export class Loader extends Feature {
          * @type {Function}
          */
         this.onHide = defaultsFn(f.on_hide_loader, EMPTY_FN);
+
+        /**
+         * Subscribed before-action handler
+         * @type {Function|null}
+         * @private
+         */
+        this.boundShow = null;
+
+        /**
+         * Subscribed after-action handler
+         * @type {Function|null}
+         * @private
+         */
+        this.boundHide = null;
     }
 
     /**
@@ -105,16 +120,80 @@ export class Loader extends Feature {
             return;
         }
 
-        let tf = this.tf;
-        let emitter = this.emitter;
+        // Bridge to <tf-loader> (scaffold #916): a custom `css_class`, or
+        // an unresolvable `target_id`, keeps the legacy div container.
+        // TODO(#965): remove once the legacy webpack pipeline is retired.
+        if (this.canUseCE()) {
+            this.initCE();
+        } else {
+            this.initLegacy();
+        }
 
+        this.show(NONE);
+
+        // Subscribe to events
+        this.boundShow = () => this.show('');
+        this.boundHide = () => this.show(NONE);
+        this.emitter.on(BEFORE_ACTION_EVENTS, this.boundShow);
+        this.emitter.on(AFTER_ACTION_EVENTS, this.boundHide);
+
+        /** @inherited */
+        this.initialized = true;
+    }
+
+    /**
+     * Whether the feature renders through `<tf-loader>`.
+     * @returns {Boolean} True when the element is registered and the
+     * configuration keeps the default `loader` class
+     * @private
+     */
+    canUseCE() {
+        if (typeof customElements === 'undefined' ||
+            !customElements.get('tf-loader')) {
+            return false;
+        }
+        if (this.cssClass !== 'loader') {
+            return false;
+        }
+        if (this.targetId) {
+            return Boolean(elm(this.targetId));
+        }
+        return true;
+    }
+
+    /**
+     * Initialize using the <tf-loader> custom element
+     * @private
+     */
+    initCE() {
+        const host = document.createElement('tf-loader');
+        host.className = this.cssClass;
+        host.setText(this.text);
+        if (this.html) {
+            host.innerHTML = sanitizeHtml(this.html);
+        }
+
+        if (this.targetId) {
+            elm(this.targetId).appendChild(host);
+        } else {
+            const dom = this.tf.dom();
+            dom.parentNode.insertBefore(host, dom);
+        }
+        this.cont = host;
+    }
+
+    /**
+     * Initialize using the legacy div container
+     * @private
+     */
+    initLegacy() {
         let containerDiv = createElm('div');
         containerDiv.className = this.cssClass;
 
         let targetEl = !this.targetId ?
-            tf.dom().parentNode : elm(this.targetId);
+            this.tf.dom().parentNode : elm(this.targetId);
         if (!this.targetId) {
-            targetEl.insertBefore(containerDiv, tf.dom());
+            targetEl.insertBefore(containerDiv, this.tf.dom());
         } else {
             targetEl.appendChild(containerDiv);
         }
@@ -122,17 +201,8 @@ export class Loader extends Feature {
         if (!this.html) {
             this.cont.appendChild(createText(this.text));
         } else {
-            this.cont.innerHTML = this.html;
+            this.cont.innerHTML = sanitizeHtml(this.html);
         }
-
-        this.show(NONE);
-
-        // Subscribe to events
-        emitter.on(BEFORE_ACTION_EVENTS, () => this.show(''));
-        emitter.on(AFTER_ACTION_EVENTS, () => this.show(NONE));
-
-        /** @inherited */
-        this.initialized = true;
     }
 
     /**
@@ -175,8 +245,10 @@ export class Loader extends Feature {
         this.cont = null;
 
         // Unsubscribe to events
-        emitter.off(BEFORE_ACTION_EVENTS, () => this.show(''));
-        emitter.off(AFTER_ACTION_EVENTS, () => this.show(NONE));
+        emitter.off(BEFORE_ACTION_EVENTS, this.boundShow);
+        emitter.off(AFTER_ACTION_EVENTS, this.boundHide);
+        this.boundShow = null;
+        this.boundHide = null;
 
         this.initialized = false;
     }
