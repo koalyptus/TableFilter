@@ -3384,6 +3384,92 @@ test('loader bridge appends the legacy div into a resolving target_id',
         expect(result.removed).toBe(true);
     });
 
+test('loader bridge clears the text fallback when html is configured',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const configs = [
+                { text: 'Loading...', html: '   ' },
+                {
+                    text: 'Loading...',
+                    html: '<script>window.__xss=1<\/script>'
+                },
+                { text: 'Loading...', html: '<!-- only a comment -->' }
+            ];
+            const ce = [];
+            for (let i = 0; i < configs.length; i++) {
+                const tf = await window.mountLoader(
+                    'ce-loader-empty-html-' + i, { loader: configs[i] }, html);
+                const host = tf.feature('loader').cont;
+                const message = window.loaderPart(host, 'message');
+                ce.push({
+                    tag: host.nodeName,
+                    message: message.textContent,
+                    elements: host.children.length
+                });
+                tf.destroy();
+            }
+
+            const tf = await window.mountLoader('ce-loader-empty-html-legacy', {
+                loader: {
+                    text: 'Loading...',
+                    html: '   ',
+                    css_class: 'myLoader'
+                }
+            }, html);
+            const cont = tf.feature('loader').cont;
+            const legacy = { tag: cont.nodeName, text: cont.textContent };
+            tf.destroy();
+
+            return { ce, legacy };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.ce).toEqual([
+            { tag: 'TF-LOADER', message: '', elements: 0 },
+            { tag: 'TF-LOADER', message: '', elements: 0 },
+            { tag: 'TF-LOADER', message: '', elements: 0 }
+        ]);
+        expect(result.legacy).toEqual({ tag: 'DIV', text: '   ' });
+    });
+
+test('loader bridge falls back when the registered tf-loader lacks setText',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            class Foreign extends HTMLElement {}
+            customElements.define('tf-loader', Foreign);
+
+            let error = null;
+            let state = null;
+            try {
+                const tf = await window.mountLoader('ce-loader-foreign', {
+                    loader: true
+                }, html);
+                const loader = tf.feature('loader');
+                state = {
+                    tag: loader.cont.nodeName,
+                    className: loader.cont.className,
+                    text: loader.cont.textContent
+                };
+                loader.destroy();
+            } catch (err) {
+                error = err && err.message;
+            }
+            return { error, state };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.error).toBeNull();
+        expect(result.state).toEqual({
+            tag: 'DIV',
+            className: 'loader',
+            text: 'Loading...'
+        });
+    });
+
 test('loader bridge falls back to legacy without customElements',
     async ({ page }) => {
         await page.goto(FIXTURE);

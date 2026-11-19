@@ -145,14 +145,16 @@ export class Loader extends Feature {
     /**
      * Whether the feature renders through `<tf-loader>`.
      * @param {DOMElement} targetEl Resolved `target_id` container, if any
-     * @returns {Boolean} True when the element is registered, the
-     * configuration keeps the default `loader` class and a configured
+     * @returns {Boolean} True when the registered element exposes `setText`,
+     * the configuration keeps the default `loader` class and a configured
      * `target_id` resolves
      * @private
      */
     canUseCE(targetEl) {
-        return typeof customElements !== 'undefined' &&
-            Boolean(customElements.get('tf-loader')) &&
+        const LoaderElement = typeof customElements === 'undefined' ?
+            null : customElements.get('tf-loader');
+        return Boolean(LoaderElement) &&
+            typeof LoaderElement.prototype.setText === 'function' &&
             this.cssClass === 'loader' &&
             (!this.targetId || Boolean(targetEl));
     }
@@ -165,7 +167,7 @@ export class Loader extends Feature {
     initCE(targetEl) {
         const host = document.createElement('tf-loader');
         host.className = this.cssClass;
-        host.setText(this.text);
+        host.setText(this.html ? '' : this.text);
         if (this.html) {
             host.innerHTML = sanitizeHtml(this.html);
         }
