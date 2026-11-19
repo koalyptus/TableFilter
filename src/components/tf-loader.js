@@ -6,29 +6,24 @@
  * `message` parts. Consumer content (legacy `loader.html`) renders
  * through the default slot (P2, ROADMAP/content-projection-parity.md);
  * the `text` attribute is the plain-text fallback
- * (P3) and is rendered as text. The host is the live region (#916):
- * connecting it enforces the shared live-region contract
- * (`applyLiveRegion()`) so message changes are announced politely.
+ * (P3) and is rendered as text. `connectedCallback()` applies the
+ * shared live-region contract (`applyLiveRegion()`) to the host.
  *
  * The configurable loader class (`loader.css_class`, default `loader`)
- * is applied to this host by the Loader bridge (#917), not hardcoded
- * here. TableFilter themes through `--tf-*` custom properties (#892/
- * #945 — inherited into shadow trees) and `::part()` hooks, so the
- * element ships structure and hooks only and leaves the look to the
- * stylesheet/theme.
+ * is applied to this host by the Loader bridge (#917). The element
+ * ships structure and `::part()` hooks only; the look is defined by
+ * the stylesheet and themes.
  *
- * Importing this module registers the element. Like `<table-filter>` it
- * is deliberately not part of the legacy webpack bundle (PhantomJS
- * `_wrapNativeSuper`); consumers load it as a module, and shipping it
- * in a bundle belongs with #965.
+ * Importing this module registers the element. It is not part of the
+ * legacy webpack bundle (PhantomJS `_wrapNativeSuper`); consumers load
+ * it as a module (#965).
  */
 
 import {applyLiveRegion} from './attributes.js';
 
-// Cloned into every instance's shadow root. Structure and `part` hooks
-// only: `part` is the stable internal contract (selected by _update()
-// and themed via ::part()), and no class or presentational style is
-// baked in, so themes and consumers stay in control.
+// Cloned into every instance's shadow root. `part` is the internal
+// contract (selected by _update() and themed via ::part()); the clone
+// carries no class or stylesheet.
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
     <slot part="message-slot"></slot>
@@ -53,8 +48,8 @@ export class TfLoaderElement extends HTMLElement {
     }
 
     connectedCallback() {
-        // Live-region contract (#916): the host is the region, so a
-        // message change is announced politely.
+        // Live-region contract (#916): `applyLiveRegion()` sets
+        // role=status, aria-live=polite and aria-atomic=true on the host.
         applyLiveRegion(this);
         this._update();
         this._syncLayout();
@@ -66,8 +61,7 @@ export class TfLoaderElement extends HTMLElement {
 
     /**
      * Set the message text, rendered as text into the `message` part.
-     * Values are coerced to strings so a falsy non-string (e.g. 0) is
-     * displayed rather than silently dropped.
+     * Values are coerced to strings (0 renders as '0').
      * @param {String} text Message text
      */
     setText(text) {

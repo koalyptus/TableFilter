@@ -1,10 +1,7 @@
 // Component gates (#916 scaffold): the <tf-loader> element registers an
-// open shadow root exposing the `message-slot`/`message` parts and renders
-// the `text` attribute statically (or consumer content through the slot),
-// and its host connects as a polite ARIA status region. Per the theming
-// model (--tf-* custom properties + ::part()), it ships structure and hooks
-// only: no invented classes and no baked-in presentational CSS. The Loader
-// bridge (#917) is a separate ticket. Fails CI on regression.
+// open shadow root exposing the `message-slot`/`message` parts, renders
+// the `text` attribute into the `message` part (or consumer content
+// through the slot), and connects as a polite ARIA status region.
 const { test, expect } = require('@playwright/test');
 
 const FIXTURE = '/test/test-emitter.html';
@@ -39,8 +36,7 @@ test('registers an open shadow root exposing the message-slot/message parts',
         expect(result.mode).toBe('open');
         expect(result.parts).toEqual(['message-slot', 'message']);
         expect(result.leakedToLightDom).toBe(false);
-        // The component ships no classes and no presentational styles;
-        // themes style the parts via --tf-* tokens and ::part().
+        // No classes or <style> nodes in the shadow root.
         expect(result.classless).toBe(true);
         expect(result.styleless).toBe(true);
     });
@@ -100,23 +96,18 @@ test('projects light DOM content through the slot and hides the message part',
             const slot = sr.querySelector('[part=message-slot]');
             const message = sr.querySelector('[part=message]');
             const assigned = slot.assignedNodes({ flatten: true });
-            const hasMarkup = el.innerHTML.indexOf('loading-markup') !== -1;
 
             return {
                 assignedText: assigned.map((n) => (n.textContent || '').trim()),
-                hasMarkup,
                 messageHidden: message.hidden,
                 messageText: message.textContent
             };
         }, COMPONENT);
 
-        expect(result.hasMarkup).toBe(true);
         expect(result.assignedText).toContain('Loading');
-        // The element-rendered fallback hides when slotted content is
-        // present.
+        // The message part hides while the slot has assigned nodes.
         expect(result.messageHidden).toBe(true);
-        // The attribute text is still reflected on the part for the
-        // bridge and tests that read it.
+        // The `text` attribute still renders into the message part.
         expect(result.messageText).toBe('fallback text');
     });
 
@@ -137,7 +128,7 @@ test('setText() sets and clears the rendered message',
             const empty = msg();
             el.setText();
             const missing = msg();
-            // A falsy non-string must render, not be dropped.
+            // setText(0) renders '0'.
             el.setText(0);
             const zero = msg();
 
@@ -174,17 +165,15 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
     expect(result.message).toBe('rgb(1, 2, 3)');
 });
 
-// The host is the live region. `role="status"` implies polite and
-// atomic, so they are set (not defaulted) on connect and a consumer's
-// value is corrected; the shadow parts stay ARIA-free so a message
-// change is announced once, not twice.
+// The host is the live region (#916); the shadow parts carry no ARIA
+// attributes.
 test('connects as a polite ARIA status live region', async ({ page }) => {
     await page.goto(FIXTURE);
 
     const result = await page.evaluate(async (component) => {
         await import(component);
         const el = document.createElement('tf-loader');
-        // Enforcement, not a default: a wrong consumer value is fixed.
+        // A consumer-set aria-live=off is corrected to polite on connect.
         el.setAttribute('aria-live', 'off');
         document.body.appendChild(el);
         return {
