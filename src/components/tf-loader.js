@@ -1,13 +1,12 @@
 /**
- * `<tf-loader>` custom element: accessible activity indicator
- * (ROADMAP: hybrid-migration-strategy.md).
+ * `<tf-loader>` custom element: accessible activity indicator.
  *
  * Scaffold (#916): an open shadow root exposing the `message-slot` and
  * `message` parts. Consumer content (legacy `loader.html`) renders
- * through the default slot (P2, ROADMAP/content-projection-parity.md);
- * the `text` attribute is the plain-text fallback
- * (P3) and is rendered as text. `connectedCallback()` applies the
- * shared live-region contract (`applyLiveRegion()`) to the host.
+ * through the default slot; the `text` attribute is the plain-text
+ * fallback and is rendered as text. `connectedCallback()` applies the
+ * shared live-region contract (`applyLiveRegion()`) to the host. The
+ * Loader bridge (#917) follows.
  *
  * The configurable loader class (`loader.css_class`, default `loader`)
  * is applied to this host by the Loader bridge (#917). The element
