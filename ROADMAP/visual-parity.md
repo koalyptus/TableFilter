@@ -44,6 +44,7 @@ not parity.
 | `<tf-results-per-page>` | `static/style/paging.styl:66` (`select.rspg`), `:72` (`span.rspgSpan`) | [#1081](https://github.com/koalyptus/TableFilter/issues/1081) | 2 — Accessibility pass & feature bridges |
 | `<tf-checklist>` | `static/style/filter-checklist.styl` | [#1082](https://github.com/koalyptus/TableFilter/issues/1082) | 2 — Accessibility pass & feature bridges |
 | `<tf-help>` | `static/style/help.styl` | [#1083](https://github.com/koalyptus/TableFilter/issues/1083) | 3 — Accessible overlays & instructions |
+| `<tf-loader>` | `static/style/loader.styl` | [#1102](https://github.com/koalyptus/TableFilter/issues/1102) | 3 — Accessible overlays & instructions |
 
 The epic [#1049](https://github.com/koalyptus/TableFilter/issues/1049) holds
 only the cross-cutting work (`::part` naming, host-class to part mapping,
