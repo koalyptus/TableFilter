@@ -3269,6 +3269,9 @@ test('loader bridge keeps loader off without a config',
         const result = await page.evaluate(async (html) => {
             const configs = [
                 { themes: [{ name: 'default' }], loader: false },
+                { themes: [{ name: 'default' }] },
+                { enable_default_theme: true },
+                { enable_default_theme: true, loader: false },
                 { loader: false },
                 {}
             ];
@@ -3288,8 +3291,66 @@ test('loader bridge keeps loader off without a config',
         expect(result).toEqual([
             { feature: false, hosts: 0 },
             { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 },
             { feature: false, hosts: 0 }
         ]);
+    });
+
+test('loader bridge mounts with themes and a configured loader',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const configs = [
+                { themes: [{ name: 'default' }], loader: true },
+                { themes: [{ name: 'default' }], loader: { text: 'Hi' } },
+                { enable_default_theme: true, loader: true }
+            ];
+            const mounts = [];
+            for (let i = 0; i < configs.length; i++) {
+                const tf = await window.mountLoader(
+                    'ce-loader-themes-' + i, configs[i], html);
+                const feature = tf.feature('loader');
+                const host = feature && feature.cont;
+                mounts.push({
+                    isCE: Boolean(host) && host.nodeName === 'TF-LOADER',
+                    className: host && host.className,
+                    connected: Boolean(host) && host.isConnected
+                });
+                tf.destroy();
+            }
+            return mounts;
+        }, LOADER_TABLE_HTML);
+
+        expect(result).toEqual([
+            { isCE: true, className: 'loader', connected: true },
+            { isCE: true, className: 'loader', connected: true },
+            { isCE: true, className: 'loader', connected: true }
+        ]);
+    });
+
+test('loader bridge tf.destroy() removes the host',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-tfdestroy', {
+                loader: true
+            }, html);
+            const host = tf.feature('loader').cont;
+            tf.destroy();
+            return {
+                connected: host.isConnected,
+                hosts: document.querySelectorAll('tf-loader').length
+            };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.connected).toBe(false);
+        expect(result.hosts).toBe(0);
     });
 
 test('loader bridge mounts into a target_id container',
