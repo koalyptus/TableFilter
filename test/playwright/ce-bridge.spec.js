@@ -3317,6 +3317,35 @@ test('loader bridge mounts into a target_id container',
         expect(result.inBox).toBe(true);
     });
 
+test('loader bridge mounts before the table when target_id is missing',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-missing', {
+                loader: { target_id: 'missingBox' }
+            }, html);
+            const loader = tf.feature('loader');
+            const host = loader.cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                elementHosts: document.querySelectorAll('tf-loader').length,
+                beforeTable: host.nextSibling ===
+                    document.querySelector('#ce-loader-missing')
+            };
+            loader.destroy();
+            return Object.assign(state, { removed: !host.isConnected });
+        }, LOADER_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('loader');
+        expect(result.elementHosts).toBe(0);
+        expect(result.beforeTable).toBe(true);
+        expect(result.removed).toBe(true);
+    });
+
 test('loader bridge toggles visibility on the action events',
     async ({ page }) => {
         await page.goto(FIXTURE);

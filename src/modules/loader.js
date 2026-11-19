@@ -121,7 +121,7 @@ export class Loader extends Feature {
         }
 
         // Bridge to <tf-loader> (scaffold #916): a custom `css_class`, or
-        // an unresolvable `target_id`, keeps the legacy div container.
+        // an unresolvable `target_id`, routes to the legacy div container.
         // TODO(#965): remove once the legacy webpack pipeline is retired.
         if (this.canUseCE()) {
             this.initCE();
@@ -190,12 +190,12 @@ export class Loader extends Feature {
         let containerDiv = createElm('div');
         containerDiv.className = this.cssClass;
 
-        let targetEl = !this.targetId ?
-            this.tf.dom().parentNode : elm(this.targetId);
-        if (!this.targetId) {
-            targetEl.insertBefore(containerDiv, this.tf.dom());
-        } else {
+        const dom = this.tf.dom();
+        const targetEl = this.targetId ? elm(this.targetId) : null;
+        if (targetEl) {
             targetEl.appendChild(containerDiv);
+        } else {
+            dom.parentNode.insertBefore(containerDiv, dom);
         }
         this.cont = containerDiv;
         if (!this.html) {
