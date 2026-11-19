@@ -241,7 +241,9 @@ export class Loader extends Feature {
 
         let emitter = this.emitter;
 
-        removeElm(this.cont);
+        if (this.cont && this.cont.parentNode) {
+            removeElm(this.cont);
+        }
         this.cont = null;
 
         // Unsubscribe to events
