@@ -12,6 +12,8 @@
     <code>&lt;table-filter&gt;</code> element, so there is no imperative
     <code>new TableFilter(...)</code> call. The element wraps a light-DOM
     <code>&lt;table&gt;</code> and instantiates the engine on connect.
+    The activity indicator is rendered through
+    <code>&lt;tf-loader&gt;</code>.
 </p>
 
 <table-filter
@@ -23,6 +25,7 @@
     rows-counter="true"
     btn-reset="true"
     status-bar="true"
+    loader="true"
     no-results-message="true"
     extensions='[{"name":"sort"}]'
     col-widths='["150px","100px","100px","100px","100px","100px","100px","70px","60px"]'
@@ -37,6 +40,7 @@
     compiles it. Shipping the element in a bundle is #965.
 -->
 <script type="module" src="/src/components/tf-help.js"></script>
+<script type="module" src="/src/components/tf-loader.js"></script>
 <script type="module" src="/src/components/table-filter.js"></script>
 </body>
 </html>

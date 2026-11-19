@@ -47,6 +47,10 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
             initialized: tf.isInitialized(),
             hasSortExt: !!tf.extension('sort'),
             isoTag,
+            loaderTag: tf.feature('loader') &&
+                tf.feature('loader').cont.nodeName,
+            loaderInHost: Boolean(
+                document.querySelector('table-filter tf-loader')),
             before,
             filtered,
             restored
@@ -56,6 +60,8 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
     expect(result.initialized).toBe(true);
     expect(result.hasSortExt).toBe(true);
     expect(result.isoTag).toBe('SELECT');
+    expect(result.loaderTag).toBe('TF-LOADER');
+    expect(result.loaderInHost).toBe(true);
     expect(result.filtered).toBeGreaterThan(0);
     expect(result.filtered).toBeLessThan(result.before);
     expect(result.restored).toBe(result.before);
