@@ -157,3 +157,69 @@ test('can destroy TableFilter DOM elements', function() {
     tf.destroy();
     deepEqual(tf.isInitialized(), false, 'Filters removed');
 });
+
+/**
+ * Mount a loader on a table owned by the test
+ * @param {String} id Table id
+ * @param {Object} loaderConfig `loader` configuration object
+ * @returns {TableFilter} Initialised instance
+ */
+function mountLoader(id, loaderConfig) {
+    var table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = '<tbody>' +
+        '<tr><th>From</th><th>Destination</th></tr>' +
+        '<tr><td>Sydney</td><td>Adelaide</td></tr>' +
+        '</tbody>';
+    document.body.appendChild(table);
+
+    var instance = new TableFilter(id, {
+        base_path: '../dist/tablefilter/',
+        loader: loaderConfig
+    });
+    instance.init();
+    return instance;
+}
+
+module('Config-supplied html');
+test('Injects html as authored', function() {
+    var html = '<span class="spin" style="color:red">Loading</span>' +
+        '<my-spinner></my-spinner>';
+    var instance = mountLoader('loader-html', { html: html });
+    var cont = instance.feature('loader').cont;
+
+    equal(cont.nodeName, 'DIV', 'Legacy container');
+    equal(cont.innerHTML, html, 'Markup injected verbatim');
+    notEqual(cont.querySelector('my-spinner'), null,
+        'Custom element preserved');
+
+    instance.destroy();
+});
+
+module('Destroy');
+asyncTest('Removes the container and unsubscribes the action events',
+    function() {
+        var shown = 0;
+        var instance = mountLoader('loader-destroy', {
+            on_show_loader: function() {
+                shown++;
+            }
+        });
+        var loader = instance.feature('loader');
+        var cont = loader.cont;
+
+        instance.emitter.emit('before-filtering', instance);
+        setTimeout(function() {
+            equal(shown, 1, 'on_show_loader called while initialised');
+
+            loader.destroy();
+            equal(cont.isConnected, false, 'Container removed from the DOM');
+
+            instance.emitter.emit('before-filtering', instance);
+            setTimeout(function() {
+                equal(shown, 1, 'on_show_loader not called after destroy');
+                instance.destroy();
+                start();
+            }, 100);
+        }, 100);
+    });
