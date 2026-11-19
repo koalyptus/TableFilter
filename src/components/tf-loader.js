@@ -1,21 +1,20 @@
 /**
  * `<tf-loader>` custom element: accessible activity indicator.
  *
- * Scaffold (#916): an open shadow root exposing the `message-slot` and
+ * Scaffold: an open shadow root exposing the `message-slot` and
  * `message` parts. Consumer content (legacy `loader.html`) renders
  * through the default slot; the `text` attribute is the plain-text
  * fallback and is rendered as text. `connectedCallback()` applies the
- * shared live-region contract (`applyLiveRegion()`) to the host. The
- * Loader bridge (#917) follows.
+ * shared live-region contract (`applyLiveRegion()`) to the host.
  *
  * The configurable loader class (`loader.css_class`, default `loader`)
- * is applied to this host by the Loader bridge (#917). The element
- * ships structure and `::part()` hooks only; the look is defined by
- * the stylesheet and themes.
+ * is applied to this host by the Loader bridge. The element ships
+ * structure and `::part()` hooks only; the look is defined by the
+ * stylesheet and themes.
  *
  * Importing this module registers the element. It is not part of the
  * legacy webpack bundle (PhantomJS `_wrapNativeSuper`); consumers load
- * it as a module (#965).
+ * it as a module.
  */
 
 import {applyLiveRegion} from './attributes.js';
@@ -47,8 +46,8 @@ export class TfLoaderElement extends HTMLElement {
     }
 
     connectedCallback() {
-        // Live-region contract (#916): `applyLiveRegion()` sets
-        // role=status, aria-live=polite and aria-atomic=true on the host.
+        // Live-region contract: `applyLiveRegion()` sets role=status,
+        // aria-live=polite and aria-atomic=true on the host.
         applyLiveRegion(this);
         this._update();
         this._syncLayout();

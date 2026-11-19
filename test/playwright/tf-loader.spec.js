@@ -1,4 +1,4 @@
-// Component gates (#916 scaffold): the <tf-loader> element registers an
+// Component gates: the <tf-loader> element registers an
 // open shadow root exposing the `message-slot`/`message` parts, renders
 // the `text` attribute into the `message` part (or consumer content
 // through the slot), and connects as a polite ARIA status region.
@@ -301,7 +301,7 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
     expect(result.slot).toBe('rgb(9, 8, 7)');
 });
 
-// The host is the live region (#916); the shadow parts carry no ARIA
+// The host is the live region; the shadow parts carry no ARIA
 // attributes.
 test('connects as a polite ARIA status live region', async ({ page }) => {
     await page.goto(FIXTURE);
