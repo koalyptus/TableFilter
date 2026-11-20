@@ -3121,3 +3121,631 @@ test('help bridge keeps the paging results control before the trigger',
         expect(result.beforeClear).toBe(true);
         expect(result.clearLast).toBe(true);
     });
+// Loader bridge (#917): the feature routes through <tf-loader> when the
+// source registers it, mounting the host before the table (or into a
+// configured `target_id`) and toggling visibility on the legacy
+// before/after action events.
+const LOADER_TABLE_HTML =
+    '<tbody><tr><th>From</th></tr><tr><td>Sydney</td></tr></tbody>';
+
+const LOADER_MOUNT = `
+window.loaderPart = function (host, name) {
+    return host.shadowRoot.querySelector('[part="' + name + '"]');
+};
+window.mountLoader = async function (id, config, html) {
+    await import('/src/components/tf-loader.js');
+    const table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = html;
+    document.body.appendChild(table);
+    const tf = new TableFilter(id, Object.assign({
+        base_path: '/dist/tablefilter/',
+        rows_counter: true
+    }, config));
+    tf.init();
+    return tf;
+};
+`;
+
+test('loader bridge uses tf-loader with the legacy config',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader', {
+                loader: true
+            }, html);
+            const loader = tf.feature('loader');
+            const host = loader.cont;
+            const partMessage = window.loaderPart(host, 'message');
+            const mount = {
+                isCE: host.nodeName === 'TF-LOADER',
+                className: host.className,
+                beforeTable: host.nextSibling ===
+                    document.querySelector('#ce-loader'),
+                message: partMessage.textContent,
+                messageHidden: partMessage.hidden
+            };
+
+            // Legacy starts hidden after init (closeDelay applies).
+            await new Promise((resolve) => setTimeout(resolve, 400));
+            const hiddenAfterInit = host.style.display === 'none';
+
+            loader.destroy();
+            return Object.assign(mount, {
+                hiddenAfterInit,
+                removed: !host.isConnected
+            });
+        }, LOADER_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.className).toBe('loader');
+        expect(result.beforeTable).toBe(true);
+        expect(result.message).toBe('Loading...');
+        expect(result.messageHidden).toBe(false);
+        expect(result.hiddenAfterInit).toBe(true);
+        expect(result.removed).toBe(true);
+    });
+
+test('loader bridge maps the text config onto the message part',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-text', {
+                loader: { text: 'Fetching rows' }
+            }, html);
+            const host = tf.feature('loader').cont;
+            const text = window.loaderPart(host, 'message').textContent;
+            tf.feature('loader').destroy();
+            return { text, attribute: host.getAttribute('text') };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.text).toBe('Fetching rows');
+        expect(result.attribute).toBe('Fetching rows');
+    });
+
+test('loader bridge projects sanitised html through the slot',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-html', {
+                loader: {
+                    html: '<b id="dogfood">Dogfood</b>' +
+                        '<img src=x onerror="window.__xss=1">' +
+                        '<script>window.__xss=1<\/script>'
+                }
+            }, html);
+            const host = tf.feature('loader').cont;
+            const state = {
+                slotted: Boolean(host.querySelector('#dogfood')),
+                xss: window.__xss === 1,
+                messageHidden: window.loaderPart(host, 'message').hidden
+            };
+            tf.feature('loader').destroy();
+            return state;
+        }, LOADER_TABLE_HTML);
+
+        expect(result.slotted).toBe(true);
+        expect(result.xss).toBe(false);
+        expect(result.messageHidden).toBe(true);
+    });
+
+test('loader bridge forces the legacy path on a custom css_class',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-class', {
+                loader: { css_class: 'myLoader' }
+            }, html);
+            const loader = tf.feature('loader');
+            const host = loader.cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                elementHosts: document.querySelectorAll('tf-loader').length
+            };
+            loader.destroy();
+            return Object.assign(state, { removed: !host.isConnected });
+        }, LOADER_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('myLoader');
+        expect(result.elementHosts).toBe(0);
+        expect(result.removed).toBe(true);
+    });
+
+test('loader bridge keeps loader off without a config',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const configs = [
+                { themes: [{ name: 'default' }], loader: false },
+                { themes: [{ name: 'default' }] },
+                { enable_default_theme: true },
+                { enable_default_theme: true, loader: false },
+                { loader: false },
+                {}
+            ];
+            const mounts = [];
+            for (let i = 0; i < configs.length; i++) {
+                const tf = await window.mountLoader('ce-loader-off-' + i,
+                    configs[i], html);
+                mounts.push({
+                    feature: Boolean(tf.feature('loader')),
+                    hosts: document.querySelectorAll('tf-loader').length
+                });
+                tf.destroy();
+            }
+            return mounts;
+        }, LOADER_TABLE_HTML);
+
+        expect(result).toEqual([
+            { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 },
+            { feature: false, hosts: 0 }
+        ]);
+    });
+
+test('loader bridge mounts with themes and a configured loader',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const configs = [
+                { themes: [{ name: 'default' }], loader: true },
+                { themes: [{ name: 'default' }], loader: { text: 'Hi' } },
+                { enable_default_theme: true, loader: true }
+            ];
+            const mounts = [];
+            for (let i = 0; i < configs.length; i++) {
+                const tf = await window.mountLoader(
+                    'ce-loader-themes-' + i, configs[i], html);
+                const feature = tf.feature('loader');
+                const host = feature && feature.cont;
+                mounts.push({
+                    isCE: Boolean(host) && host.nodeName === 'TF-LOADER',
+                    className: host && host.className,
+                    connected: Boolean(host) && host.isConnected
+                });
+                tf.destroy();
+            }
+            return mounts;
+        }, LOADER_TABLE_HTML);
+
+        expect(result).toEqual([
+            { isCE: true, className: 'loader', connected: true },
+            { isCE: true, className: 'loader', connected: true },
+            { isCE: true, className: 'loader', connected: true }
+        ]);
+    });
+
+test('loader bridge tf.destroy() removes the host',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-tfdestroy', {
+                loader: true
+            }, html);
+            const host = tf.feature('loader').cont;
+            tf.destroy();
+            return {
+                connected: host.isConnected,
+                hosts: document.querySelectorAll('tf-loader').length
+            };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.connected).toBe(false);
+        expect(result.hosts).toBe(0);
+    });
+
+test('loader bridge appends the legacy div into a resolving target_id',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const box = document.createElement('div');
+            box.id = 'legacyLoaderBox';
+            document.body.appendChild(box);
+            const tf = await window.mountLoader('ce-loader-legacy-target', {
+                loader: { target_id: 'legacyLoaderBox',
+                    css_class: 'myLoader' }
+            }, html);
+            const host = tf.feature('loader').cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                inBox: host.parentNode === box,
+                elementHosts: document.querySelectorAll('tf-loader').length
+            };
+            tf.feature('loader').destroy();
+            return Object.assign(state, { removed: !host.isConnected });
+        }, LOADER_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('myLoader');
+        expect(result.inBox).toBe(true);
+        expect(result.elementHosts).toBe(0);
+        expect(result.removed).toBe(true);
+    });
+
+test('loader bridge clears the text fallback when html is configured',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const configs = [
+                { text: 'Loading...', html: '   ' },
+                {
+                    text: 'Loading...',
+                    html: '<script>window.__xss=1<\/script>'
+                },
+                { text: 'Loading...', html: '<!-- only a comment -->' }
+            ];
+            const ce = [];
+            for (let i = 0; i < configs.length; i++) {
+                const tf = await window.mountLoader(
+                    'ce-loader-empty-html-' + i, { loader: configs[i] }, html);
+                const host = tf.feature('loader').cont;
+                const message = window.loaderPart(host, 'message');
+                ce.push({
+                    tag: host.nodeName,
+                    message: message.textContent,
+                    elements: host.children.length
+                });
+                tf.destroy();
+            }
+
+            const tf = await window.mountLoader('ce-loader-empty-html-legacy', {
+                loader: {
+                    text: 'Loading...',
+                    html: '   ',
+                    css_class: 'myLoader'
+                }
+            }, html);
+            const cont = tf.feature('loader').cont;
+            const legacy = { tag: cont.nodeName, text: cont.textContent };
+            tf.destroy();
+
+            return { ce, legacy };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.ce).toEqual([
+            { tag: 'TF-LOADER', message: '', elements: 0 },
+            { tag: 'TF-LOADER', message: '', elements: 0 },
+            { tag: 'TF-LOADER', message: '', elements: 0 }
+        ]);
+        expect(result.legacy).toEqual({ tag: 'DIV', text: '   ' });
+    });
+
+test('loader bridge falls back when the registered tf-loader lacks setText',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            class Foreign extends HTMLElement {}
+            customElements.define('tf-loader', Foreign);
+
+            let error = null;
+            let state = null;
+            try {
+                const tf = await window.mountLoader('ce-loader-foreign', {
+                    loader: true
+                }, html);
+                const loader = tf.feature('loader');
+                state = {
+                    tag: loader.cont.nodeName,
+                    className: loader.cont.className,
+                    text: loader.cont.textContent
+                };
+                loader.destroy();
+            } catch (err) {
+                error = err && err.message;
+            }
+            return { error, state };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.error).toBeNull();
+        expect(result.state).toEqual({
+            tag: 'DIV',
+            className: 'loader',
+            text: 'Loading...'
+        });
+    });
+
+test('loader bridge falls back to legacy without customElements',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            Object.defineProperty(window, 'customElements',
+                { value: undefined, configurable: true });
+            let state;
+            try {
+                const tf = await window.mountLoader('ce-loader-no-ce', {
+                    loader: true
+                }, html);
+                const host = tf.feature('loader').cont;
+                state = {
+                    tag: host.nodeName,
+                    className: host.className,
+                    elementHosts:
+                        document.querySelectorAll('tf-loader').length
+                };
+                tf.feature('loader').destroy();
+            } finally {
+                delete window.customElements;
+            }
+            return state;
+        }, LOADER_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('loader');
+        expect(result.elementHosts).toBe(0);
+    });
+
+test('loader bridge destroy() tolerates an externally detached host',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-detached', {
+                loader: true
+            }, html);
+            const loader = tf.feature('loader');
+            loader.cont.remove();
+            let error = null;
+            try {
+                tf.destroy();
+            } catch (err) {
+                error = err && err.message;
+            }
+            return { error, loaderCont: loader.cont };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.error).toBeNull();
+        expect(result.loaderCont).toBeNull();
+    });
+
+test('loader bridge mounts into a target_id container',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const box = document.createElement('div');
+            box.id = 'loaderBox';
+            document.body.appendChild(box);
+            const tf = await window.mountLoader('ce-loader-target', {
+                loader: { target_id: 'loaderBox' }
+            }, html);
+            const host = tf.feature('loader').cont;
+            const state = {
+                isCE: host.nodeName === 'TF-LOADER',
+                inBox: host.parentNode === box
+            };
+            tf.feature('loader').destroy();
+            return state;
+        }, LOADER_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.inBox).toBe(true);
+    });
+
+test('loader bridge mounts before the table when target_id is missing',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-missing', {
+                loader: { target_id: 'missingBox' }
+            }, html);
+            const loader = tf.feature('loader');
+            const host = loader.cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                elementHosts: document.querySelectorAll('tf-loader').length,
+                beforeTable: host.nextSibling ===
+                    document.querySelector('#ce-loader-missing')
+            };
+            loader.destroy();
+            return Object.assign(state, { removed: !host.isConnected });
+        }, LOADER_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('loader');
+        expect(result.elementHosts).toBe(0);
+        expect(result.beforeTable).toBe(true);
+        expect(result.removed).toBe(true);
+    });
+
+test('loader bridge toggles visibility on the action events',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-events', {
+                loader: {
+                    on_show_loader(instance) {
+                        window.__onShow = (window.__onShow || 0) + 1;
+                        window.__onShowInstance =
+                            instance === tf.feature('loader');
+                    },
+                    on_hide_loader(instance) {
+                        window.__onHide = (window.__onHide || 0) + 1;
+                        window.__onHideInstance =
+                            instance === tf.feature('loader');
+                    }
+                }
+            }, html);
+            const loader = tf.feature('loader');
+            const host = loader.cont;
+
+            tf.emitter.emit('before-filtering', tf);
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            const shown = host.style.display === '';
+
+            tf.emitter.emit('after-filtering', tf);
+            await new Promise((resolve) => setTimeout(resolve, 400));
+            const hidden = host.style.display === 'none';
+
+            loader.destroy();
+            return {
+                shown,
+                hidden,
+                onShow: window.__onShow || 0,
+                onHide: window.__onHide || 0,
+                showInstance: window.__onShowInstance,
+                hideInstance: window.__onHideInstance
+            };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.shown).toBe(true);
+        expect(result.hidden).toBe(true);
+        expect(result.onShow).toBe(1);
+        expect(result.onHide).toBeGreaterThanOrEqual(1);
+        expect(result.showInstance).toBe(true);
+        expect(result.hideInstance).toBe(true);
+    });
+
+test('loader bridge destroy() unsubscribes the action events',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-destroy', {
+                loader: {
+                    on_show_loader() { window.__onShow = 0; }
+                }
+            }, html);
+            const loader = tf.feature('loader');
+            loader.destroy();
+            tf.emitter.emit('before-filtering', tf);
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            return { onShow: window.__onShow };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.onShow).toBeUndefined();
+    });
+
+test('loader bridge double-init is guarded and reset() re-inits',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountLoader('ce-loader-reset', {
+                loader: { text: 'Again' }
+            }, html);
+            const loader = tf.feature('loader');
+            loader.init();
+            const afterDoubleInit = document
+                .querySelectorAll('tf-loader').length;
+
+            loader.destroy();
+            const afterDestroy = document
+                .querySelectorAll('tf-loader').length;
+            loader.reset();
+            const host = loader.cont;
+            const afterReset = {
+                hosts: document.querySelectorAll('tf-loader').length,
+                connected: Boolean(host) && host.isConnected,
+                text: host ? window.loaderPart(host, 'message')
+                    .textContent : null
+            };
+            loader.destroy();
+            return { afterDoubleInit, afterDestroy, afterReset };
+        }, LOADER_TABLE_HTML);
+
+        expect(result.afterDoubleInit).toBe(1);
+        expect(result.afterDestroy).toBe(0);
+        expect(result.afterReset.hosts).toBe(1);
+        expect(result.afterReset.connected).toBe(true);
+        expect(result.afterReset.text).toBe('Again');
+    });
+
+test('loader bridge hosts the status bar target (pagination template)',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const config = {
+                loader: { html: '<div id="lblMsg"></div>' },
+                status_bar: { target_id: 'lblMsg' }
+            };
+            const tf = await window.mountLoader('ce-loader-status',
+                config, html);
+            const host = tf.feature('loader').cont;
+            tf.feature('statusBar').message('Sorting data...');
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            const target = document.querySelector('#lblMsg');
+            const state = {
+                isCE: host.nodeName === 'TF-LOADER',
+                targetInsideHost: Boolean(target) && host.contains(target),
+                statusText: target ? target.textContent : null
+            };
+            tf.destroy();
+            return state;
+        }, LOADER_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.targetInsideHost).toBe(true);
+        expect(result.statusText).toContain('Sorting data...');
+    });
+
+test('loader bridge keeps the pagination template on the legacy path',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: LOADER_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const config = {
+                loader: {
+                    html: '<div id="lblMsg"></div>',
+                    css_class: 'myLoader'
+                },
+                status_bar: { target_id: 'lblMsg' }
+            };
+            const tf = await window.mountLoader('ce-loader-status-legacy',
+                config, html);
+            const loader = tf.feature('loader');
+            tf.feature('statusBar').message('Sorting data...');
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            const target = document.querySelector('#lblMsg');
+            const state = {
+                tag: loader.cont.nodeName,
+                className: loader.cont.className,
+                statusText: target ? target.textContent : null
+            };
+            tf.destroy();
+            return state;
+        }, LOADER_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('myLoader');
+        expect(result.statusText).toContain('Sorting data...');
+    });
