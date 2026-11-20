@@ -9,7 +9,9 @@
 <h2>Web components pager demo</h2>
 <p>
     Paging rendered through the <code>&lt;tf-pager&gt;</code> custom
-    element (#926) instead of the legacy spans and select.
+    element (#926) instead of the legacy spans and select. The activity
+    indicator is a <code>&lt;tf-loader&gt;</code> with a configured
+    <code>text</code>.
 </p>
 
 <!-- @import partials/pre.html -->
@@ -21,6 +23,7 @@
      init waits for the registration. Both go away once the bundle
      registers the element. -->
 <script type="module" src="../src/components/tf-clear-button.js"></script>
+<script type="module" src="../src/components/tf-loader.js"></script>
 <script type="module" src="../src/components/tf-pager.js"></script>
 <script data-config>
     var filtersConfig = {
@@ -31,14 +34,21 @@
         alternate_rows: true,
         rows_counter: true,
         btn_reset: { text: 'Clear' },
-        loader: true,
+        // The bridge routes to the loader element when it is registered;
+        // `text` fills its message part.
+        loader: {
+            text: 'Loading rows...'
+        },
         status_bar: true,
         paging: {
             length: 10
         }
     };
 
-    customElements.whenDefined('tf-pager').then(function () {
+    Promise.all([
+        customElements.whenDefined('tf-pager'),
+        customElements.whenDefined('tf-loader')
+    ]).then(function () {
         var tf = new TableFilter('demo', filtersConfig);
         tf.init();
     });
