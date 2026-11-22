@@ -153,6 +153,18 @@
             'Throws Error when no DOM table'
         );
     });
+    test('throws when the table is detached at init time', function() {
+        var table = document.createElement('table');
+        table.innerHTML =
+            '<thead><tr><th>From</th></tr></thead>' +
+            '<tbody><tr><td>Sydney</td></tr></tbody>';
+        var detached = new TableFilter(table, { loader: true });
+        throws(
+            function() { detached.init(); },
+            /not attached to the document/,
+            'Throws Error when the table is not attached to the document'
+        );
+    });
     test('Can instantiate with wrong refRow', function() {
         var tf2 = new TableFilter('demo', -9);
         tf2.init();
