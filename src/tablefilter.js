@@ -938,12 +938,27 @@ export class TableFilter {
     }
 
     /**
+     * Throws when the table is not attached to the document.
+     * @private
+     */
+    assertTableAttached() {
+        const rootEl = doc.documentElement;
+        if (!rootEl || !rootEl.contains(this.dom())) {
+            throw new Error(`Could not initialise TableFilter: the HTML table
+                is not attached to the document. Append it to the DOM before
+                init().`);
+        }
+    }
+
+    /**
      * Initialise features and layout
      */
     init() {
         if (this.initialized) {
             return;
         }
+
+        this.assertTableAttached();
 
         // import main stylesheet
         this.import(this.stylesheetId, this.getStylesheetPath(), null, 'link');
