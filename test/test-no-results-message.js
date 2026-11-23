@@ -230,8 +230,8 @@ test('Injects content as authored', function() {
         base_path: '../dist/tablefilter/',
         no_results_message: {
             content: '<b id="nrRaw">Raw</b>' +
-                // Inert payload: the authored onerror attribute is preserved
-                // without writing a global when the error event fires.
+                // Inert onerror payload: the authored attribute survives
+                // without writing the __nrRaw sentinel on error.
                 '<img src=x onerror="void 0">'
         }
     });
@@ -251,6 +251,23 @@ test('Injects content as authored', function() {
     noResults.cont.querySelector('img').dispatchEvent(event);
     deepEqual('__nrRaw' in window, false, 'inert handler has no side effect');
     tfLegacy.destroy();
+});
+test('Empty form/select custom containers receive the message', function() {
+    ['form', 'select'].forEach(function(tag) {
+        var box = document.createElement(tag);
+        document.body.appendChild(box);
+        var tf = new TableFilter('demo0', {
+            base_path: '../dist/tablefilter/',
+            no_results_message: { custom_container: box }
+        });
+        tf.init();
+        var noResults = tf.feature('noResults');
+
+        deepEqual(noResults.isExternal, true, tag + ' treated as external');
+        deepEqual(noResults.cont.parentNode, box, tag + ' receives message');
+        tf.destroy();
+        document.body.removeChild(box);
+    });
 });
 test('destroy unsubscribes the toggle handler', function() {
     var tfLegacy = new TableFilter('demo0', {

@@ -50,7 +50,7 @@ export class NoResults extends Feature {
          * @type {Boolean}
          * @private
          */
-        this.isExternal = !isEmpty(this.customContainer) ||
+        this.isExternal = Boolean(this.customContainer) ||
             !isEmpty(this.customContainerId);
 
         /**

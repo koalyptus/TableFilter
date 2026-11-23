@@ -3979,6 +3979,44 @@ test('no-results bridge mounts into a custom_container element',
         expect(result.removed).toBe(true);
     });
 
+test('no-results bridge treats empty form/select containers as external',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const states = [];
+            for (const tag of ['form', 'select']) {
+                const box = document.createElement(tag);
+                box.id = 'nrEmptyContainer';
+                document.body.appendChild(box);
+                const id = 'ce-nr-empty-container-' + tag;
+                const tf = await window.mountNoResults(id,
+                    { no_results_message: { custom_container: box } }, html);
+                const feature = tf.feature('noResults');
+                const host = feature.cont;
+                states.push({
+                    tag: tag,
+                    length: box.length,
+                    isCE: host.nodeName === 'TF-NO-RESULTS',
+                    external: feature.isExternal,
+                    inBox: host.parentNode === box
+                });
+                tf.destroy();
+                document.getElementById(id).remove();
+                box.remove();
+            }
+            return states;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result).toEqual([
+            { tag: 'form', length: 0, isCE: true, external: true,
+                inBox: true },
+            { tag: 'select', length: 0, isCE: true, external: true,
+                inBox: true }
+        ]);
+    });
+
 test('no-results bridge mounts into a resolving custom_container_id',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -4047,8 +4085,9 @@ test('no-results bridge injects legacy content as authored',
             const tf = await window.mountNoResults('ce-nr-legacy-content', {
                 no_results_message: {
                     content: '<b id="nrRaw">Raw</b>' +
-                        // Inert payload: the authored onerror attribute is
-                        // preserved without writing a global on error.
+                        // Inert onerror payload: the authored attribute
+                        // survives without writing the __nrRaw sentinel
+                        // on error.
                         '<img src=x onerror="void 0">'
                 }
             }, html);
