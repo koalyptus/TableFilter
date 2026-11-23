@@ -30,9 +30,9 @@ Each component has its own parity issue with its own checklist, tests and
 closing gate. A parity issue rides the milestone its component's bridge
 landed in: milestone 4 for the table-filter, tf-status, tf-rows-counter and
 tf-clear-button work, milestone 2 for the pager, results-per-page and
-checklist work, milestone 3 for tf-help. The "Styling modernization
-(post-1.0)" milestone tracks only post-v1.0.0 work (#943, #944, #945, #969),
-not parity.
+checklist work, milestone 3 for tf-help, tf-loader and tf-no-results. The
+"Styling modernization (post-1.0)" milestone tracks only post-v1.0.0 work
+(#943, #944, #945, #969), not parity.
 
 | Component | Legacy stylesheet | Issue | Milestone |
 |---|---|---|---|
@@ -45,6 +45,7 @@ not parity.
 | `<tf-checklist>` | `static/style/filter-checklist.styl` | [#1082](https://github.com/koalyptus/TableFilter/issues/1082) | 2 — Accessibility pass & feature bridges |
 | `<tf-help>` | `static/style/help.styl` | [#1083](https://github.com/koalyptus/TableFilter/issues/1083) | 3 — Accessible overlays & instructions |
 | `<tf-loader>` | `static/style/loader.styl` | [#1102](https://github.com/koalyptus/TableFilter/issues/1102) | 3 — Accessible overlays & instructions |
+| `<tf-no-results>` | `static/style/noresults.styl` | [#1111](https://github.com/koalyptus/TableFilter/issues/1111) | 3 — Accessible overlays & instructions |
 
 The epic [#1049](https://github.com/koalyptus/TableFilter/issues/1049) holds
 only the cross-cutting work (`::part` naming, host-class to part mapping,

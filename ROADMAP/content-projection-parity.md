@@ -56,7 +56,7 @@ The bridge maps legacy options onto that surface with these rules.
 | **P2 `*_html` → light DOM** | `btn_reset.html`, `loader.html`, `help_instructions.html`, `btn_html`, `image_html`, `btn_*_page_html` | Bridge sets `host.innerHTML = cfg` (sanitised per P7); the slot renders it. Keeps integrator CSS classes working (content stays in light DOM). |
 | **P3 `*_text` → text** | `*_text`, `text`, `content`, `msg_*` | Rendered with `textContent`. Legacy defaults that embed markup/entities are split into plain text + a `*_html` path (fix the default, not the consumer). |
 | **P4 No wrapper (route 2)** | button components (ClearButton, Help widget, Paging, filtersVisibility, colsVisibility) | The element renders the bare `<slot>`; a slotted control is the control; the host adds button semantics only for element-rendered content. No nested controls. |
-| **P5 Messages preserve HTML** | StatusBar, NoResults | The message node renders configured values as HTML (`innerHTML`), matching legacy `statusBar` (`msgContainer.innerHTML = t`). The label/`text` stays text (legacy used a text node). No silent escaping. |
+| **P5 Messages preserve HTML** | StatusBar, NoResults | StatusBar renders configured values as sanitised HTML into the `message` part (#1014), matching legacy `statusBar` (`msgContainer.innerHTML = t`). NoResults renders `no_results_message.content` as sanitised projected markup through the default slot, with `text` as the `textContent` fallback (#918). The label/`text` stays text (legacy used a text node). No silent escaping. |
 | **P6 Extensions off-shadow** | colOps, gridLayout | Content written into the light-DOM table is unaffected by Shadow DOM; keep as-is. |
 | **P7 Sanitised boundary** | all | Config HTML is integrator-authored but always passed through `sanitizeHtml()` (DOMPurify) before `innerHTML`: ordinary markup is preserved, scripts / event handlers / `javascript:` URLs are stripped. The one shared helper is the trust boundary. |
 
@@ -125,7 +125,7 @@ HTML-message and sanitiser tests.
 - [ ] Route every `*_html` injection below through `sanitizeHtml()` (P7).
 - [ ] `<tf-loader>`: `loader.html` → slot (P2); text fallback (P3).
 - [ ] `<tf-help>`: instructions (`html`/`text`) + button (`btn_html`/`btn_text`) → slot(s); fix the HTML default (inventory row 5).
-- [ ] `<tf-no-results>`: `content` → slot or part; decide text vs HTML for the default message.
+- [x] `<tf-no-results>`: `content` → default slot as sanitised light-DOM markup; `text` is the plain-text `textContent` fallback ([#918](https://github.com/koalyptus/TableFilter/issues/918)); bridge projection tracked in #919.
 - [ ] `<tf-popup-filter>`: `image_html` → slotted icon (P2); the icon element owns its semantics (P4 route 2).
 
 ### 0.9.0
