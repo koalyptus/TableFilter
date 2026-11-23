@@ -11,6 +11,9 @@ test('No Results Feature', function() {
     deepEqual(tf instanceof TableFilter, true, 'TableFilter instantiated');
     notEqual(noResults, null, 'noResults instantiated');
     deepEqual(tf.noResults, true, 'noResults property');
+    deepEqual(noResults.cont.previousSibling,
+        document.querySelector('#demo0'),
+        'message inserted directly after the table');
 
     module('Feature interface');
     test('Properties', function() {
@@ -268,6 +271,23 @@ test('Empty form/select custom containers receive the message', function() {
         tf.destroy();
         document.body.removeChild(box);
     });
+});
+test('Resolving custom_container_id receives the message', function() {
+    var box = document.createElement('div');
+    box.id = 'nr-container-id';
+    document.body.appendChild(box);
+    var tf = new TableFilter('demo1', {
+        base_path: '../dist/tablefilter/',
+        no_results_message: { custom_container_id: 'nr-container-id' }
+    });
+    tf.init();
+    var noResults = tf.feature('noResults');
+
+    deepEqual(noResults.isExternal, true, 'external container configured');
+    deepEqual(noResults.cont.parentNode, box,
+        'resolved container receives the message');
+    tf.destroy();
+    document.body.removeChild(box);
 });
 test('destroy unsubscribes the toggle handler', function() {
     var tfLegacy = new TableFilter('demo0', {

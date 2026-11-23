@@ -4121,19 +4121,34 @@ test('no-results bridge toggles display and fires the callbacks',
 
         const result = await page.evaluate(async (html) => {
             const calls = [];
+            let currentTf;
+            let currentFeature;
+            const signature = (instance, feature) =>
+                (instance === currentTf) + ':' +
+                (feature === currentFeature);
             const tf = await window.mountNoResults('ce-nr-events', {
                 no_results_message: {
                     on_before_show_msg(instance, feature) {
-                        calls.push('before-show:' +
-                            (instance instanceof TableFilter) + ':' +
-                            (feature.feature === 'noResults'));
+                        calls.push('before-show:' + signature(instance,
+                            feature));
                     },
-                    on_after_show_msg() { calls.push('after-show'); },
-                    on_before_hide_msg() { calls.push('before-hide'); },
-                    on_after_hide_msg() { calls.push('after-hide'); }
+                    on_after_show_msg(instance, feature) {
+                        calls.push('after-show:' + signature(instance,
+                            feature));
+                    },
+                    on_before_hide_msg(instance, feature) {
+                        calls.push('before-hide:' + signature(instance,
+                            feature));
+                    },
+                    on_after_hide_msg(instance, feature) {
+                        calls.push('after-hide:' + signature(instance,
+                            feature));
+                    }
                 }
             }, html);
-            const host = tf.feature('noResults').cont;
+            currentTf = tf;
+            currentFeature = tf.feature('noResults');
+            const host = currentFeature.cont;
             calls.length = 0;
 
             tf.setFilterValue(0, 'ZZZ');
@@ -4150,11 +4165,9 @@ test('no-results bridge toggles display and fires the callbacks',
 
         expect(result.shown).toBe('block');
         expect(result.hidden).toBe('none');
-        expect(result.calls.slice(0, 2)).toEqual([
-            'before-show:true:true', 'after-show'
-        ]);
-        expect(result.calls.slice(2, 4)).toEqual([
-            'before-hide', 'after-hide'
+        expect(result.calls).toEqual([
+            'before-show:true:true', 'after-show:true:true',
+            'before-hide:true:true', 'after-hide:true:true'
         ]);
     });
 
@@ -4238,10 +4251,13 @@ test('no-results bridge destroy unsubscribes and tolerates detached hosts',
             const feature = tf.feature('noResults');
             const host = feature.cont;
             const initEvents = tf.emitter.events['after-filtering'].length;
+            const initEventsAll = tf.emitter.events['initialized'].length;
             calls = 0;
 
             feature.destroy();
             const afterDestroy = tf.emitter.events['after-filtering'].length;
+            const afterDestroyAll = tf.emitter.events['initialized'].length;
+            tf.emitter.emit('initialized', tf);
             tf.emitter.emit('after-filtering', tf);
             const afterEmit = {
                 calls,
@@ -4258,7 +4274,9 @@ test('no-results bridge destroy unsubscribes and tolerates detached hosts',
             }
             return {
                 initEvents,
+                initEventsAll,
                 afterDestroy,
+                afterDestroyAll,
                 afterEmit,
                 error,
                 cont: feature.cont,
@@ -4267,11 +4285,34 @@ test('no-results bridge destroy unsubscribes and tolerates detached hosts',
         }, NORESULTS_TABLE_HTML);
 
         expect(result.afterDestroy).toBe(result.initEvents - 1);
+        expect(result.afterDestroyAll).toBe(result.initEventsAll - 1);
         expect(result.afterEmit).toEqual({ calls: 0, hosts: 0 });
         expect(result.error).toBeNull();
         expect(result.cont).toBeNull();
         expect(result.removed).toBe(true);
     });
+
+test('no-results bridge tf.destroy removes the host', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountNoResults('ce-nr-tf-destroy', {
+            no_results_message: true
+        }, html);
+        const feature = tf.feature('noResults');
+        const host = feature.cont;
+
+        tf.destroy();
+        return {
+            connected: host.isConnected,
+            cont: feature.cont,
+            hosts: document.querySelectorAll('tf-no-results').length
+        };
+    }, NORESULTS_TABLE_HTML);
+
+    expect(result).toEqual({ connected: false, cont: null, hosts: 0 });
+});
 
 test('no-results bridge double-init is guarded and reset() re-inits',
     async ({ page }) => {
