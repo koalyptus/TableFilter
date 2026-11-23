@@ -230,7 +230,7 @@ test('Injects content as authored', function() {
         base_path: '../dist/tablefilter/',
         no_results_message: {
             content: '<b id="nrRaw">Raw</b>' +
-                '<img src=x onerror="window.__nrRaw=1">'
+                '<img src=x onerror="void 0">'
         }
     });
     tfLegacy.init();

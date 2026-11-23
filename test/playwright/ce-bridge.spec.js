@@ -4047,7 +4047,7 @@ test('no-results bridge injects legacy content as authored',
             const tf = await window.mountNoResults('ce-nr-legacy-content', {
                 no_results_message: {
                     content: '<b id="nrRaw">Raw</b>' +
-                        '<img src=x onerror="window.__nrRaw=1">'
+                        '<img src=x onerror="void 0">'
                 }
             }, html);
             const host = tf.feature('noResults').cont;
