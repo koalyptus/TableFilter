@@ -3,6 +3,9 @@ import {createElm, elm, removeElm} from '../dom';
 import {isEmpty, EMPTY_FN} from '../types';
 import {NONE} from '../const';
 import {defaultsStr, defaultsFn} from '../settings';
+import {sanitizeHtml} from '../sanitize';
+
+const TOGGLE_EVENTS = ['initialized', 'after-filtering'];
 
 /**
  * UI when filtering yields no matches
@@ -32,7 +35,9 @@ export class NoResults extends Feature {
          * Custom container DOM element
          * @type {DOMElement}
          */
-        this.customContainer = defaultsStr(f.custom_container, null);
+        this.customContainer = f.custom_container &&
+            typeof f.custom_container.appendChild === 'function' ?
+            f.custom_container : null;
 
         /**
          * ID of custom container element
@@ -83,6 +88,13 @@ export class NoResults extends Feature {
          * @type {Function}
          */
         this.onAfterHide = defaultsFn(f.on_after_hide_msg, EMPTY_FN);
+
+        /**
+         * Subscribed toggle handler
+         * @type {Function|null}
+         * @private
+         */
+        this.boundToggle = null;
     }
 
     /**
@@ -92,11 +104,66 @@ export class NoResults extends Feature {
         if (this.initialized) {
             return;
         }
-        let tf = this.tf;
-        let target = this.customContainer || elm(this.customContainerId) ||
-            tf.dom();
+        let targetEl = this.isExternal ?
+            this.customContainer || elm(this.customContainerId) : null;
 
-        //container
+        // TODO(#965): remove once the legacy webpack pipeline is retired.
+        if (this.canUseCE(targetEl)) {
+            this.initCE(targetEl);
+        } else {
+            this.initLegacy(targetEl);
+        }
+
+        this.boundToggle = () => this.toggle();
+        this.emitter.on(TOGGLE_EVENTS, this.boundToggle);
+
+        /** @inherited */
+        this.initialized = true;
+    }
+
+    /**
+     * Whether the feature renders through `<tf-no-results>`.
+     * @param {DOMElement} targetEl Resolved external container, if any
+     * @returns {Boolean} True when the registered element exposes `setText`
+     * and no external container is configured, or the container resolves
+     * @private
+     */
+    canUseCE(targetEl) {
+        const NoResultsElement = typeof customElements === 'undefined' ?
+            null : customElements.get('tf-no-results');
+        return Boolean(NoResultsElement) &&
+            typeof NoResultsElement.prototype.setText === 'function' &&
+            (!this.isExternal || Boolean(targetEl &&
+                typeof targetEl.appendChild === 'function'));
+    }
+
+    /**
+     * Initialize using the <tf-no-results> custom element
+     * @param {DOMElement} targetEl External container element
+     * @private
+     */
+    initCE(targetEl) {
+        const host = document.createElement('tf-no-results');
+        host.className = this.cssClass;
+        host.setText('');
+        host.innerHTML = sanitizeHtml(this.content);
+
+        if (this.isExternal) {
+            targetEl.appendChild(host);
+        } else {
+            const dom = this.tf.dom();
+            dom.parentNode.insertBefore(host, dom.nextSibling);
+        }
+        this.cont = host;
+    }
+
+    /**
+     * Initialize using the legacy div container
+     * @param {DOMElement} targetEl External container element
+     * @private
+     */
+    initLegacy(targetEl) {
+        let target = targetEl || this.tf.dom();
         let cont = createElm('div');
         cont.className = this.cssClass;
         cont.innerHTML = this.content;
@@ -108,15 +175,6 @@ export class NoResults extends Feature {
         }
 
         this.cont = cont;
-
-        // subscribe to after-filtering event
-        this.emitter.on(
-            ['initialized', 'after-filtering'],
-            () => this.toggle()
-        );
-
-        /** @inherited */
-        this.initialized = true;
     }
 
     /**
@@ -183,10 +241,14 @@ export class NoResults extends Feature {
         if (!this.initialized) {
             return;
         }
-        removeElm(this.cont);
+        if (this.cont && this.cont.parentNode) {
+            removeElm(this.cont);
+        }
         this.cont = null;
-        // unsubscribe to after-filtering event
-        this.emitter.off(['after-filtering'], () => this.toggle());
+        if (this.boundToggle) {
+            this.emitter.off(TOGGLE_EVENTS, this.boundToggle);
+            this.boundToggle = null;
+        }
 
         this.initialized = false;
     }
