@@ -3749,3 +3749,642 @@ test('loader bridge keeps the pagination template on the legacy path',
         expect(result.className).toBe('myLoader');
         expect(result.statusText).toContain('Sorting data...');
     });
+// NoResults bridge (#919): the feature routes through <tf-no-results> when
+// the source registers it, projecting `content` through the default slot and
+// keeping the legacy div (and its raw markup) on the fallback path.
+const NORESULTS_TABLE_HTML = '<thead><tr><th>From</th></tr></thead>' +
+    '<tbody><tr><td>Sydney</td></tr></tbody>';
+const NORESULTS_EMPTY_TABLE_HTML =
+    '<thead><tr><th>From</th></tr></thead><tbody></tbody>';
+
+const NORESULTS_MOUNT = `
+window.nrPart = function (host, name) {
+    return host.shadowRoot.querySelector('[part="' + name + '"]');
+};
+window.mountNoResults = async function (id, config, html) {
+    await import('/src/components/tf-no-results.js');
+    const table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = html;
+    document.body.appendChild(table);
+    const tf = new TableFilter(id, Object.assign({
+        base_path: '/dist/tablefilter/',
+        alternate_rows: true
+    }, config));
+    tf.init();
+    return tf;
+};
+`;
+
+test('no-results bridge uses tf-no-results with the legacy config',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr', {
+                no_results_message: true
+            }, html);
+            const feature = tf.feature('noResults');
+            const host = feature.cont;
+            const slot = window.nrPart(host, 'message-slot');
+            const message = window.nrPart(host, 'message');
+            const state = {
+                isCE: host.nodeName === 'TF-NO-RESULTS',
+                className: host.className,
+                afterTable: host.previousSibling ===
+                    document.querySelector('#ce-nr'),
+                slotText: slot.assignedNodes({ flatten: true })
+                    .map((node) => node.textContent || '').join(''),
+                messageText: message.textContent,
+                messageHidden: message.hidden,
+                display: host.style.display,
+                role: host.getAttribute('role'),
+                live: host.getAttribute('aria-live'),
+                atomic: host.getAttribute('aria-atomic'),
+                legacyDivs: document.querySelectorAll('div.no-results').length
+            };
+            feature.destroy();
+            return Object.assign(state, { removed: !host.isConnected });
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.className).toBe('no-results');
+        expect(result.afterTable).toBe(true);
+        expect(result.slotText).toBe('No results');
+        expect(result.messageText).toBe('');
+        expect(result.messageHidden).toBe(true);
+        expect(result.display).toBe('none');
+        expect(result.role).toBe('status');
+        expect(result.live).toBe('polite');
+        expect(result.atomic).toBe('true');
+        expect(result.legacyDivs).toBe(0);
+        expect(result.removed).toBe(true);
+    });
+
+test('no-results bridge shows an initially empty table on init',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr-empty', {
+                no_results_message: true
+            }, html);
+            const host = tf.feature('noResults').cont;
+            const state = {
+                display: host.style.display,
+                width: host.style.width,
+                hasWidth: host.style.width.indexOf('px') !== -1
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_EMPTY_TABLE_HTML);
+
+        expect(result.display).toBe('block');
+        expect(result.hasWidth).toBe(true);
+    });
+
+test('no-results bridge projects sanitised content through the slot',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr-content', {
+                no_results_message: {
+                    content: '<b id="nr-dogfood">No match</b>' +
+                        '<img src=x onerror="window.__nrXss=1">' +
+                        '<script>window.__nrXss=1<\/script>'
+                }
+            }, html);
+            const host = tf.feature('noResults').cont;
+            const state = {
+                slotted: Boolean(host.querySelector('#nr-dogfood')),
+                text: host.textContent,
+                xss: window.__nrXss === 1,
+                scripts: host.querySelectorAll('script').length,
+                handlers: host.querySelectorAll('[onerror]').length,
+                messageHidden: window.nrPart(host, 'message').hidden,
+                fallbackText: window.nrPart(host, 'message').textContent
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.slotted).toBe(true);
+        expect(result.text).toContain('No match');
+        expect(result.xss).toBe(false);
+        expect(result.scripts).toBe(0);
+        expect(result.handlers).toBe(0);
+        expect(result.messageHidden).toBe(true);
+        expect(result.fallbackText).toBe('');
+    });
+
+test('no-results bridge keeps a sanitised-away message empty',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const configs = [
+                { content: '<!-- only a comment -->' },
+                { content: '<script>window.__nrXss=1<\/script>' }
+            ];
+            const states = [];
+            for (let i = 0; i < configs.length; i++) {
+                const tf = await window.mountNoResults(
+                    'ce-nr-empty-content-' + i,
+                    { no_results_message: configs[i] }, html);
+                const host = tf.feature('noResults').cont;
+                const message = window.nrPart(host, 'message');
+                states.push({
+                    text: host.textContent,
+                    nodes: host.children.length,
+                    fallback: message.textContent,
+                    hidden: message.hidden
+                });
+                tf.destroy();
+            }
+            return states;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result).toEqual([
+            { text: '', nodes: 0, fallback: '', hidden: false },
+            { text: '', nodes: 0, fallback: '', hidden: false }
+        ]);
+    });
+
+test('no-results bridge applies a custom css_class to the host',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr-class', {
+                no_results_message: { css_class: 'myNoResults' }
+            }, html);
+            const host = tf.feature('noResults').cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                hosts: document.querySelectorAll('tf-no-results').length,
+                divClass: document.querySelectorAll('div.myNoResults').length
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.tag).toBe('TF-NO-RESULTS');
+        expect(result.className).toBe('myNoResults');
+        expect(result.hosts).toBe(1);
+        expect(result.divClass).toBe(0);
+    });
+
+test('no-results bridge mounts into a custom_container element',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const box = document.createElement('div');
+            box.id = 'nrExternal';
+            document.body.appendChild(box);
+            const tf = await window.mountNoResults('ce-nr-container', {
+                no_results_message: {
+                    custom_container: box,
+                    content: '<h3>Nothing here</h3>'
+                }
+            }, html);
+            const feature = tf.feature('noResults');
+            const host = feature.cont;
+            const state = {
+                isCE: host.nodeName === 'TF-NO-RESULTS',
+                inBox: host.parentNode === box,
+                markup: Boolean(host.querySelector('h3')),
+                external: feature.isExternal,
+                width: host.style.width,
+                display: host.style.display
+            };
+            feature.destroy();
+            return Object.assign(state, { removed: !host.isConnected });
+        }, NORESULTS_EMPTY_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.inBox).toBe(true);
+        expect(result.markup).toBe(true);
+        expect(result.external).toBe(true);
+        expect(result.width).toBe('');
+        expect(result.display).toBe('block');
+        expect(result.removed).toBe(true);
+    });
+
+test('no-results bridge mounts into a resolving custom_container_id',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const box = document.createElement('div');
+            box.id = 'nrExternalById';
+            document.body.appendChild(box);
+            const tf = await window.mountNoResults('ce-nr-container-id', {
+                no_results_message: { custom_container_id: 'nrExternalById' }
+            }, html);
+            const host = tf.feature('noResults').cont;
+            const state = {
+                isCE: host.nodeName === 'TF-NO-RESULTS',
+                inBox: host.parentNode === box
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.inBox).toBe(true);
+    });
+
+test('no-results bridge keeps an unresolved custom_container_id legacy',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr-missing', {
+                no_results_message: {
+                    custom_container_id: 'missingContainer',
+                    content: '<b>Legacy message</b>'
+                }
+            }, html);
+            const host = tf.feature('noResults').cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                inTable: host.parentNode ===
+                    document.querySelector('#ce-nr-missing'),
+                markup: host.innerHTML,
+                hosts: document.querySelectorAll('tf-no-results').length
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('no-results');
+        expect(result.inTable).toBe(true);
+        expect(result.markup).toBe('<b>Legacy message</b>');
+        expect(result.hosts).toBe(0);
+    });
+
+test('no-results bridge injects legacy content as authored',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            class Foreign extends HTMLElement {}
+            customElements.define('tf-no-results', Foreign);
+            const tf = await window.mountNoResults('ce-nr-legacy-content', {
+                no_results_message: {
+                    content: '<b id="nrRaw">Raw</b>' +
+                        '<img src=x onerror="window.__nrRaw=1">'
+                }
+            }, html);
+            const host = tf.feature('noResults').cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                markup: host.innerHTML,
+                hostHandler: Boolean(host.querySelector('[onerror]')),
+                hosts: document.querySelectorAll('tf-no-results').length
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('no-results');
+        expect(result.markup).toContain('<b id="nrRaw">Raw</b>');
+        expect(result.hostHandler).toBe(true);
+        expect(result.hosts).toBe(0);
+    });
+
+test('no-results bridge toggles display and fires the callbacks',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const calls = [];
+            const tf = await window.mountNoResults('ce-nr-events', {
+                no_results_message: {
+                    on_before_show_msg(instance, feature) {
+                        calls.push('before-show:' +
+                            (instance instanceof TableFilter) + ':' +
+                            (feature.feature === 'noResults'));
+                    },
+                    on_after_show_msg() { calls.push('after-show'); },
+                    on_before_hide_msg() { calls.push('before-hide'); },
+                    on_after_hide_msg() { calls.push('after-hide'); }
+                }
+            }, html);
+            const host = tf.feature('noResults').cont;
+            calls.length = 0;
+
+            tf.setFilterValue(0, 'ZZZ');
+            tf.filter();
+            const shown = host.style.display;
+
+            tf.setFilterValue(0, 'Sydney');
+            tf.filter();
+            const hidden = host.style.display;
+
+            tf.destroy();
+            return { shown, hidden, calls };
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.shown).toBe('block');
+        expect(result.hidden).toBe('none');
+        expect(result.calls.slice(0, 2)).toEqual([
+            'before-show:true:true', 'after-show'
+        ]);
+        expect(result.calls.slice(2, 4)).toEqual([
+            'before-hide', 'after-hide'
+        ]);
+    });
+
+test('no-results bridge sets the width from the table and grid layout',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr-width', {
+                no_results_message: true
+            }, html);
+            const feature = tf.feature('noResults');
+            const tableWidth = document.querySelector('#ce-nr-width')
+                .tHead.clientWidth;
+            feature.show();
+            const plain = feature.cont.style.width;
+            tf.destroy();
+
+            const grid = await window.mountNoResults('ce-nr-grid', {
+                grid_layout: true,
+                no_results_message: true
+            }, html);
+            const gridFeature = grid.feature('noResults');
+            const gridWidth = grid.feature('gridLayout').headTbl.clientWidth;
+            gridFeature.show();
+            const styled = gridFeature.cont.style.width;
+            grid.destroy();
+            return {
+                plain,
+                tableWidth,
+                styled,
+                gridWidth
+            };
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.plain).toBe(result.tableWidth + 'px');
+        expect(result.styled).toBe(result.gridWidth + 'px');
+    });
+
+test('no-results bridge honours disable() and enable()', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const tf = await window.mountNoResults('ce-nr-enabled', {
+            no_results_message: true
+        }, html);
+        const feature = tf.feature('noResults');
+        const host = feature.cont;
+        host.style.display = 'none';
+
+        feature.disable();
+        feature.show();
+        const disabled = host.style.display;
+
+        feature.enable();
+        feature.show();
+        const enabled = host.style.display;
+
+        tf.destroy();
+        return { disabled, enabled };
+    }, NORESULTS_TABLE_HTML);
+
+    expect(result.disabled).toBe('none');
+    expect(result.enabled).toBe('block');
+});
+
+test('no-results bridge destroy unsubscribes and tolerates detached hosts',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            let calls = 0;
+            const tf = await window.mountNoResults('ce-nr-destroy', {
+                no_results_message: {
+                    on_before_show_msg() { calls++; }
+                }
+            }, html);
+            const feature = tf.feature('noResults');
+            const host = feature.cont;
+            const initEvents = tf.emitter.events['after-filtering'].length;
+            calls = 0;
+
+            feature.destroy();
+            const afterDestroy = tf.emitter.events['after-filtering'].length;
+            tf.emitter.emit('after-filtering', tf);
+            const afterEmit = {
+                calls,
+                hosts: document.querySelectorAll('tf-no-results').length
+            };
+
+            feature.init();
+            feature.cont.remove();
+            let error = null;
+            try {
+                tf.destroy();
+            } catch (err) {
+                error = err && err.message;
+            }
+            return {
+                initEvents,
+                afterDestroy,
+                afterEmit,
+                error,
+                cont: feature.cont,
+                removed: !host.isConnected
+            };
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.afterDestroy).toBe(result.initEvents - 1);
+        expect(result.afterEmit).toEqual({ calls: 0, hosts: 0 });
+        expect(result.error).toBeNull();
+        expect(result.cont).toBeNull();
+        expect(result.removed).toBe(true);
+    });
+
+test('no-results bridge double-init is guarded and reset() re-inits',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr-reset', {
+                no_results_message: { content: 'Again' }
+            }, html);
+            const feature = tf.feature('noResults');
+            feature.init();
+            const afterDoubleInit = document
+                .querySelectorAll('tf-no-results').length;
+
+            feature.destroy();
+            const afterDestroy = document
+                .querySelectorAll('tf-no-results').length;
+            feature.reset();
+            const host = feature.cont;
+            const afterReset = {
+                hosts: document.querySelectorAll('tf-no-results').length,
+                connected: Boolean(host) && host.isConnected,
+                text: host && window.nrPart(host, 'message-slot')
+                    .assignedNodes({ flatten: true })
+                    .map((node) => node.textContent).join('')
+            };
+            feature.destroy();
+            return { afterDoubleInit, afterDestroy, afterReset };
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.afterDoubleInit).toBe(1);
+        expect(result.afterDestroy).toBe(0);
+        expect(result.afterReset.hosts).toBe(1);
+        expect(result.afterReset.connected).toBe(true);
+        expect(result.afterReset.text).toBe('Again');
+    });
+
+test('no-results bridge falls back when tf-no-results lacks setText',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            class Foreign extends HTMLElement {}
+            customElements.define('tf-no-results', Foreign);
+            const tf = await window.mountNoResults('ce-nr-foreign', {
+                no_results_message: true
+            }, html);
+            const host = tf.feature('noResults').cont;
+            const state = {
+                tag: host.nodeName,
+                className: host.className,
+                text: host.textContent,
+                hosts: document.querySelectorAll('tf-no-results').length
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('no-results');
+        expect(result.text).toBe('No results');
+        expect(result.hosts).toBe(0);
+    });
+
+test('no-results bridge falls back to legacy without customElements',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            Object.defineProperty(window, 'customElements',
+                { value: undefined, configurable: true });
+            let state;
+            try {
+                const tf = await window.mountNoResults('ce-nr-no-ce', {
+                    no_results_message: true
+                }, html);
+                const host = tf.feature('noResults').cont;
+                state = {
+                    tag: host.nodeName,
+                    className: host.className,
+                    hosts: document.querySelectorAll('tf-no-results').length
+                };
+                tf.destroy();
+            } finally {
+                delete window.customElements;
+            }
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result.tag).toBe('DIV');
+        expect(result.className).toBe('no-results');
+        expect(result.hosts).toBe(0);
+    });
+
+test('no-results bridge does not mount when no_results_message is false',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountNoResults('ce-nr-off', {
+                no_results_message: false
+            }, html);
+            const state = {
+                feature: Boolean(tf.feature('noResults')),
+                hosts: document.querySelectorAll('tf-no-results').length,
+                divs: document.querySelectorAll('div.no-results').length
+            };
+            tf.destroy();
+            return state;
+        }, NORESULTS_TABLE_HTML);
+
+        expect(result).toEqual({ feature: false, hosts: 0, divs: 0 });
+    });
+
+test('no-results bridge instances are independent', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: NORESULTS_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const first = await window.mountNoResults('ce-nr-first', {
+            no_results_message: { content: 'First message' }
+        }, html);
+        const second = await window.mountNoResults('ce-nr-second', {
+            no_results_message: {
+                content: 'Second message',
+                css_class: 'second-message'
+            }
+        }, html);
+        const firstHost = first.feature('noResults').cont;
+        const secondHost = second.feature('noResults').cont;
+        const text = (host) => window.nrPart(host, 'message-slot')
+            .assignedNodes({ flatten: true })
+            .map((node) => node.textContent).join('');
+
+        const state = {
+            firstText: text(firstHost),
+            secondText: text(secondHost),
+            firstClass: firstHost.className,
+            secondClass: secondHost.className,
+            hosts: document.querySelectorAll('tf-no-results').length
+        };
+
+        first.destroy();
+        return Object.assign(state, {
+            firstRemoved: !firstHost.isConnected,
+            secondKept: secondHost.isConnected
+        });
+    }, NORESULTS_TABLE_HTML);
+
+    expect(result.firstText).toBe('First message');
+    expect(result.secondText).toBe('Second message');
+    expect(result.firstClass).toBe('no-results');
+    expect(result.secondClass).toBe('second-message');
+    expect(result.hosts).toBe(2);
+    expect(result.firstRemoved).toBe(true);
+    expect(result.secondKept).toBe(true);
+});

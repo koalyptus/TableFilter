@@ -104,6 +104,9 @@ test('External container sanity checks', function() {
         'external container element');
     deepEqual(noResultsCustom.cont.className, 'test',
         'external container element CSS class');
+    deepEqual(noResultsCustom.cont.parentNode,
+        document.querySelector('#ext-cont'),
+        'external container receives the message');
 
     test('Can display external no results message', function() {
         tfCustom.setFilterValue(0, 'sadasd');
@@ -219,4 +222,44 @@ test('External container sanity checks', function() {
         deepEqual(tfCall.isInitialized(), false, 'Filters removed');
         tfCall = null;
     });
+});
+
+module('Legacy path regressions');
+test('Injects content as authored', function() {
+    var tfLegacy = new TableFilter('demo0', {
+        base_path: '../dist/tablefilter/',
+        no_results_message: {
+            content: '<b id="nrRaw">Raw</b>' +
+                '<img src=x onerror="window.__nrRaw=1">'
+        }
+    });
+    tfLegacy.init();
+    var noResults = tfLegacy.feature('noResults');
+
+    deepEqual(noResults.cont.nodeName, 'DIV', 'legacy container element');
+    deepEqual(
+        noResults.cont.innerHTML.indexOf('<b id="nrRaw">Raw</b>') !== -1,
+        true,
+        'markup injected as authored'
+    );
+    deepEqual(Boolean(noResults.cont.querySelector('[onerror]')), true,
+        'event handler attribute preserved');
+    tfLegacy.destroy();
+});
+test('destroy unsubscribes the toggle handler', function() {
+    var tfLegacy = new TableFilter('demo0', {
+        base_path: '../dist/tablefilter/',
+        no_results_message: true
+    });
+    tfLegacy.init();
+    var noResults = tfLegacy.feature('noResults');
+    var before = tfLegacy.emitter.events['after-filtering'].length;
+
+    noResults.destroy();
+    var after = tfLegacy.emitter.events['after-filtering'].length;
+    tfLegacy.emitter.emit('after-filtering', tfLegacy);
+
+    deepEqual(after, before - 1, 'handler removed from after-filtering');
+    deepEqual(noResults.cont, null, 'container reference cleared');
+    tfLegacy.destroy();
 });
