@@ -1,7 +1,4 @@
-// Component gates: <tf-no-results> registers an open shadow root with the
-// message-slot/message parts, renders the `text` attribute into the message
-// part (or consumer content through the slot), and connects as a polite
-// ARIA status region.
+// Component gates for the <tf-no-results> element.
 const { test, expect } = require('@playwright/test');
 
 const FIXTURE = '/test/test-emitter.html';
@@ -327,7 +324,7 @@ test('reconnecting re-enforces the live-region contract',
         expect(result.atomic).toBe('true');
     });
 
-test('renders disconnected updates and keeps the contract while hidden',
+test('renders pre-connection updates and keeps the contract while hidden',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
