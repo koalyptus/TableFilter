@@ -1,6 +1,6 @@
 import {Feature} from '../feature';
 import {createElm, elm, removeElm} from '../dom';
-import {isEmpty, EMPTY_FN} from '../types';
+import {EMPTY_FN} from '../types';
 import {NONE} from '../const';
 import {defaultsStr, defaultsFn} from '../settings';
 import {sanitizeHtml} from '../sanitize';
@@ -46,12 +46,12 @@ export class NoResults extends Feature {
         this.customContainerId = defaultsStr(f.custom_container_id, null);
 
         /**
-         * Indicates if UI is contained in a external element
+         * True when a container element is present or a container id is set
          * @type {Boolean}
          * @private
          */
         this.isExternal = Boolean(this.customContainer) ||
-            !isEmpty(this.customContainerId);
+            Boolean(this.customContainerId);
 
         /**
          * Css class assigned to container element
