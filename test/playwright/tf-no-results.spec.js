@@ -74,6 +74,56 @@ test('renders the text attribute into the message part', async ({ page }) => {
     expect(result.whitespace).toEqual({ text: '   ', hidden: false });
 });
 
+test('preserves host presentation attributes and external placement',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const container = document.createElement('div');
+            container.id = 'external-message-container';
+            document.body.appendChild(container);
+
+            const el = document.createElement('tf-no-results');
+            el.className = 'custom-message-class';
+            el.style.color = 'rgb(4, 5, 6)';
+            el.setAttribute('data-config', 'no_results_message');
+            el.setAttribute('aria-label', 'Filter result');
+            el.setAttribute('text', 'No results');
+            container.appendChild(el);
+
+            const read = () => ({
+                className: el.className,
+                color: el.style.color,
+                config: el.getAttribute('data-config'),
+                label: el.getAttribute('aria-label'),
+                parentId: el.parentNode.id,
+                text: el.shadowRoot.querySelector('[part=message]').textContent
+            });
+            const initial = read();
+
+            el.setText('Still no results');
+            return { initial, updated: read() };
+        }, COMPONENT);
+
+        expect(result.initial).toEqual({
+            className: 'custom-message-class',
+            color: 'rgb(4, 5, 6)',
+            config: 'no_results_message',
+            label: 'Filter result',
+            parentId: 'external-message-container',
+            text: 'No results'
+        });
+        expect(result.updated).toEqual({
+            className: 'custom-message-class',
+            color: 'rgb(4, 5, 6)',
+            config: 'no_results_message',
+            label: 'Filter result',
+            parentId: 'external-message-container',
+            text: 'Still no results'
+        });
+    });
+
 test('renders a markup-valued text attribute as literal text',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -275,6 +325,48 @@ test('reconnecting re-enforces the live-region contract',
         expect(result.role).toBe('status');
         expect(result.live).toBe('polite');
         expect(result.atomic).toBe('true');
+    });
+
+test('renders disconnected updates and keeps the contract while hidden',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-no-results');
+            el.setAttribute('text', 'Initial');
+            el.setAttribute('text', 'No results');
+            document.body.appendChild(el);
+            el.hidden = true;
+
+            const message = el.shadowRoot.querySelector('[part=message]');
+            const read = () => ({
+                role: el.getAttribute('role'),
+                live: el.getAttribute('aria-live'),
+                atomic: el.getAttribute('aria-atomic'),
+                hidden: el.hidden,
+                text: message.textContent
+            });
+            const hidden = read();
+
+            el.hidden = false;
+            return { hidden, shown: read() };
+        }, COMPONENT);
+
+        expect(result.hidden).toEqual({
+            role: 'status',
+            live: 'polite',
+            atomic: 'true',
+            hidden: true,
+            text: 'No results'
+        });
+        expect(result.shown).toEqual({
+            role: 'status',
+            live: 'polite',
+            atomic: 'true',
+            hidden: false,
+            text: 'No results'
+        });
     });
 
 test('is exposed to assistive tech as a single status region',

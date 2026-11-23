@@ -8,8 +8,11 @@
  * `message`, which hides while slotted content is present.
  *
  * `connectedCallback()` applies the shared live-region contract to the host.
- * The NoResults bridge (#919) applies the configurable message class to the
- * host; the look comes from the stylesheet and themes.
+ * The bridge sanitises configured markup with `sanitizeHtml()` before
+ * projecting it (P7, ROADMAP/content-projection-parity.md). The configurable
+ * message class (`no_results_message.css_class`), external containers
+ * (`custom_container`/`custom_container_id`) and show/hide callbacks stay in
+ * the bridge (#919). The look comes from the stylesheet and themes.
  *
  * Importing this module registers the element. It stays out of the legacy
  * webpack bundle (#965); consumers load it as a module.
