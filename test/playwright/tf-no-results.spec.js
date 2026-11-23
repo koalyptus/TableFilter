@@ -333,6 +333,8 @@ test('renders pre-connection updates and keeps the contract while hidden',
             const el = document.createElement('tf-no-results');
             el.setAttribute('text', 'Initial');
             el.setAttribute('text', 'No results');
+            const beforeConnect = el.shadowRoot
+                .querySelector('[part=message]').textContent;
             document.body.appendChild(el);
             el.hidden = true;
 
@@ -347,9 +349,10 @@ test('renders pre-connection updates and keeps the contract while hidden',
             const hidden = read();
 
             el.hidden = false;
-            return { hidden, shown: read() };
+            return { beforeConnect, hidden, shown: read() };
         }, COMPONENT);
 
+        expect(result.beforeConnect).toBe('No results');
         expect(result.hidden).toEqual({
             role: 'status',
             live: 'polite',
