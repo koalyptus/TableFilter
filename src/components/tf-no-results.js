@@ -14,8 +14,8 @@
  * (`custom_container`/`custom_container_id`) and show/hide callbacks stay in
  * the bridge (#919). The look comes from the stylesheet and themes.
  *
- * Importing this module registers the element. It stays out of the legacy
- * webpack bundle (#965); consumers load it as a module.
+ * Importing this module registers the element. Consumers load this module
+ * directly; #965 tracks the legacy webpack bundle.
  */
 
 import {applyLiveRegion} from './attributes.js';

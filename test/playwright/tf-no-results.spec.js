@@ -551,6 +551,7 @@ test('tolerates a shadow root without the message part', async ({ page }) => {
         await import(component);
         const el = document.createElement('tf-no-results');
         el.shadowRoot.querySelector('[part=message]').remove();
+        el._messageEl = null;
         document.body.appendChild(el);
 
         let error = null;
