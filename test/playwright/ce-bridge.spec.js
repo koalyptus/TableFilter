@@ -4047,6 +4047,8 @@ test('no-results bridge injects legacy content as authored',
             const tf = await window.mountNoResults('ce-nr-legacy-content', {
                 no_results_message: {
                     content: '<b id="nrRaw">Raw</b>' +
+                        // Inert payload: the authored onerror attribute is
+                        // preserved without writing a global on error.
                         '<img src=x onerror="void 0">'
                 }
             }, html);
@@ -4058,6 +4060,9 @@ test('no-results bridge injects legacy content as authored',
                 hostHandler: Boolean(host.querySelector('[onerror]')),
                 hosts: document.querySelectorAll('tf-no-results').length
             };
+            const event = new Event('error');
+            host.querySelector('img').dispatchEvent(event);
+            state.inert = !('__nrRaw' in window);
             tf.destroy();
             return state;
         }, NORESULTS_TABLE_HTML);
@@ -4066,6 +4071,7 @@ test('no-results bridge injects legacy content as authored',
         expect(result.className).toBe('no-results');
         expect(result.markup).toContain('<b id="nrRaw">Raw</b>');
         expect(result.hostHandler).toBe(true);
+        expect(result.inert).toBe(true);
         expect(result.hosts).toBe(0);
     });
 

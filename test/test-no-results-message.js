@@ -230,6 +230,8 @@ test('Injects content as authored', function() {
         base_path: '../dist/tablefilter/',
         no_results_message: {
             content: '<b id="nrRaw">Raw</b>' +
+                // Inert payload: the authored onerror attribute is preserved
+                // without writing a global when the error event fires.
                 '<img src=x onerror="void 0">'
         }
     });
@@ -244,6 +246,10 @@ test('Injects content as authored', function() {
     );
     deepEqual(Boolean(noResults.cont.querySelector('[onerror]')), true,
         'event handler attribute preserved');
+    var event = document.createEvent('Event');
+    event.initEvent('error', false, false);
+    noResults.cont.querySelector('img').dispatchEvent(event);
+    deepEqual('__nrRaw' in window, false, 'inert handler has no side effect');
     tfLegacy.destroy();
 });
 test('destroy unsubscribes the toggle handler', function() {
