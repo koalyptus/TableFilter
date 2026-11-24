@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
-    "@babel/core": "7.10.0",
+    "@babel/core": "7.29.13",
     "@babel/preset-env": "7.10.0",
     "@playwright/test": "^1.53.2",
     "babel-eslint": "10.1.0",
