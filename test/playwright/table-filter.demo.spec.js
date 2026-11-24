@@ -43,6 +43,20 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
         await tf.clearFilters();
         const restored = tf.getFilteredData().length;
 
+        const noResults = tf.feature('noResults');
+        const host = noResults && noResults.cont;
+        const noResultsText = host && host.shadowRoot
+            .querySelector('[part="message-slot"]')
+            .assignedNodes({ flatten: true })
+            .map((node) => node.textContent || '').join('');
+        const noResultsHidden = host && host.style.display;
+
+        tf.setFilterValue(3, 'ZZZ');
+        tf.filter();
+        const noResultsShown = host && host.style.display;
+        await tf.clearFilters();
+        const noResultsRestored = host && host.style.display;
+
         return {
             initialized: tf.isInitialized(),
             hasSortExt: !!tf.extension('sort'),
@@ -51,6 +65,15 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
                 tf.feature('loader').cont.nodeName,
             loaderInHost: Boolean(
                 document.querySelector('table-filter tf-loader')),
+            noResultsTag: host && host.nodeName,
+            noResultsInHost: Boolean(
+                document.querySelector('table-filter tf-no-results')),
+            noResultsText,
+            noResultsHidden,
+            noResultsShown,
+            noResultsRestored,
+            legacyDivs: document.querySelectorAll(
+                'table-filter div.no-results').length,
             before,
             filtered,
             restored
@@ -62,6 +85,13 @@ test(`declarative <table-filter> mounts and filters: ${DEMO_PAGE}`, async ({
     expect(result.isoTag).toBe('SELECT');
     expect(result.loaderTag).toBe('TF-LOADER');
     expect(result.loaderInHost).toBe(true);
+    expect(result.noResultsTag).toBe('TF-NO-RESULTS');
+    expect(result.noResultsInHost).toBe(true);
+    expect(result.noResultsText).toContain('No results');
+    expect(result.noResultsHidden).toBe('none');
+    expect(result.noResultsShown).toBe('block');
+    expect(result.noResultsRestored).toBe('none');
+    expect(result.legacyDivs).toBe(0);
     expect(result.filtered).toBeGreaterThan(0);
     expect(result.filtered).toBeLessThan(result.before);
     expect(result.restored).toBe(result.before);

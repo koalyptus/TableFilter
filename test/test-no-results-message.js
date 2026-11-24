@@ -11,6 +11,9 @@ test('No Results Feature', function() {
     deepEqual(tf instanceof TableFilter, true, 'TableFilter instantiated');
     notEqual(noResults, null, 'noResults instantiated');
     deepEqual(tf.noResults, true, 'noResults property');
+    deepEqual(noResults.cont.previousSibling,
+        document.querySelector('#demo0'),
+        'message inserted directly after the table');
 
     module('Feature interface');
     test('Properties', function() {
@@ -104,6 +107,9 @@ test('External container sanity checks', function() {
         'external container element');
     deepEqual(noResultsCustom.cont.className, 'test',
         'external container element CSS class');
+    deepEqual(noResultsCustom.cont.parentNode,
+        document.querySelector('#ext-cont'),
+        'external container receives the message');
 
     test('Can display external no results message', function() {
         tfCustom.setFilterValue(0, 'sadasd');
@@ -219,4 +225,84 @@ test('External container sanity checks', function() {
         deepEqual(tfCall.isInitialized(), false, 'Filters removed');
         tfCall = null;
     });
+});
+
+module('Legacy path regressions');
+test('Injects content as authored', function() {
+    var tfLegacy = new TableFilter('demo0', {
+        base_path: '../dist/tablefilter/',
+        no_results_message: {
+            content: '<b id="nrRaw">Raw</b>' +
+                // Inert onerror payload: the authored attribute survives
+                // without writing the __nrRaw sentinel on error.
+                '<img src=x onerror="void 0">'
+        }
+    });
+    tfLegacy.init();
+    var noResults = tfLegacy.feature('noResults');
+
+    deepEqual(noResults.cont.nodeName, 'DIV', 'legacy container element');
+    deepEqual(
+        noResults.cont.innerHTML.indexOf('<b id="nrRaw">Raw</b>') !== -1,
+        true,
+        'markup injected as authored'
+    );
+    deepEqual(Boolean(noResults.cont.querySelector('[onerror]')), true,
+        'event handler attribute preserved');
+    var event = document.createEvent('Event');
+    event.initEvent('error', false, false);
+    noResults.cont.querySelector('img').dispatchEvent(event);
+    deepEqual('__nrRaw' in window, false, 'inert handler has no side effect');
+    tfLegacy.destroy();
+});
+test('Empty form/select custom containers receive the message', function() {
+    ['form', 'select'].forEach(function(tag) {
+        var box = document.createElement(tag);
+        document.body.appendChild(box);
+        var tf = new TableFilter('demo0', {
+            base_path: '../dist/tablefilter/',
+            no_results_message: { custom_container: box }
+        });
+        tf.init();
+        var noResults = tf.feature('noResults');
+
+        deepEqual(noResults.isExternal, true, tag + ' treated as external');
+        deepEqual(noResults.cont.parentNode, box, tag + ' receives message');
+        tf.destroy();
+        document.body.removeChild(box);
+    });
+});
+test('Resolving custom_container_id receives the message', function() {
+    var box = document.createElement('div');
+    box.id = 'nr-container-id';
+    document.body.appendChild(box);
+    var tf = new TableFilter('demo1', {
+        base_path: '../dist/tablefilter/',
+        no_results_message: { custom_container_id: 'nr-container-id' }
+    });
+    tf.init();
+    var noResults = tf.feature('noResults');
+
+    deepEqual(noResults.isExternal, true, 'external container configured');
+    deepEqual(noResults.cont.parentNode, box,
+        'resolved container receives the message');
+    tf.destroy();
+    document.body.removeChild(box);
+});
+test('destroy unsubscribes the toggle handler', function() {
+    var tfLegacy = new TableFilter('demo0', {
+        base_path: '../dist/tablefilter/',
+        no_results_message: true
+    });
+    tfLegacy.init();
+    var noResults = tfLegacy.feature('noResults');
+    var before = tfLegacy.emitter.events['after-filtering'].length;
+
+    noResults.destroy();
+    var after = tfLegacy.emitter.events['after-filtering'].length;
+    tfLegacy.emitter.emit('after-filtering', tfLegacy);
+
+    deepEqual(after, before - 1, 'handler removed from after-filtering');
+    deepEqual(noResults.cont, null, 'container reference cleared');
+    tfLegacy.destroy();
 });
