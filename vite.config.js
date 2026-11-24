@@ -137,6 +137,24 @@ const serveDistRaw = () => ({
     }
 });
 
+// Requests to /demos redirect to the examples index at /demos/.
+const serveDemosIndex = () => ({
+    name: 'serve-demos-index',
+    configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+            const [path, query] = (req.url || '').split('?');
+            if (path === '/demos') {
+                res.statusCode = 308;
+                res.setHeader('Location', '/demos/' +
+                    (query ? '?' + query : ''));
+                res.end();
+                return;
+            }
+            next();
+        });
+    }
+});
+
 // Same {VERSION}/{AUTHOR} substitution as webpack.config.js
 const replacePlaceholders = () => ({
     name: 'tablefilter-placeholders',
@@ -186,7 +204,8 @@ module.exports = {
         publishLegacyDist(),
         injectExtImports(),
         injectSortableTable(),
-        serveDistRaw()
+        serveDistRaw(),
+        serveDemosIndex()
     ],
     build: {
         lib: {
