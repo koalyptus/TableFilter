@@ -856,20 +856,67 @@ test('removing and re-appending an open element keeps its state',
             host.appendChild(el);
             el.setOpen(true);
             el.remove();
+            let error = null;
+            try {
+                el.setAttribute('trigger-text', 'Detached');
+                el.setAttribute('open', '');
+            } catch (err) {
+                error = err && err.message;
+            }
             host.appendChild(el);
             await new Promise((resolve) => setTimeout(resolve, 0));
             const state = {
+                error,
                 open: el.hasAttribute('open'),
                 hidden: el.shadowRoot
-                    .querySelector('[part="popup"]').hidden
+                    .querySelector('[part="popup"]').hidden,
+                text: el.shadowRoot
+                    .querySelector('[part="trigger-text"]').textContent
             };
             el.remove();
             host.remove();
             return state;
         }, COMPONENT);
 
-        expect(result).toEqual({ open: true, hidden: false });
+        expect(result).toEqual({
+            error: null,
+            open: true,
+            hidden: false,
+            text: 'Detached'
+        });
     });
+
+test('a plain pointerdown event closes the popup', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-popup-filter');
+        el.innerHTML = '<input aria-label="Filter value">';
+        document.body.appendChild(el);
+        el.setOpen(true);
+
+        let error = null;
+        try {
+            document.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+        } catch (err) {
+            error = err && err.message;
+        }
+        const state = {
+            error,
+            open: el.hasAttribute('open'),
+            hidden: el.shadowRoot.querySelector('[part="popup"]').hidden
+        };
+        el.remove();
+        return state;
+    }, COMPONENT);
+
+    expect(result).toEqual({
+        error: null,
+        open: false,
+        hidden: true
+    });
+});
 
 test('upgrades declarative markup present before the module loads',
     async ({ page }) => {

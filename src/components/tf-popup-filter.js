@@ -171,6 +171,8 @@ export class TfPopupFilterElement extends HTMLElement {
      * Render attributes into the shadow parts.
      */
     _update() {
+        // The constructor installs the shadow parts before attribute
+        // callbacks run, so the parts exist on every call.
         const label = this.getAttribute('accessible-label') || '';
         if (label) {
             this._trigger.setAttribute('aria-label', label);
