@@ -151,6 +151,89 @@ test('projects a trigger control and hides the element button',
         expect(result.after).toEqual({ open: true, hidden: false });
     });
 
+test('names the popup and mirrors state onto a slotted trigger',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-popup-filter');
+            el.innerHTML = '<button type="button" slot="trigger">' +
+                'Filter</button>';
+            document.body.appendChild(el);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+
+            const sr = el.shadowRoot;
+            const popup = sr.querySelector('[part="popup"]');
+            const trigger = sr.querySelector('[part="trigger"]');
+            const slotted = el.querySelector('button');
+            const closed = {
+                label: popup.getAttribute('aria-label'),
+                labelledby: popup.getAttribute('aria-labelledby'),
+                hasPopup: slotted.getAttribute('aria-haspopup'),
+                expanded: slotted.getAttribute('aria-expanded'),
+                controls: slotted.getAttribute('aria-controls')
+            };
+
+            slotted.click();
+            const opened = {
+                slotted: slotted.getAttribute('aria-expanded'),
+                fallback: trigger.getAttribute('aria-expanded')
+            };
+
+            el.setPopupLabel('Column filter');
+            const configured = {
+                label: popup.getAttribute('aria-label'),
+                labelledby: popup.getAttribute('aria-labelledby')
+            };
+
+            el.removeAttribute('accessible-popup-label');
+            const cleared = popup.getAttribute('aria-label');
+
+            el.innerHTML = '';
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const removed = {
+                hasPopup: slotted.getAttribute('aria-haspopup'),
+                expanded: slotted.getAttribute('aria-expanded')
+            };
+
+            const labelled = document.createElement('tf-popup-filter');
+            labelled.innerHTML = '<button type="button" slot="trigger" ' +
+                'aria-label="Column filter">Icon</button>';
+            document.body.appendChild(labelled);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const labelledName = labelled.shadowRoot
+                .querySelector('[part="popup"]').getAttribute('aria-label');
+            labelled.remove();
+            el.remove();
+            return {
+                closed, opened, configured, cleared, removed, labelledName
+            };
+        }, COMPONENT);
+
+        expect(result.closed).toEqual({
+            label: 'Filter',
+            labelledby: null,
+            hasPopup: 'dialog',
+            expanded: 'false',
+            controls: null
+        });
+        expect(result.opened).toEqual({
+            slotted: 'true',
+            fallback: 'true'
+        });
+        expect(result.configured).toEqual({
+            label: 'Column filter',
+            labelledby: null
+        });
+        expect(result.cleared).toBe('Filter');
+        expect(result.removed).toEqual({
+            hasPopup: null,
+            expanded: null
+        });
+        expect(result.labelledName).toBe('Column filter');
+    });
+
 test('projects the filter container and focuses its first control',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -325,30 +408,46 @@ test('the open attribute drives the popup state', async ({ page }) => {
         const el = document.createElement('tf-popup-filter');
         el.setAttribute('open', '');
         document.body.appendChild(el);
-        const popup = el.shadowRoot.querySelector('[part="popup"]');
-        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+        const sr = el.shadowRoot;
+        const popup = sr.querySelector('[part="popup"]');
+        const trigger = sr.querySelector('[part="trigger"]');
         const declared = {
             hidden: popup.hidden,
             expanded: trigger.getAttribute('aria-expanded')
         };
 
+        const events = [];
+        document.addEventListener('open-change', (event) => {
+            events.push(event.detail.open);
+        });
+
         el.removeAttribute('open');
-        const cleared = popup.hidden;
+        const cleared = {
+            hidden: popup.hidden,
+            expanded: trigger.getAttribute('aria-expanded')
+        };
 
         el.setOpen(true);
-        const reopened = popup.hidden;
+        const reopened = {
+            hidden: popup.hidden,
+            focused: sr.activeElement === popup
+        };
 
         el.setOpen(false);
-        const closed = popup.hidden;
+        const closed = {
+            hidden: popup.hidden,
+            focused: sr.activeElement === trigger
+        };
         el.remove();
-        return { declared, cleared, reopened, closed };
+        return { declared, cleared, reopened, closed, events };
     }, COMPONENT);
 
     expect(result).toEqual({
         declared: { hidden: false, expanded: 'true' },
-        cleared: true,
-        reopened: false,
-        closed: true
+        cleared: { hidden: true, expanded: 'false' },
+        reopened: { hidden: false, focused: true },
+        closed: { hidden: true, focused: true },
+        events: [false, true, false]
     });
 });
 
@@ -737,7 +836,6 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
         named.setOpen(true);
 
         const slotted = document.createElement('tf-popup-filter');
-        slotted.setPopupLabel('Column filter');
         slotted.innerHTML = '<button slot="trigger" type="button">' +
             'Filter</button><input aria-label="Filter value">';
         scope.appendChild(slotted);

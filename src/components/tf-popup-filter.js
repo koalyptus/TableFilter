@@ -10,16 +10,17 @@
  *
  * Attributes: `trigger-text` (visible text), `accessible-label` (trigger
  * `aria-label`), `accessible-popup-label` (popup accessible name, falling
- * back to `aria-labelledby` on the trigger), `open` and `disabled`.
- * `setText()`, `setLabel()`, `setPopupLabel()` and `setOpen()` reflect the
- * matching attributes.
+ * back to the assigned trigger's label or text, then to `aria-labelledby`
+ * on the trigger), `open` and `disabled`. `setText()`, `setLabel()`,
+ * `setPopupLabel()` and `setOpen()` reflect the matching attributes.
  *
  * The trigger toggles the popup and reports state with a composed
  * `open-change` event carrying `detail: {open}`. Opening moves focus to the
  * first focusable projected filter control, or to the popup. `Escape` closes
  * the popup and returns focus to the trigger control. A pointer press outside
  * the element closes it. The host adds no role or tabindex to slotted
- * content: a slotted control owns its semantics.
+ * content: a slotted control owns its semantics. `aria-haspopup` and
+ * `aria-expanded` are mirrored onto the assigned trigger.
  *
  * The element ships no CSS class or presentational style; the look comes
  * from the stylesheet and themes through `::part()`. Importing this module
@@ -67,6 +68,9 @@ export class TfPopupFilterElement extends HTMLElement {
         this._contentSlot =
             this.shadowRoot.querySelector('slot[part="content-slot"]');
         this._reportedOpen = false;
+        // Assigned trigger attributes before this element applied popup
+        // state, keyed by element.
+        this._triggerState = new Map();
         this._onOutsidePointerDown = (event) => {
             this._handleOutsidePointerDown(event);
         };
@@ -86,6 +90,7 @@ export class TfPopupFilterElement extends HTMLElement {
     connectedCallback() {
         this._update();
         this._reportedOpen = this.hasAttribute('open');
+        this._applyOpen(false);
         this.ownerDocument.addEventListener(
             'pointerdown', this._onOutsidePointerDown, true);
     }
@@ -95,8 +100,11 @@ export class TfPopupFilterElement extends HTMLElement {
             'pointerdown', this._onOutsidePointerDown, true);
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(name) {
         this._update();
+        if (name === 'open') {
+            this._applyOpen(true);
+        }
     }
 
     /**
@@ -132,16 +140,30 @@ export class TfPopupFilterElement extends HTMLElement {
      */
     setOpen(open) {
         if (open) {
-            if (this.hasAttribute('open')) {
-                return;
-            }
             this.setAttribute('open', '');
-            this._reportOpen(true);
-            if (this.isConnected) {
-                this._focusContent();
-            }
         } else {
-            this._close(false);
+            this.removeAttribute('open');
+        }
+    }
+
+    /**
+     * Apply the open attribute to the popup, report the state and move
+     * focus into or out of the popup.
+     * @param {Boolean} moveFocus Whether opening moves focus into the popup
+     */
+    _applyOpen(moveFocus) {
+        if (!this.isConnected) {
+            return;
+        }
+        const open = this.hasAttribute('open');
+        const hadFocus = !open && this._containsFocus();
+        this._popup.hidden = !open;
+        this._syncExpanded();
+        this._reportOpen(open);
+        if (open && moveFocus && this.hasAttribute('open')) {
+            this._focusContent();
+        } else if (hadFocus) {
+            this._focusTrigger();
         }
     }
 
@@ -161,7 +183,6 @@ export class TfPopupFilterElement extends HTMLElement {
         }
         this._triggerText.textContent =
             this.getAttribute('trigger-text') || '';
-        this._setPopupName();
 
         if (this.hasAttribute('disabled')) {
             this._trigger.setAttribute('disabled', '');
@@ -170,17 +191,18 @@ export class TfPopupFilterElement extends HTMLElement {
         }
 
         this._syncLayout();
-        this._syncExpanded();
-        this._popup.hidden = !this.hasAttribute('open');
     }
 
     /**
-     * Name the popup from its own attribute, or from the trigger.
+     * Name the popup from its own attribute, from an assigned trigger
+     * control, or from the element button.
+     * @param {Array<Element>} assigned Assigned trigger elements
      */
-    _setPopupName() {
+    _setPopupName(assigned) {
         const label = this.getAttribute('accessible-popup-label') || '';
-        if (label) {
-            this._popup.setAttribute('aria-label', label);
+        const triggerName = label || this._assignedTriggerName(assigned);
+        if (triggerName) {
+            this._popup.setAttribute('aria-label', triggerName);
             this._popup.removeAttribute('aria-labelledby');
         } else {
             this._popup.removeAttribute('aria-label');
@@ -189,20 +211,94 @@ export class TfPopupFilterElement extends HTMLElement {
     }
 
     /**
-     * Show the element-rendered button only when the trigger slot has no
-     * assigned nodes.
+     * Read the accessible name of the first assigned trigger control.
+     * @param {Array<Element>} assigned Assigned trigger elements
+     * @returns {String} Trigger name, or an empty string
      */
-    _syncLayout() {
-        this._trigger.hidden = this._triggerSlot
-            .assignedNodes({ flatten: true }).length > 0;
+    _assignedTriggerName(assigned) {
+        for (const el of assigned) {
+            const label = (el.getAttribute('aria-label') || '').trim();
+            if (label) {
+                return label;
+            }
+            const text = (el.textContent || '').trim();
+            if (text) {
+                return text;
+            }
+            const image = el.querySelector('img[alt]');
+            const alt = image ? (image.getAttribute('alt') || '').trim() : '';
+            if (alt) {
+                return alt;
+            }
+        }
+        return '';
     }
 
     /**
-     * Keep `aria-expanded` in sync with the open attribute.
+     * Show the element-rendered button only when the trigger slot has no
+     * assigned nodes, and mirror the popup state onto slotted triggers.
+     */
+    _syncLayout() {
+        const assigned = this._triggerSlot
+            .assignedNodes({ flatten: true })
+            .filter((node) => node.nodeType === Node.ELEMENT_NODE);
+        this._trigger.hidden = this._triggerSlot
+            .assignedNodes({ flatten: true }).length > 0;
+        this._syncSlottedTrigger(assigned);
+        this._setPopupName(assigned);
+        this._syncExpanded();
+    }
+
+    /**
+     * Apply `aria-haspopup` to the assigned trigger controls and restore
+     * their previous value when the slot no longer carries them.
+     * @param {Array<Element>} assigned Assigned trigger elements
+     */
+    _syncSlottedTrigger(assigned) {
+        const current = new Set(assigned);
+        this._triggerState.forEach((previous, el) => {
+            if (current.has(el)) {
+                return;
+            }
+            this._restoreAttribute(el, 'aria-haspopup', previous.hasPopup);
+            this._restoreAttribute(el, 'aria-expanded', previous.expanded);
+            this._triggerState.delete(el);
+        });
+        assigned.forEach((el) => {
+            if (!this._triggerState.has(el)) {
+                this._triggerState.set(el, {
+                    hasPopup: el.getAttribute('aria-haspopup'),
+                    expanded: el.getAttribute('aria-expanded')
+                });
+            }
+            el.setAttribute('aria-haspopup', 'dialog');
+        });
+    }
+
+    /**
+     * Restore an attribute to its previous value, or remove it.
+     * @param {Element} el Element to update
+     * @param {String} name Attribute name
+     * @param {String|null} value Previous value
+     */
+    _restoreAttribute(el, name, value) {
+        if (value === null) {
+            el.removeAttribute(name);
+        } else {
+            el.setAttribute(name, value);
+        }
+    }
+
+    /**
+     * Keep `aria-expanded` in sync with the open attribute on the element
+     * button and on assigned trigger controls.
      */
     _syncExpanded() {
-        this._trigger.setAttribute('aria-expanded',
-            String(this.hasAttribute('open')));
+        const expanded = String(this.hasAttribute('open'));
+        this._trigger.setAttribute('aria-expanded', expanded);
+        this._triggerState.forEach((previous, el) => {
+            el.setAttribute('aria-expanded', expanded);
+        });
     }
 
     /**
@@ -213,27 +309,17 @@ export class TfPopupFilterElement extends HTMLElement {
             return;
         }
         if (this.hasAttribute('open')) {
-            this._close(false);
+            this._close();
         } else {
             this.setOpen(true);
         }
     }
 
     /**
-     * Close the popup and restore focus to the trigger when requested or
-     * when focus is currently inside the popup.
-     * @param {Boolean} restoreFocus Always return focus to the trigger
+     * Close the popup.
      */
-    _close(restoreFocus) {
-        if (!this.hasAttribute('open')) {
-            return;
-        }
-        const shouldRestore = restoreFocus || this._containsFocus();
+    _close() {
         this.removeAttribute('open');
-        this._reportOpen(false);
-        if (shouldRestore) {
-            this._focusTrigger();
-        }
     }
 
     /**
@@ -245,7 +331,7 @@ export class TfPopupFilterElement extends HTMLElement {
             return;
         }
         event.preventDefault();
-        this._close(true);
+        this._close();
     }
 
     /**
@@ -261,7 +347,7 @@ export class TfPopupFilterElement extends HTMLElement {
         if (path.indexOf(this) !== -1) {
             return;
         }
-        this._close(false);
+        this._close();
     }
 
     /**
