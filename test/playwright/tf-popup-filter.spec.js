@@ -190,6 +190,11 @@ test('names the popup and mirrors state onto a slotted trigger',
             el.removeAttribute('accessible-popup-label');
             const cleared = popup.getAttribute('aria-label');
 
+            el.setLabel(null);
+            const nullLabel = trigger.getAttribute('aria-label');
+            el.setPopupLabel(null);
+            const nullPopupLabel = popup.getAttribute('aria-label');
+
             el.innerHTML = '';
             await new Promise((resolve) => setTimeout(resolve, 0));
             const removed = {
@@ -207,7 +212,8 @@ test('names the popup and mirrors state onto a slotted trigger',
             labelled.remove();
             el.remove();
             return {
-                closed, opened, configured, cleared, removed, labelledName
+                closed, opened, configured, cleared, removed, labelledName,
+                nullLabel, nullPopupLabel
             };
         }, COMPONENT);
 
@@ -232,7 +238,133 @@ test('names the popup and mirrors state onto a slotted trigger',
             expanded: null
         });
         expect(result.labelledName).toBe('Column filter');
+        expect(result.nullLabel).toBeNull();
+        expect(result.nullPopupLabel).toBe('Filter');
     });
+
+test('derives the popup name from a slotted icon or falls back',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+
+            const mount = async (html) => {
+                const el = document.createElement('tf-popup-filter');
+                el.innerHTML = html;
+                document.body.appendChild(el);
+                await new Promise((resolve) => setTimeout(resolve, 0));
+                const popup = el.shadowRoot
+                    .querySelector('[part="popup"]');
+                const state = {
+                    label: popup.getAttribute('aria-label'),
+                    labelledby: popup.getAttribute('aria-labelledby')
+                };
+                el.remove();
+                return state;
+            };
+
+            return {
+                icon: await mount('<button type="button" slot="trigger">' +
+                    '<img alt="Filter column"></button>'),
+                iconNoAlt: await mount(
+                    '<button type="button" slot="trigger">' +
+                    '<img alt=""></button>'),
+                empty: await mount('<span slot="trigger"></span>')
+            };
+        }, COMPONENT);
+
+        expect(result.icon).toEqual({
+            label: 'Filter column',
+            labelledby: null
+        });
+        expect(result.iconNoAlt).toEqual({
+            label: null,
+            labelledby: 'trigger'
+        });
+        expect(result.empty).toEqual({
+            label: null,
+            labelledby: 'trigger'
+        });
+    });
+
+test('restores slotted trigger attributes when the slot empties',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-popup-filter');
+            el.innerHTML = '<button type="button" slot="trigger" ' +
+                'aria-haspopup="menu" aria-expanded="true">' +
+                'Filter</button>';
+            document.body.appendChild(el);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const slotted = el.querySelector('button');
+
+            const managed = {
+                hasPopup: slotted.getAttribute('aria-haspopup'),
+                expanded: slotted.getAttribute('aria-expanded')
+            };
+
+            el.innerHTML = '';
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const restored = {
+                hasPopup: slotted.getAttribute('aria-haspopup'),
+                expanded: slotted.getAttribute('aria-expanded')
+            };
+            el.remove();
+            return { managed, restored };
+        }, COMPONENT);
+
+        expect(result.managed).toEqual({
+            hasPopup: 'dialog',
+            expanded: 'false'
+        });
+        expect(result.restored).toEqual({
+            hasPopup: 'menu',
+            expanded: 'true'
+        });
+    });
+
+test('ignores Escape and outside presses while closed', async ({ page }) => {
+    await page.goto(FIXTURE);
+
+    const result = await page.evaluate(async (component) => {
+        await import(component);
+        const el = document.createElement('tf-popup-filter');
+        document.body.appendChild(el);
+        const sr = el.shadowRoot;
+
+        el.dispatchEvent(new KeyboardEvent('keydown', {
+            key: 'Escape', bubbles: true, composed: true
+        }));
+        document.dispatchEvent(new PointerEvent('pointerdown', {
+            bubbles: true
+        }));
+
+        let error = null;
+        sr.querySelector('[part="trigger"]').remove();
+        try {
+            el.setAttribute('trigger-text', 'Filter');
+        } catch (err) {
+            error = err && err.message;
+        }
+        const state = {
+            error,
+            open: el.hasAttribute('open'),
+            hidden: sr.querySelector('[part="popup"]').hidden
+        };
+        el.remove();
+        return state;
+    }, COMPONENT);
+
+    expect(result).toEqual({
+        error: null,
+        open: false,
+        hidden: true
+    });
+});
 
 test('projects the filter container and focuses its first control',
     async ({ page }) => {
@@ -360,6 +492,42 @@ test('Escape returns focus to a slotted trigger control',
             focused: true,
             open: false,
             triggerFocused: true
+        });
+    });
+
+test('returns focus to the host when the slotted trigger cannot focus',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-popup-filter');
+            el.innerHTML = '<span slot="trigger">Filter</span>' +
+                '<input aria-label="Filter value">';
+            document.body.appendChild(el);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+
+            const input = el.querySelector('input');
+            el.setOpen(true);
+            const focused = document.activeElement === input;
+            input.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Escape', bubbles: true, composed: true
+            }));
+            const state = {
+                focused,
+                open: el.hasAttribute('open'),
+                hostFocused: document.activeElement === el,
+                tabIndex: el.tabIndex
+            };
+            el.remove();
+            return state;
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            focused: true,
+            open: false,
+            hostFocused: true,
+            tabIndex: -1
         });
     });
 

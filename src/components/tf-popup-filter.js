@@ -171,10 +171,6 @@ export class TfPopupFilterElement extends HTMLElement {
      * Render attributes into the shadow parts.
      */
     _update() {
-        if (!this._trigger) {
-            return;
-        }
-
         const label = this.getAttribute('accessible-label') || '';
         if (label) {
             this._trigger.setAttribute('aria-label', label);
@@ -342,9 +338,7 @@ export class TfPopupFilterElement extends HTMLElement {
         if (!this.hasAttribute('open')) {
             return;
         }
-        const path = typeof event.composedPath === 'function' ?
-            event.composedPath() : [];
-        if (path.indexOf(this) !== -1) {
+        if (event.composedPath().indexOf(this) !== -1) {
             return;
         }
         this._close();
@@ -359,10 +353,7 @@ export class TfPopupFilterElement extends HTMLElement {
         if (active && this.contains(active)) {
             return true;
         }
-        const shadowActive = this.shadowRoot.activeElement;
-        return Boolean(shadowActive &&
-            (shadowActive === this._popup ||
-                this._popup.contains(shadowActive)));
+        return this.shadowRoot.activeElement === this._popup;
     }
 
     /**
@@ -391,9 +382,6 @@ export class TfPopupFilterElement extends HTMLElement {
      * the host when slotted markup hides the button.
      */
     _focusTrigger() {
-        if (!this.isConnected) {
-            return;
-        }
         const assigned = this._triggerSlot
             .assignedNodes({ flatten: true })
             .filter((node) => node.nodeType === Node.ELEMENT_NODE);
