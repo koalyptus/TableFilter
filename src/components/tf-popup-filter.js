@@ -1,31 +1,18 @@
 /**
- * `<tf-popup-filter>` custom element: accessible column filter popup.
+ * `<tf-popup-filter>`: accessible column filter popup with an open shadow
+ * root. The `trigger` slot holds consumer icons; the element renders its own
+ * button when it is empty. The default slot projects filter content into a
+ * non-modal `role="dialog"` popup.
  *
- * An open shadow root exposes a `trigger` slot for consumer icons and an
- * element-rendered `<button part="trigger">` for the no-slotted-content
- * case, following the no-wrapper rule in ROADMAP/content-projection-parity.md.
- * A non-modal `role="dialog"` popup (`part="popup"`) holds the default slot
- * for the legacy filter container; the filter controls stay in light DOM,
- * where the engine queries them.
+ * Attributes: `trigger-text`, `accessible-label`, `accessible-popup-label`,
+ * `open`, `disabled`. Methods: `setText()`, `setLabel()`, `setPopupLabel()`,
+ * `setOpen()`. State changes emit composed `open-change` with
+ * `detail: {open}`.
  *
- * Attributes: `trigger-text` (visible text), `accessible-label` (trigger
- * `aria-label`), `accessible-popup-label` (popup accessible name, falling
- * back to the assigned trigger's label or text, then to `aria-labelledby`
- * on the trigger), `open` and `disabled`. `setText()`, `setLabel()`,
- * `setPopupLabel()` and `setOpen()` reflect the matching attributes.
- *
- * The trigger toggles the popup and reports state with a composed
- * `open-change` event carrying `detail: {open}`. Opening moves focus to the
- * first focusable projected filter control, or to the popup. `Escape` closes
- * the popup and returns focus to the trigger control. A pointer press outside
- * the element closes it. The host adds no role or tabindex to slotted
- * content: a slotted control owns its semantics. `aria-haspopup` and
- * `aria-expanded` are mirrored onto the assigned trigger.
- *
- * The element ships no CSS class or presentational style; the look comes
- * from the stylesheet and themes through `::part()`. Importing this module
- * registers the element. It is not part of the legacy webpack bundle;
- * consumers load it as a module.
+ * Opening focuses the first focusable filter control or the popup. `Escape`
+ * and outside pointer presses close it; focus returns to the trigger.
+ * Popup state is mirrored onto a slotted trigger. Styling uses `::part()`;
+ * importing this module registers the element.
  */
 
 const TRIGGER_ID = 'trigger';
