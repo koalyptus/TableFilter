@@ -1201,6 +1201,222 @@ test('paging bridge emits page-change and the legacy page events',
         expect(result.after).toEqual([2, 3]);
     });
 
+// Results per page bridge (#1042): the feature routes through
+// <tf-results-per-page> when the source registers it, so the label text,
+// option list and selection live in the element while the feature keeps
+// the paging arithmetic. The host carries both legacy classes and the
+// shadow `results-select` part is the select the feature reads and writes.
+const RESULTS_MOUNT = `
+window.resultsHost = function (tf) {
+    return tf.feature('paging').resultsPerPageEl;
+};
+window.resultsPart = function (host, part) {
+    return host.shadowRoot.querySelector('[part="' + part + '"]');
+};
+window.mountResults = async function (id, config, html) {
+    await import('/src/components/tf-pager.js');
+    await import('/src/components/tf-results-per-page.js');
+    const table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = html;
+    document.body.appendChild(table);
+    const tf = new TableFilter(id, Object.assign({
+        base_path: '/dist/tablefilter/',
+        enable_icons: false
+    }, config));
+    tf.init();
+    return tf;
+};
+`;
+
+test('results per page bridge uses tf-results-per-page with the legacy config',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountResults('ce-results',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]],
+                        results_slc_css_class: 'mySlc',
+                        results_span_css_class: 'mySpan'
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = window.resultsHost(tf);
+            const select = window.resultsPart(host, 'results-select');
+            const state = {
+                isCE: host.nodeName === 'TF-RESULTS-PER-PAGE',
+                className: host.className,
+                text: window.resultsPart(host, 'results-text').textContent,
+                options: Array.from(select.options).map((o) => o.value),
+                selected: select.value,
+                pageLength: paging.pageLength,
+                isShadowSelect: paging.pageLengthSlc === select,
+                besidePager: !paging.pagerEl.contains(host),
+                sameToolbar: host.closest('.inf') ===
+                    paging.pagerEl.closest('.inf')
+            };
+
+            paging.destroy();
+            return { state, removed: !host.isConnected };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.state.isCE).toBe(true);
+        expect(result.state.className).toBe('mySlc mySpan');
+        expect(result.state.text).toBe('Rows: ');
+        expect(result.state.options).toEqual(['5', '2']);
+        expect(result.state.selected).toBe('5');
+        expect(result.state.pageLength).toBe(5);
+        expect(result.state.isShadowSelect).toBe(true);
+        expect(result.state.besidePager).toBe(true);
+        expect(result.state.sameToolbar).toBe(true);
+        expect(result.removed).toBe(true);
+    });
+
+test('results per page bridge applies a pick from the element',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountResults('ce-results-pick',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = window.resultsHost(tf);
+            const select = window.resultsPart(host, 'results-select');
+
+            select.selectedIndex = 1;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+
+            const state = {
+                pageLength: paging.pageLength,
+                nbPages: paging.nbPages,
+                pageLengthAttr: host.getAttribute('page-length'),
+                pageAttr: paging.pagerEl.getAttribute('page'),
+                options: Array.from(
+                    window.resultsPart(paging.pagerEl, 'page-select').options)
+                    .map((o) => o.value)
+            };
+
+            paging.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.pageLength).toBe(2);
+        expect(result.nbPages).toBe(6);
+        expect(result.pageLengthAttr).toBe('2');
+        expect(result.pageAttr).toBe('1');
+        expect(result.options).toEqual(['0', '2', '4', '6', '8', '10']);
+    });
+
+test('results per page bridge renders into results_per_page_target_id',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const target = document.createElement('div');
+            target.id = 'results-target';
+            document.body.appendChild(target);
+
+            const tf = await window.mountResults('ce-results-target',
+                {
+                    help_instructions: false,
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]],
+                        results_per_page_target_id: 'results-target'
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = window.resultsHost(tf);
+
+            const state = {
+                inTarget: host.parentElement === target,
+                tag: host.nodeName
+            };
+
+            paging.destroy();
+            target.remove();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.inTarget).toBe(true);
+        expect(result.tag).toBe('TF-RESULTS-PER-PAGE');
+    });
+
+test('results per page bridge keeps the attribute in step with the API',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountResults('ce-results-api',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = window.resultsHost(tf);
+
+            paging.changeResultsPerPage('2');
+
+            const state = {
+                pageLength: paging.pageLength,
+                attr: host.getAttribute('page-length'),
+                selected: window.resultsPart(host, 'results-select').value
+            };
+
+            paging.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.pageLength).toBe(2);
+        expect(result.attr).toBe('2');
+        expect(result.selected).toBe('2');
+    });
+
+test('results per page stays on the legacy path without the element',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPager('ce-results-legacy',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const state = {
+                host: paging.resultsPerPageEl,
+                tag: paging.pageLengthSlc.tagName,
+                className: paging.pageLengthSlc.className,
+                span: paging.slcResultsTxt && paging.slcResultsTxt.tagName
+            };
+
+            paging.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.host).toBe(null);
+        expect(result.tag).toBe('SELECT');
+        expect(result.className).toBe('rspg');
+        expect(result.span).toBe('SPAN');
+    });
+
 // Checklist bridge (#930): the feature routes through <tf-checklist>
 // when the source registers it, so the options, selection state and
 // open state live in the element while the feature keeps the filtering,
@@ -3120,6 +3336,39 @@ test('help bridge keeps the paging results control before the trigger',
         expect(result.selectBefore).toBe(true);
         expect(result.beforeClear).toBe(true);
         expect(result.clearLast).toBe(true);
+    });
+
+test('help bridge keeps the results element before the trigger',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: HELP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            await import('/src/components/tf-results-per-page.js');
+
+            const tf = await window.mountHelp('ce-help-results', {
+                paging: {
+                    length: 1,
+                    results_per_page: ['Rows: ', [1, 2]]
+                },
+                help_instructions: true
+            }, html);
+            const host = window.helpHost(tf);
+            const paging = tf.feature('paging');
+            const results = paging.resultsPerPageEl;
+            const state = {
+                isCE: results.nodeName === 'TF-RESULTS-PER-PAGE',
+                beforeHelp: results.nextElementSibling === host,
+                sameParent: results.parentElement === host.parentElement
+            };
+
+            tf.destroy();
+            return state;
+        }, HELP_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.beforeHelp).toBe(true);
+        expect(result.sameParent).toBe(true);
     });
 // Loader bridge (#917): the feature routes through <tf-loader> when the
 // source registers it, mounting the host before the table (or into a
