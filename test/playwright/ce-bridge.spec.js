@@ -1238,7 +1238,7 @@ test('results per page bridge uses tf-results-per-page with the legacy config',
             const tf = await window.mountResults('ce-results',
                 {
                     paging: {
-                        length: 5,
+                        length: 10,
                         results_per_page: ['Rows: ', [5, 2]],
                         results_slc_css_class: 'mySlc',
                         results_span_css_class: 'mySpan'
@@ -1253,7 +1253,12 @@ test('results per page bridge uses tf-results-per-page with the legacy config',
                 text: window.resultsPart(host, 'results-text').textContent,
                 options: Array.from(select.options).map((o) => o.value),
                 selected: select.value,
+                attr: host.getAttribute('page-length'),
                 pageLength: paging.pageLength,
+                nbPages: paging.nbPages,
+                pageOptions: Array.from(
+                    window.resultsPart(paging.pagerEl, 'page-select').options)
+                    .map((o) => o.value),
                 isShadowSelect: paging.pageLengthSlc === select,
                 besidePager: !paging.pagerEl.contains(host),
                 sameToolbar: host.closest('.inf') ===
@@ -1269,7 +1274,10 @@ test('results per page bridge uses tf-results-per-page with the legacy config',
         expect(result.state.text).toBe('Rows: ');
         expect(result.state.options).toEqual(['5', '2']);
         expect(result.state.selected).toBe('5');
+        expect(result.state.attr).toBe('5');
         expect(result.state.pageLength).toBe(5);
+        expect(result.state.nbPages).toBe(3);
+        expect(result.state.pageOptions).toEqual(['0', '5', '10']);
         expect(result.state.isShadowSelect).toBe(true);
         expect(result.state.besidePager).toBe(true);
         expect(result.state.sameToolbar).toBe(true);
@@ -1368,22 +1376,28 @@ test('results per page bridge keeps the attribute in step with the API',
                 }, html);
             const paging = tf.feature('paging');
             const host = window.resultsHost(tf);
+            const state = [];
 
-            paging.changeResultsPerPage('2');
-
-            const state = {
-                pageLength: paging.pageLength,
-                attr: host.getAttribute('page-length'),
-                selected: window.resultsPart(host, 'results-select').value
-            };
+            ['2', '5'].forEach((val) => {
+                paging.changeResultsPerPage(val);
+                state.push({
+                    pageLength: paging.pageLength,
+                    nbPages: paging.nbPages,
+                    attr: host.getAttribute('page-length'),
+                    selected: window.resultsPart(host, 'results-select').value
+                });
+            });
 
             paging.destroy();
             return state;
         }, PAGER_TABLE_HTML);
 
-        expect(result.pageLength).toBe(2);
-        expect(result.attr).toBe('2');
-        expect(result.selected).toBe('2');
+        expect(result[0]).toEqual({
+            pageLength: 2, nbPages: 6, attr: '2', selected: '2'
+        });
+        expect(result[1]).toEqual({
+            pageLength: 5, nbPages: 3, attr: '5', selected: '5'
+        });
     });
 
 test('results per page stays on the legacy path without the element',
@@ -1400,14 +1414,18 @@ test('results per page stays on the legacy path without the element',
                     }
                 }, html);
             const paging = tf.feature('paging');
+            const select = paging.pageLengthSlc;
+            const span = paging.slcResultsTxt;
             const state = {
                 host: paging.resultsPerPageEl,
-                tag: paging.pageLengthSlc.tagName,
-                className: paging.pageLengthSlc.className,
-                span: paging.slcResultsTxt && paging.slcResultsTxt.tagName
+                tag: select.tagName,
+                className: select.className,
+                span: span && span.tagName
             };
 
             paging.destroy();
+            state.selectRemoved = !select.isConnected;
+            state.spanRemoved = !span.isConnected;
             return state;
         }, PAGER_TABLE_HTML);
 
@@ -1415,6 +1433,222 @@ test('results per page stays on the legacy path without the element',
         expect(result.tag).toBe('SELECT');
         expect(result.className).toBe('rspg');
         expect(result.span).toBe('SPAN');
+        expect(result.selectRemoved).toBe(true);
+        expect(result.spanRemoved).toBe(true);
+    });
+
+test('results per page bridge works without the pager element',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            await import('/src/components/tf-results-per-page.js');
+
+            const table = document.createElement('table');
+            table.id = 'ce-results-no-pager';
+            table.innerHTML = html;
+            document.body.appendChild(table);
+            const tf = new TableFilter(table.id, {
+                base_path: '/dist/tablefilter/',
+                enable_icons: false,
+                paging: {
+                    length: 5,
+                    results_per_page: ['Rows: ', [5, 2]]
+                }
+            });
+            tf.init();
+
+            const paging = tf.feature('paging');
+            const host = paging.resultsPerPageEl;
+            const select = window.resultsPart(host, 'results-select');
+            const state = {
+                isCE: host.nodeName === 'TF-RESULTS-PER-PAGE',
+                pagerIsCE: Boolean(paging.pagerEl),
+                pageSlcTag: paging.pageSlc.tagName,
+                isShadowSelect: paging.pageLengthSlc === select,
+                pageLength: paging.pageLength
+            };
+
+            select.selectedIndex = 1;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            state.pickedLength = paging.pageLength;
+            state.pageOptions = Array.from(paging.pageSlc.options)
+                .map((o) => o.value);
+
+            tf.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.pagerIsCE).toBe(false);
+        expect(result.pageSlcTag).toBe('SELECT');
+        expect(result.isShadowSelect).toBe(true);
+        expect(result.pageLength).toBe(5);
+        expect(result.pickedLength).toBe(2);
+        expect(result.pageOptions).toEqual(
+            ['0', '2', '4', '6', '8', '10']);
+    });
+
+test('results per page bridge resets the element selection',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountResults('ce-results-reset',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = paging.resultsPerPageEl;
+
+            tf.Mod.store = { getPageLength: () => '1' };
+            paging.resetPageLength();
+
+            const select = window.resultsPart(host, 'results-select');
+            const state = {
+                value: select.value,
+                optionSelected: select.options[1].selected,
+                attr: host.getAttribute('page-length')
+            };
+
+            paging.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.value).toBe('2');
+        expect(result.optionSelected).toBe(true);
+        expect(result.attr).toBe('2');
+    });
+
+test('results per page bridge keeps the pick when no rows are valid',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountResults('ce-results-empty',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = paging.resultsPerPageEl;
+
+            tf.setFilterValue(0, 'no such city');
+            tf.filter();
+            const validRows = tf.getValidRowsNb();
+
+            paging.changeResultsPerPage('2');
+            const state = {
+                validRows,
+                value: window.resultsPart(host, 'results-select').value,
+                attr: host.getAttribute('page-length'),
+                pageLength: paging.pageLength,
+                page: paging.getPage()
+            };
+
+            paging.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result.validRows).toBe(0);
+        expect(result.value).toBe('2');
+        expect(result.attr).toBe('2');
+        expect(result.pageLength).toBe(5);
+        expect(result.page).toBe(1);
+    });
+
+test('results per page bridge unbinds the element event on destroy',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountResults('ce-results-unbind',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const host = paging.resultsPerPageEl;
+
+            paging.destroy();
+
+            let threw = false;
+            try {
+                const select = window.resultsPart(host, 'results-select');
+                select.selectedIndex = 1;
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+            } catch (err) {
+                threw = true;
+            }
+
+            return {
+                threw,
+                pageLength: paging.pageLength,
+                attr: host.getAttribute('page-length')
+            };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.threw).toBe(false);
+        expect(result.pageLength).toBe(5);
+        expect(result.attr).toBe('2');
+    });
+
+test('results per page bridge double-init is guarded and reset re-inits',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: RESULTS_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountResults('ce-results-lifecycle',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+
+            paging.init();
+            const afterDoubleInit = document
+                .querySelectorAll('tf-results-per-page').length;
+
+            paging.destroy();
+            const afterDestroy = document
+                .querySelectorAll('tf-results-per-page').length;
+
+            paging.reset();
+            const host = paging.resultsPerPageEl;
+            const afterReset = {
+                hosts: document
+                    .querySelectorAll('tf-results-per-page').length,
+                connected: Boolean(host) && host.isConnected,
+                text: host ? window.resultsPart(host, 'results-text')
+                    .textContent : null,
+                value: host ? window.resultsPart(host, 'results-select')
+                    .value : null
+            };
+
+            paging.destroy();
+            return { afterDoubleInit, afterDestroy, afterReset };
+        }, PAGER_TABLE_HTML);
+
+        expect(result.afterDoubleInit).toBe(1);
+        expect(result.afterDestroy).toBe(0);
+        expect(result.afterReset.hosts).toBe(1);
+        expect(result.afterReset.connected).toBe(true);
+        expect(result.afterReset.text).toBe('Rows: ');
+        expect(result.afterReset.value).toBe('5');
     });
 
 // Checklist bridge (#930): the feature routes through <tf-checklist>
@@ -3346,10 +3580,15 @@ test('help bridge keeps the results element before the trigger',
         const result = await page.evaluate(async (html) => {
             await import('/src/components/tf-results-per-page.js');
 
+            const target = document.createElement('div');
+            target.id = 'help-results-target';
+            document.body.appendChild(target);
+
             const tf = await window.mountHelp('ce-help-results', {
                 paging: {
                     length: 1,
-                    results_per_page: ['Rows: ', [1, 2]]
+                    results_per_page: ['Rows: ', [1, 2]],
+                    results_per_page_target_id: target.id
                 },
                 help_instructions: true
             }, html);
@@ -3359,17 +3598,21 @@ test('help bridge keeps the results element before the trigger',
             const state = {
                 isCE: results.nodeName === 'TF-RESULTS-PER-PAGE',
                 beforeHelp: results.nextElementSibling === host,
-                sameParent: results.parentElement === host.parentElement
+                sameParent: results.parentElement === host.parentElement,
+                notInTarget: results.parentElement !== target
             };
 
             tf.destroy();
+            target.remove();
             return state;
         }, HELP_TABLE_HTML);
 
         expect(result.isCE).toBe(true);
         expect(result.beforeHelp).toBe(true);
         expect(result.sameParent).toBe(true);
+        expect(result.notInTarget).toBe(true);
     });
+
 // Loader bridge (#917): the feature routes through <tf-loader> when the
 // source registers it, mounting the host before the table (or into a
 // configured `target_id`) and toggling visibility on the legacy
