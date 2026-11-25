@@ -173,6 +173,7 @@ export class PopupFilter extends Feature {
          */
         this.boundHandlers = {
             mouseup: (event) => this.onMouseup(event),
+            containerClick: (event) => stopEvt(event),
             beforeFiltering: () => this.setIconsState(),
             afterFiltering: () => this.closeAll(),
             cellProcessed: (tf, cellIndex) => this.changeState(cellIndex, true),
@@ -284,24 +285,42 @@ export class PopupFilter extends Feature {
     reset() {
         this.enable();
         this.init();
-        this.buildIcons();
+        if (!this.tf.gridLayout) {
+            this.buildIcons();
+        }
         this.buildAll();
     }
 
     /**
      * Whether the feature renders through `<tf-popup-filter>`.
-     * @returns {Boolean} True when the registered element exposes the
-     * popup state and labelling APIs used by the bridge
+     * A definition is accepted when it exposes the bridge methods and the
+     * shadow parts the bridge projects into.
+     * @returns {Boolean} True when the bridge renders through the element
      * @private
      */
     canUseCE() {
         const PopupFilterElement = typeof customElements === 'undefined' ?
             null : customElements.get('tf-popup-filter');
-        return Boolean(PopupFilterElement) &&
-            typeof PopupFilterElement.prototype.setOpen === 'function' &&
-            typeof PopupFilterElement.prototype.setPopupLabel === 'function' &&
-            typeof PopupFilterElement.prototype.setLabel === 'function' &&
-            typeof PopupFilterElement.prototype.setText === 'function';
+        if (!PopupFilterElement ||
+            typeof PopupFilterElement.prototype.setOpen !== 'function' ||
+            typeof PopupFilterElement.prototype.setPopupLabel !== 'function' ||
+            typeof PopupFilterElement.prototype.setLabel !== 'function' ||
+            typeof PopupFilterElement.prototype.setText !== 'function') {
+            return false;
+        }
+
+        let probe;
+        try {
+            probe = document.createElement('tf-popup-filter');
+        } catch (e) {
+            return false;
+        }
+        const shadow = probe.shadowRoot;
+        return Boolean(shadow &&
+            shadow.querySelector('slot[name="trigger"]') &&
+            shadow.querySelector('[part="trigger"]') &&
+            shadow.querySelector('[part="popup"]') &&
+            shadow.querySelector('slot[part="content-slot"]'));
     }
 
     /**
@@ -334,6 +353,11 @@ export class PopupFilter extends Feature {
      * @private
      */
     buildIconCE(colIndex) {
+        const existing = this.hosts[colIndex];
+        if (existing && existing.parentNode) {
+            return;
+        }
+
         const host = document.createElement('tf-popup-filter');
         host.className = this.placeholderCssClass;
         host.setText(FILTER_TRIGGER_TEXT);
@@ -451,6 +475,11 @@ export class PopupFilter extends Feature {
      * @private
      */
     buildIconLegacy(colIndex) {
+        const existing = this.fltSpans[colIndex];
+        if (existing && existing.parentNode) {
+            return;
+        }
+
         let tf = this.tf;
         let icon = createElm('span', ['ci', colIndex]);
         icon.innerHTML = sanitizeHtml(this.iconHtml);
@@ -481,7 +510,7 @@ export class PopupFilter extends Feature {
         let cont = div ||
             createElm('div', ['id', contId], ['class', this.containerCssClass]);
         tf.externalFltIds[colIndex] = cont.id;
-        addEvt(cont, 'click', (evt) => stopEvt(evt));
+        addEvt(cont, 'click', this.boundHandlers.containerClick);
 
         const host = this.hosts[colIndex];
         if (host) {
@@ -563,9 +592,8 @@ export class PopupFilter extends Feature {
 
         if (host) {
             this.setCEOpen(host, false);
-        } else {
-            container.style.display = NONE;
         }
+        container.style.display = NONE;
         if (this.activeFilterIdx === colIndex) {
             this.activeFilterIdx = -1;
         }
@@ -683,6 +711,8 @@ export class PopupFilter extends Feature {
                 icon = this.fltSpans[i],
                 iconImg = this.fltIcons[i];
             if (container) {
+                removeEvt(container, 'click',
+                    this.boundHandlers.containerClick);
                 if (container.parentNode) {
                     removeElm(container);
                 }
