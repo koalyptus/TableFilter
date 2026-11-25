@@ -4794,8 +4794,7 @@ test('popup filter bridge applies configurable classes and host width',
             const state = {
                 hostClass: host.className,
                 containerClass: container.className,
-                width: host.style.width,
-                hasPixelWidth: /^\d+px$/.test(host.style.width)
+                width: host.style.width
             };
             tf.destroy();
             return state;
@@ -4803,7 +4802,7 @@ test('popup filter bridge applies configurable classes and host width',
 
         expect(result.hostClass).toBe('customPlaceholder');
         expect(result.containerClass).toBe('customPopup');
-        expect(result.hasPixelWidth).toBe(true);
+        expect(result.width).toMatch(/^\d+px$/);
     });
 
 test('popup filter bridge falls back to legacy markup without the element',
@@ -4842,6 +4841,40 @@ test('popup filter bridge falls back to legacy markup without the element',
         expect(result.container).toBe(3);
         expect(result.icon).toBe('IMG');
         expect(result.open).toBe(true);
+    });
+
+test('popup filter bridge destroy removes an open legacy mouseup listener',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate((html) => {
+            const table = document.createElement('table');
+            table.id = 'popup-legacy-listener';
+            table.innerHTML = html;
+            document.body.appendChild(table);
+            const tf = new TableFilter('popup-legacy-listener', {
+                base_path: '/dist/tablefilter/',
+                popup_filters: true,
+                col_0: 'select',
+                col_1: 'select',
+                col_2: 'multiple'
+            });
+            tf.init();
+
+            const feature = tf.feature('popupFilter');
+            feature.open(0);
+            tf.destroy();
+
+            const activeAfterDestroy = feature.activeFilterIdx;
+            let staleMouseup = 0;
+            feature.onMouseup = () => staleMouseup++;
+            feature.activeFilterIdx = 0;
+            window.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+            return { activeAfterDestroy, staleMouseup };
+        }, POPUP_TABLE_HTML);
+
+        expect(result.activeAfterDestroy).toBe(-1);
+        expect(result.staleMouseup).toBe(0);
     });
 
 test('popup filter bridge destroy and reset reprojects cached containers',

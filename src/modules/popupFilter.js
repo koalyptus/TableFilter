@@ -716,6 +716,8 @@ export class PopupFilter extends Feature {
         this.hosts = [];
         this.ceEvt = [];
         this.syncingCEOpen = false;
+        this.activeFilterIdx = -1;
+        removeEvt(root, 'mouseup', this.boundHandlers.mouseup);
 
         // TODO: expose an API to handle external filter IDs
         this.tf.externalFltIds = [];
