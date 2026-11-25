@@ -4474,3 +4474,590 @@ test('no-results bridge instances are independent', async ({ page }) => {
     expect(result.firstRemoved).toBe(true);
     expect(result.secondKept).toBe(true);
 });
+
+// PopupFilter bridge (#921): the feature routes trigger and popup state
+// through <tf-popup-filter> while keeping the legacy filter containers,
+// callbacks, icon state and close-on-filtering behaviour.
+const POPUP_TABLE_HTML =
+    '<thead><tr><th>City</th><th>Country</th><th>Code</th></tr></thead>' +
+    '<tbody><tr><td>Sydney</td><td>Australia</td><td>AU</td></tr>' +
+    '<tr><td>Paris</td><td>France</td><td>FR</td></tr></tbody>';
+
+const POPUP_MOUNT = `
+window.popupPart = function (host, name) {
+    return host.shadowRoot.querySelector('[part="' + name + '"]');
+};
+window.popupAssigned = function (host, name) {
+    const slot = host.shadowRoot.querySelector('slot[name="' + name + '"]');
+    return slot ? slot.assignedNodes({ flatten: true }) : [];
+};
+window.mountPopup = async function (id, config, html) {
+    await import('/src/components/tf-popup-filter.js');
+    const table = document.createElement('table');
+    table.id = id;
+    table.innerHTML = html;
+    document.body.appendChild(table);
+    const tf = new TableFilter(id, Object.assign({
+        base_path: '/dist/tablefilter/',
+        popup_filters: true,
+        col_0: 'select',
+        col_1: 'select',
+        col_2: 'multiple'
+    }, config));
+    tf.init();
+    return tf;
+};
+`;
+
+test('popup filter bridge uses tf-popup-filter with the legacy config',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const calls = [];
+            const record = (name) =>
+                function (feature, container, colIndex) {
+                    calls.push({
+                        name,
+                        isFeature: feature === tf.feature('popupFilter'),
+                        containerId: container && container.id,
+                        colIndex,
+                        argc: arguments.length
+                    });
+                };
+            const tf = await window.mountPopup('ce-popup', {
+                popup_filters: {
+                    on_before_popup_filter_open: record('beforeOpen'),
+                    on_after_popup_filter_open: record('afterOpen'),
+                    on_before_popup_filter_close: record('beforeClose'),
+                    on_after_popup_filter_close: record('afterClose')
+                }
+            }, html);
+            const feature = tf.feature('popupFilter');
+            const host = feature.hosts[0];
+            const container = feature.fltElms[0];
+            const trigger = window.popupAssigned(host, 'trigger')[0];
+
+            const initial = {
+                isCE: host.nodeName === 'TF-POPUP-FILTER',
+                inHeader: host.parentNode === tf.getHeaderElement(0),
+                hostClass: host.className,
+                containerClass: container.className,
+                containerId: container.id,
+                externalId: tf.externalFltIds[0],
+                containerInHost: container.parentNode === host,
+                triggerTag: trigger.nodeName,
+                triggerType: trigger.getAttribute('type'),
+                triggerSrc: trigger.querySelector('img').getAttribute('src'),
+                popupLabel: host.getAttribute('accessible-popup-label'),
+                elementTriggerHidden: window.popupPart(host, 'trigger').hidden,
+                legacyPlaceholders:
+                    document.querySelectorAll('div.popUpPlaceholder').length
+            };
+
+            trigger.click();
+            const opened = {
+                hasOpen: host.hasAttribute('open'),
+                popupHidden: window.popupPart(host, 'popup').hidden,
+                containerDisplay: container.style.display,
+                activeIdx: feature.activeFilterIdx,
+                calls: calls.slice()
+            };
+
+            trigger.click();
+            const closed = {
+                hasOpen: host.hasAttribute('open'),
+                containerDisplay: container.style.display,
+                activeIdx: feature.activeFilterIdx,
+                calls: calls.slice()
+            };
+
+            host.setOpen(true);
+            const programmatic = calls.slice();
+
+            tf.destroy();
+            return Object.assign(initial, {
+                opened, closed, programmatic, removed: !host.isConnected
+            });
+        }, POPUP_TABLE_HTML);
+
+        expect(result.isCE).toBe(true);
+        expect(result.inHeader).toBe(true);
+        expect(result.hostClass).toBe('popUpPlaceholder');
+        expect(result.containerClass).toBe('popUpFilter');
+        expect(result.containerId).toBe(result.externalId);
+        expect(result.containerInHost).toBe(true);
+        expect(result.triggerTag).toBe('BUTTON');
+        expect(result.triggerType).toBe('button');
+        expect(result.triggerSrc).toContain('icn_filter.gif');
+        expect(result.popupLabel).toBe('Column filter');
+        expect(result.elementTriggerHidden).toBe(true);
+        expect(result.legacyPlaceholders).toBe(0);
+        expect(result.opened.hasOpen).toBe(true);
+        expect(result.opened.popupHidden).toBe(false);
+        expect(result.opened.containerDisplay).toBe('block');
+        expect(result.opened.activeIdx).toBe(0);
+        const callSeq = (calls) => calls.map(
+            (call) => `${call.name}:${call.colIndex}`);
+        expect(callSeq(result.opened.calls)).toEqual([
+            'beforeClose:1', 'afterClose:1',
+            'beforeClose:2', 'afterClose:2',
+            'beforeOpen:0', 'afterOpen:0'
+        ]);
+        expect(result.closed.hasOpen).toBe(false);
+        expect(result.closed.containerDisplay).toBe('none');
+        expect(result.closed.activeIdx).toBe(-1);
+        expect(callSeq(result.closed.calls)).toEqual([
+            'beforeClose:1', 'afterClose:1',
+            'beforeClose:2', 'afterClose:2',
+            'beforeOpen:0', 'afterOpen:0',
+            'beforeClose:0', 'afterClose:0'
+        ]);
+        expect(callSeq(result.programmatic)).toEqual([
+            'beforeClose:1', 'afterClose:1',
+            'beforeClose:2', 'afterClose:2',
+            'beforeOpen:0', 'afterOpen:0',
+            'beforeClose:0', 'afterClose:0',
+            'beforeClose:1', 'afterClose:1',
+            'beforeClose:2', 'afterClose:2',
+            'beforeOpen:0', 'afterOpen:0'
+        ]);
+        for (const call of result.closed.calls.filter(
+            (entry) => entry.colIndex === 0)) {
+            expect(call.isFeature).toBe(true);
+            expect(call.containerId).toBe(result.containerId);
+            expect(call.argc).toBe(3);
+        }
+        expect(result.removed).toBe(true);
+    });
+
+test('popup filter bridge sanitises image_html and keeps a keyboard ' +
+    'activatable trigger', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: POPUP_MOUNT });
+
+    const mounted = await page.evaluate(async (html) => {
+        const tf = await window.mountPopup('ce-popup-markup', {
+            popup_filters: {
+                image_html: '<span class="filterIcon" ' +
+                    'onclick="window.__popupXss = 1">Filter me' +
+                    '<img src="/icon.gif" alt="Filter icon" ' +
+                    'onerror="window.__popupXss = 2"></span>'
+            }
+        }, html);
+        const host = tf.feature('popupFilter').hosts[0];
+        const trigger = window.popupAssigned(host, 'trigger')[0];
+        trigger.focus();
+        return {
+            tag: trigger.nodeName,
+            type: trigger.getAttribute('type'),
+            className: trigger.querySelector('.filterIcon').className,
+            alt: trigger.querySelector('img').getAttribute('alt'),
+            xss: window.__popupXss,
+            focused: document.activeElement === trigger,
+            popupLabel: host.getAttribute('accessible-popup-label')
+        };
+    }, POPUP_TABLE_HTML);
+
+    expect(mounted.tag).toBe('BUTTON');
+    expect(mounted.type).toBe('button');
+    expect(mounted.className).toBe('filterIcon');
+    expect(mounted.alt).toBe('Filter icon');
+    expect(mounted.xss).toBeUndefined();
+    expect(mounted.focused).toBe(true);
+    expect(mounted.popupLabel).toBe('Filter me');
+
+    await page.keyboard.press('Enter');
+    expect(await page.evaluate(() =>
+        document.querySelector('tf-popup-filter').hasAttribute('open')))
+        .toBe(true);
+});
+
+test('popup filter bridge keeps nested focusable image_html unwrapped',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const mounted = await page.evaluate(async (html) => {
+            const tf = await window.mountPopup('ce-popup-nested', {
+                popup_filters: {
+                    image_html: '<span class="filterWrap">' +
+                        '<button type="button" class="innerTrigger">' +
+                        'Open filter</button></span>'
+                }
+            }, html);
+            const host = tf.feature('popupFilter').hosts[0];
+            const trigger = window.popupAssigned(host, 'trigger')[0];
+            const inner = trigger.querySelector('.innerTrigger');
+            inner.focus();
+            return {
+                triggerTag: trigger.nodeName,
+                triggerClass: trigger.className,
+                slotted: host.querySelectorAll('[slot="trigger"]').length,
+                popupLabel: host.getAttribute('accessible-popup-label'),
+                focused: document.activeElement === inner
+            };
+        }, POPUP_TABLE_HTML);
+
+        expect(mounted.triggerTag).toBe('SPAN');
+        expect(mounted.triggerClass).toBe('filterWrap');
+        expect(mounted.slotted).toBe(1);
+        expect(mounted.popupLabel).toBe('Open filter');
+        expect(mounted.focused).toBe(true);
+
+        await page.keyboard.press('Enter');
+        expect(await page.evaluate(() =>
+            document.querySelector('tf-popup-filter').hasAttribute('open')))
+            .toBe(true);
+    });
+
+test('popup filter bridge swaps image and image_active icon state',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPopup('ce-popup-icons', {
+                popup_filters: {
+                    image: '/idle.gif',
+                    image_active: '/active.gif'
+                }
+            }, html);
+            const feature = tf.feature('popupFilter');
+            const icon = feature.fltIcons[0];
+            const idle = icon.src;
+            tf.emitter.emit('cell-processed', tf, 0);
+            const active = icon.src;
+            tf.emitter.emit('before-filtering', tf);
+            const restored = icon.src;
+            tf.destroy();
+            return { idle, active, restored };
+        }, POPUP_TABLE_HTML);
+
+        expect(result.idle).toContain('idle.gif');
+        expect(result.active).toContain('active.gif');
+        expect(result.restored).toContain('idle.gif');
+    });
+
+test('popup filter bridge honours close_on_filtering and the multiple ' +
+    'filter exception', async ({ page }) => {
+    await page.goto(FIXTURE);
+    await page.addScriptTag({ content: POPUP_MOUNT });
+
+    const result = await page.evaluate(async (html) => {
+        const kept = await window.mountPopup('ce-popup-keep', {
+            popup_filters: { close_on_filtering: false }
+        }, html);
+        const closeAll = () => kept.emitter.emit('after-filtering', kept);
+        kept.feature('popupFilter').open(0);
+        kept.feature('popupFilter').open(2);
+        closeAll();
+        const keptState = {
+            single: kept.feature('popupFilter').isOpen(0),
+            multiple: kept.feature('popupFilter').isOpen(2)
+        };
+
+        const closed = await window.mountPopup('ce-popup-close', {
+            popup_filters: { close_on_filtering: true }
+        }, html);
+        closed.feature('popupFilter').open(0);
+        closed.feature('popupFilter').open(2);
+        closed.emitter.emit('after-filtering', closed);
+        const closedState = {
+            single: closed.feature('popupFilter').isOpen(0),
+            multiple: closed.feature('popupFilter').isOpen(2)
+        };
+
+        kept.destroy();
+        closed.destroy();
+        return { keptState, closedState };
+    }, POPUP_TABLE_HTML);
+
+    expect(result.keptState).toEqual({ single: true, multiple: true });
+    expect(result.closedState).toEqual({ single: false, multiple: true });
+});
+
+test('popup filter bridge applies configurable classes and host width',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPopup('ce-popup-classes', {
+                popup_filters: {
+                    placeholder_css_class: 'customPlaceholder',
+                    div_css_class: 'customPopup',
+                    image_html: '<span>Filter</span>'
+                }
+            }, html);
+            const feature = tf.feature('popupFilter');
+            const host = feature.hosts[0];
+            const container = feature.fltElms[0];
+            feature.open(0);
+            const state = {
+                hostClass: host.className,
+                containerClass: container.className,
+                width: host.style.width
+            };
+            tf.destroy();
+            return state;
+        }, POPUP_TABLE_HTML);
+
+        expect(result.hostClass).toBe('customPlaceholder');
+        expect(result.containerClass).toBe('customPopup');
+        expect(result.width).toMatch(/^\d+px$/);
+    });
+
+test('popup filter bridge falls back for a foreign tf-popup-filter',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            class ForeignPopupFilter extends HTMLElement {
+                setOpen() {}
+                setPopupLabel() {}
+                setLabel() {}
+                setText() {}
+            }
+            customElements.define('tf-popup-filter', ForeignPopupFilter);
+
+            const tf = await window.mountPopup('popup-foreign', {}, html);
+            const feature = tf.feature('popupFilter');
+            const state = {
+                foreign: customElements.get('tf-popup-filter') ===
+                    ForeignPopupFilter,
+                hosts: feature.hosts.length,
+                placeholder: document.querySelectorAll(
+                    'div.popUpPlaceholder').length,
+                icon: feature.fltIcons[0].nodeName
+            };
+            feature.open(0);
+            state.open = feature.isOpen(0);
+            tf.destroy();
+            return state;
+        }, POPUP_TABLE_HTML);
+
+        expect(result.foreign).toBe(true);
+        expect(result.hosts).toBe(0);
+        expect(result.placeholder).toBe(3);
+        expect(result.icon).toBe('IMG');
+        expect(result.open).toBe(true);
+    });
+
+test('popup filter bridge falls back to legacy markup without the element',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate((html) => {
+            const table = document.createElement('table');
+            table.id = 'popup-legacy';
+            table.innerHTML = html;
+            document.body.appendChild(table);
+            const tf = new TableFilter('popup-legacy', {
+                base_path: '/dist/tablefilter/',
+                popup_filters: true,
+                col_0: 'select',
+                col_1: 'select',
+                col_2: 'multiple'
+            });
+            tf.init();
+            const feature = tf.feature('popupFilter');
+            const state = {
+                hosts: feature.hosts.length,
+                placeholder: document.querySelectorAll(
+                    'div.popUpPlaceholder').length,
+                container: document.querySelectorAll('div.popUpFilter').length,
+                icon: feature.fltIcons[0].nodeName
+            };
+            feature.open(0);
+            state.open = feature.isOpen(0);
+            tf.destroy();
+            return state;
+        }, POPUP_TABLE_HTML);
+
+        expect(result.hosts).toBe(0);
+        expect(result.placeholder).toBe(3);
+        expect(result.container).toBe(3);
+        expect(result.icon).toBe('IMG');
+        expect(result.open).toBe(true);
+    });
+
+test('popup filter bridge destroy removes an open legacy mouseup listener',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate((html) => {
+            const table = document.createElement('table');
+            table.id = 'popup-legacy-listener';
+            table.innerHTML = html;
+            document.body.appendChild(table);
+            const tf = new TableFilter('popup-legacy-listener', {
+                base_path: '/dist/tablefilter/',
+                popup_filters: true,
+                col_0: 'select',
+                col_1: 'select',
+                col_2: 'multiple'
+            });
+            tf.init();
+
+            const feature = tf.feature('popupFilter');
+            feature.open(0);
+            tf.destroy();
+
+            const activeAfterDestroy = feature.activeFilterIdx;
+            let staleMouseup = 0;
+            feature.onMouseup = () => staleMouseup++;
+            feature.activeFilterIdx = 0;
+            window.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+            return { activeAfterDestroy, staleMouseup };
+        }, POPUP_TABLE_HTML);
+
+        expect(result.activeAfterDestroy).toBe(-1);
+        expect(result.staleMouseup).toBe(0);
+    });
+
+test('popup filter bridge grid reset keeps one host per column',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPopup('ce-popup-grid-reset',
+                { grid_layout: true }, html);
+            const feature = tf.feature('popupFilter');
+            const firstHost = feature.hosts[0];
+
+            feature.destroy();
+            feature.reset();
+
+            const hosts = Array.from(
+                document.querySelectorAll('tf-popup-filter'));
+            const state = {
+                hosts: hosts.length,
+                connected: hosts.filter((host) => host.parentNode).length,
+                firstRemoved: !firstHost.parentNode,
+                currentConnected: Boolean(feature.hosts[0].parentNode),
+                containerInHost: feature.fltElms[0].parentNode ===
+                    feature.hosts[0]
+            };
+            feature.open(0);
+            state.open = feature.isOpen(0);
+            tf.destroy();
+            return state;
+        }, POPUP_TABLE_HTML);
+
+        expect(result.hosts).toBe(3);
+        expect(result.connected).toBe(3);
+        expect(result.firstRemoved).toBe(true);
+        expect(result.currentConnected).toBe(true);
+        expect(result.containerInHost).toBe(true);
+        expect(result.open).toBe(true);
+    });
+
+test('popup filter bridge destroy and reset reprojects cached containers',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPopup('ce-popup-reset', {}, html);
+            const feature = tf.feature('popupFilter');
+            const firstHost = feature.hosts[0];
+            const container = feature.fltElms[0];
+            let staleCE = 0;
+            let staleEmitter = 0;
+            feature.onCEOpenChange = () => staleCE++;
+            feature.setIconsState = () => staleEmitter++;
+
+            feature.destroy();
+            document.body.appendChild(firstHost);
+            firstHost.setOpen(true);
+            document.body.removeChild(firstHost);
+            tf.emitter.emit('before-filtering', tf);
+            const destroyed = {
+                removed: !firstHost.isConnected,
+                hosts: feature.hosts.length,
+                cached: feature.filtersCache[0] === container,
+                staleCE,
+                staleEmitter
+            };
+            delete feature.onCEOpenChange;
+            delete feature.setIconsState;
+
+            feature.reset();
+            const secondHost = feature.hosts[0];
+            feature.open(0);
+            const reset = {
+                mounted: secondHost.isConnected,
+                newHost: secondHost !== firstHost,
+                reprojected: feature.fltElms[0] === container,
+                inHost: container.parentNode === secondHost,
+                open: feature.isOpen(0)
+            };
+            tf.destroy();
+            return { destroyed, reset, removedAgain: !secondHost.isConnected };
+        }, POPUP_TABLE_HTML);
+
+        expect(result.destroyed).toEqual({
+            removed: true, hosts: 0, cached: true, staleCE: 0,
+            staleEmitter: 0
+        });
+        expect(result.reset).toEqual({
+            mounted: true,
+            newHost: true,
+            reprojected: true,
+            inHost: true,
+            open: true
+        });
+        expect(result.removedAgain).toBe(true);
+    });
+
+test('popup filter bridge reset keeps one container click listener',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: POPUP_MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            const tf = await window.mountPopup('ce-popup-listeners', {}, html);
+            const feature = tf.feature('popupFilter');
+            const container = feature.fltElms[0];
+            const added = [];
+            const removed = [];
+            const origAdd = container.addEventListener;
+            const origRemove = container.removeEventListener;
+            container.addEventListener = function (type, fn, opts) {
+                if (type === 'click') {
+                    added.push(fn);
+                }
+                return origAdd.call(this, type, fn, opts);
+            };
+            container.removeEventListener = function (type, fn, opts) {
+                if (type === 'click') {
+                    removed.push(fn);
+                }
+                return origRemove.call(this, type, fn, opts);
+            };
+
+            feature.destroy();
+            feature.reset();
+            feature.destroy();
+            feature.reset();
+
+            const state = {
+                added: added.length,
+                removed: removed.length,
+                stable: added.every((fn) =>
+                    fn === feature.boundHandlers.containerClick),
+                reused: feature.fltElms[0] === container
+            };
+            tf.destroy();
+            return state;
+        }, POPUP_TABLE_HTML);
+
+        expect(result.reused).toBe(true);
+        expect(result.stable).toBe(true);
+        expect(result.added).toBe(2);
+        expect(result.removed).toBe(2);
+    });
