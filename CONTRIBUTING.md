@@ -117,6 +117,7 @@ In general, we follow the "fork-and-pull" Git workflow.
     - 3.1. **Add** unit tests covering your change in the `test` folder
     - 3.2. **Run** the tests with the `npm run eslint test` command
     - 3.3. **Ensure** build is working with `npm run dist` command
+    - 3.4. **Ensure** demo page builds by running `npm run build:demos` before Playwright tests
  4. **Push** your work back up to your fork
  5. Submit a **Pull request** so that we can review your changes
 
