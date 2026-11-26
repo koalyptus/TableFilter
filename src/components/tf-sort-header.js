@@ -14,15 +14,13 @@
  * - `accessible-label` — `aria-label` on the trigger. Unset keeps the
  *   button's content as its accessible name.
  *
- * The element renders the trigger only; `aria-sort` is set on the
- * surrounding `<th>` column header (#932).
+ * `aria-sort` is set on the surrounding `<th>` column header (#932).
  *
- * Content is projected through the default slot. Styling is left to the
- * theme via `--tf-*` custom properties and `::part()`; no CSS class or
- * presentational style is shipped.
+ * Content is projected through the default slot. The shadow parts are the
+ * styling surface: `--tf-*` custom properties and `::part()`, with no CSS
+ * class or presentational style shipped.
  *
- * Importing this module registers the element. It is not part of the
- * legacy webpack bundle; consumers load it as a module.
+ * Importing this module registers the element.
  */
 
 const TEMPLATE = document.createElement('template');

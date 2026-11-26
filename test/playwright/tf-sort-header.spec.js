@@ -3,9 +3,8 @@
 // column label, projects header markup through the default slot and holds
 // a decorative icon. The trigger is the only tab stop and its content is
 // its accessible name; `accessible-label` overrides it. `aria-sort` is set
-// on the surrounding `<th>` (#932). Per the theming model (--tf-* custom
-// properties + ::part()), it ships structure and hooks only: no invented
-// classes and no baked-in presentational CSS. Fails CI on regression.
+// on the surrounding `<th>` (#932). The parts are the styling surface
+// (ROADMAP/visual-parity.md §7).
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -62,8 +61,8 @@ test('registers an open shadow root exposing the trigger parts',
         expect(result.styleless).toBe(true);
     });
 
-// The trigger is named by its content. No name is invented, and no
-// `aria-sort` is rendered: the attribute belongs on the column header.
+// The trigger carries no `aria-label`, `aria-labelledby`, `title` or
+// `aria-sort` until the matching attributes are set.
 test('invents no accessible names and renders no aria-sort',
     async ({ page }) => {
         await page.goto(FIXTURE);
