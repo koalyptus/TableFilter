@@ -29,10 +29,10 @@ Parity is a target, not a property of the current build.
 Each component has its own parity issue with its own checklist, tests and
 closing gate. A parity issue rides the milestone its component's bridge
 landed in: milestone 4 for the table-filter, tf-status, tf-rows-counter and
-tf-clear-button work, milestone 2 for the pager, results-per-page and
-checklist work, milestone 3 for tf-help, tf-loader, tf-no-results and
-tf-popup-filter. The "Styling modernization (post-1.0)" milestone tracks
-only post-v1.0.0 work (#943, #944, #945, #969), not parity.
+tf-clear-button work, milestone 2 for the pager, results-per-page,
+checklist and sort-header work, milestone 3 for tf-help, tf-loader,
+tf-no-results and tf-popup-filter. The "Styling modernization (post-1.0)"
+milestone tracks only post-v1.0.0 work (#943, #944, #945, #969), not parity.
 
 | Component | Legacy stylesheet | Issue | Milestone |
 |---|---|---|---|
@@ -43,6 +43,7 @@ only post-v1.0.0 work (#943, #944, #945, #969), not parity.
 | `<tf-pager>` | `static/style/paging.styl` | [#1080](https://github.com/koalyptus/TableFilter/issues/1080) | 2 — Accessibility pass & feature bridges |
 | `<tf-results-per-page>` | `static/style/paging.styl:66` (`select.rspg`), `:72` (`span.rspgSpan`) | [#1081](https://github.com/koalyptus/TableFilter/issues/1081) | 2 — Accessibility pass & feature bridges |
 | `<tf-checklist>` | `static/style/filter-checklist.styl` | [#1082](https://github.com/koalyptus/TableFilter/issues/1082) | 2 — Accessibility pass & feature bridges |
+| `<tf-sort-header>` | `static/style/sort.styl`, `table.styl`, `grid-layout.styl` | [#1128](https://github.com/koalyptus/TableFilter/issues/1128) | 2 — Accessibility pass & feature bridges |
 | `<tf-help>` | `static/style/help.styl` | [#1083](https://github.com/koalyptus/TableFilter/issues/1083) | 3 — Accessible overlays & instructions |
 | `<tf-loader>` | `static/style/loader.styl` | [#1102](https://github.com/koalyptus/TableFilter/issues/1102) | 3 — Accessible overlays & instructions |
 | `<tf-no-results>` | `static/style/noresults.styl` | [#1111](https://github.com/koalyptus/TableFilter/issues/1111) | 3 — Accessible overlays & instructions |
