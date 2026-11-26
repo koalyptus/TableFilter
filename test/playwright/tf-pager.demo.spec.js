@@ -1,15 +1,16 @@
-// Paging bridge gate (#926): the demo page mounts Paging on <tf-pager>,
-// using the legacy spans and select nowhere, and Loader on <tf-loader>
+// Paging bridge gate (#926, #1042): the demo page mounts Paging on
+// <tf-pager> and the results-per-page selector on <tf-results-per-page>,
+// using the legacy spans and selects nowhere, and Loader on <tf-loader>
 // with its `text` configured. The page lives in static/templates/ and is
 // built into the gitignored demos/ by grunt build-demos; the Vite dev
 // server that serves the repo root compiles the element modules it
 // imports.
 //
-// The gate conditions are silent-failure paths: the element is absent
-// from both published bundles, so the page imports it; a
+// The gate conditions are silent-failure paths: the elements are absent
+// from both published bundles, so the page imports them; a
 // `type="module"` script is deferred, so a bare tf.init() races the
-// registration and falls back to legacy markup; and the bridge only uses
-// the element when `enable_icons` is off and no `btn_*_page_html` is
+// registration and falls back to legacy markup; and the pager bridge only
+// uses the element when `enable_icons` is off and no `btn_*_page_html` is
 // configured (src/modules/paging.js, TODO #965). Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 
@@ -24,7 +25,8 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
     // The elements registered, so the deferred modules loaded.
     await page.waitForFunction(
         () => Boolean(customElements.get('tf-pager')) &&
-            Boolean(customElements.get('tf-loader'))
+            Boolean(customElements.get('tf-loader')) &&
+            Boolean(customElements.get('tf-results-per-page'))
     );
 
     // The feature routed through the bridge: the host is in the DOM with
@@ -58,6 +60,20 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
     const result = await page.evaluate(async () => {
         const host = document.querySelector('tf-pager');
         const sr = host.shadowRoot;
+        const resultsHost = document.querySelector('tf-results-per-page');
+        const resultsSelect = resultsHost.shadowRoot
+            .querySelector('[part="results-select"]');
+
+        const resultsBefore = {
+            tag: resultsHost.nodeName,
+            className: resultsHost.className,
+            label: resultsHost.shadowRoot
+                .querySelector('[part="results-text"]').textContent,
+            options: Array.from(resultsSelect.options)
+                .map((option) => option.value),
+            selected: resultsSelect.value,
+            attr: resultsHost.getAttribute('page-length')
+        };
 
         // 1177 rows (countries-table partial) at length 10.
         const totalPages = host.getAttribute('total-pages');
@@ -79,9 +95,25 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
             document.querySelectorAll('#demo tbody tr')
         ).filter((row) => row.offsetParent !== null).length;
 
-        // The host carries the legacy paging classes
-        // (v1-webcomponents-investigation.md:479), so exclude it: no
-        // legacy paging control was rendered beside it.
+        // The results element relays the shadow `change` as
+        // `page-length-change`; the feature rewrites the pager state.
+        resultsSelect.selectedIndex = 1;
+        resultsSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        const afterLength = {
+            attr: resultsHost.getAttribute('page-length'),
+            totalPages: host.getAttribute('total-pages'),
+            page: host.getAttribute('page'),
+            visible: Array.from(
+                document.querySelectorAll('#demo tbody tr')
+            ).filter((row) => row.offsetParent !== null).length
+        };
+
+        // The hosts carry the legacy classes
+        // (v1-webcomponents-investigation.md:479), so exclude them: no
+        // legacy paging or results control was rendered beside them.
+        const legacyResultsLeftovers = document.querySelectorAll(
+            'select.rspg, span.rspgSpan'
+        ).length;
         const legacyLeftovers = host.parentElement.querySelectorAll(
             '.pgSlc:not(tf-pager), .pgNb:not(tf-pager), ' +
             '.pgInp:not(tf-pager)'
@@ -101,6 +133,9 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
             afterNext,
             afterSelect,
             visible,
+            resultsBefore,
+            afterLength,
+            legacyResultsLeftovers,
             legacyLeftovers,
             loaderShown
         };
@@ -118,6 +153,18 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
     expect(result.afterNext).toBe('2');
     expect(result.afterSelect).toBe('5');
     expect(result.visible).toBe(10);
+    expect(result.resultsBefore).toEqual({
+        tag: 'TF-RESULTS-PER-PAGE',
+        className: 'rspg rspgSpan',
+        label: 'Records: ',
+        options: ['10', '25', '50', '100'],
+        selected: '10',
+        attr: '10'
+    });
+    expect(result.afterLength).toEqual({
+        attr: '25', totalPages: '48', page: '5', visible: 25
+    });
+    expect(result.legacyResultsLeftovers).toBe(0);
     expect(result.legacyLeftovers).toBe(0);
     expect(result.loaderShown).toBe(true);
     expect(loaderAtRest).toEqual({
