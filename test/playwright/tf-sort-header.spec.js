@@ -2,11 +2,10 @@
 // root exposing a single `<button type="button">` trigger that carries the
 // column label, projects header markup through the default slot and holds
 // a decorative icon. The trigger is the only tab stop and its content is
-// its accessible name; `accessible-label` overrides it. `aria-sort` stays
-// on the surrounding `<th>` (#932) and the sort extension bridge is a
-// separate ticket (#933). Per the theming model (--tf-* custom properties
-// + ::part()), it ships structure and hooks only: no invented classes and
-// no baked-in presentational CSS. Fails CI on regression.
+// its accessible name; `accessible-label` overrides it. `aria-sort` is set
+// on the surrounding `<th>` (#932). Per the theming model (--tf-* custom
+// properties + ::part()), it ships structure and hooks only: no invented
+// classes and no baked-in presentational CSS. Fails CI on regression.
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
@@ -65,7 +64,7 @@ test('registers an open shadow root exposing the trigger parts',
 
 // The trigger is named by its content. No name is invented, and no
 // `aria-sort` is rendered: the attribute belongs on the column header.
-test('invents no accessible names and leaves aria-sort to the header',
+test('invents no accessible names and renders no aria-sort',
     async ({ page }) => {
         await page.goto(FIXTURE);
 
@@ -162,6 +161,67 @@ test('projects header markup through the default slot',
         expect(result.projected).toBe(true);
     });
 
+// The `text` attribute and the default slot are two label sources: the
+// projected content wins and the text part renders empty. Whitespace-only
+// content counts as no content.
+test('renders one label source, preferring projected content',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const textOf = (el) => el.shadowRoot
+                .querySelector('[part="text"]').textContent;
+            const lightTextOf = (el) => el.textContent.trim();
+
+            const attributeOnly = document.createElement('tf-sort-header');
+            attributeOnly.setAttribute('text', 'Destination');
+            document.body.appendChild(attributeOnly);
+
+            const projected = document.createElement('tf-sort-header');
+            projected.setAttribute('text', 'Destination');
+            projected.innerHTML = '<em>Destination</em>';
+            document.body.appendChild(projected);
+
+            const whitespace = document.createElement('tf-sort-header');
+            whitespace.setAttribute('text', 'Country');
+            whitespace.textContent = '   ';
+            document.body.appendChild(whitespace);
+
+            const textNode = document.createElement('tf-sort-header');
+            textNode.textContent = 'Status';
+            document.body.appendChild(textNode);
+
+            const late = document.createElement('tf-sort-header');
+            late.setAttribute('text', 'Region');
+            document.body.appendChild(late);
+            const beforeLate = textOf(late);
+            late.appendChild(document.createElement('em')).textContent =
+                'Region';
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            const afterLate = textOf(late);
+
+            return {
+                attributeOnly: textOf(attributeOnly),
+                projected: {
+                    text: textOf(projected),
+                    trigger: lightTextOf(projected)
+                },
+                whitespace: textOf(whitespace),
+                textNode: lightTextOf(textNode),
+                late: { beforeLate, afterLate }
+            };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            attributeOnly: 'Destination',
+            projected: { text: '', trigger: 'Destination' },
+            whitespace: 'Country',
+            textNode: 'Status',
+            late: { beforeLate: 'Region', afterLate: '' }
+        });
+    });
+
 test('setText() and setLabel() update the trigger', async ({ page }) => {
     await page.goto(FIXTURE);
 
@@ -231,7 +291,7 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
 
 // The legacy sort extension listens for clicks on the `<th>`
 // (src/extensions/sort/adapterSortabletable.js). A click on the shadow
-// button is composed, so it crosses the boundary and retargets to the host.
+// button is composed and retargets to the host.
 test('click on the trigger bubbles out of the shadow root',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -323,7 +383,6 @@ test('upgrades declarative markup present before the module loads',
             document.body.innerHTML = `
                 <tf-sort-header text="Destination"
                     accessible-label="Sort by destination">
-                    <em>Destination</em>
                 </tf-sort-header>`;
             const before = document.querySelector('tf-sort-header');
             const upgradedBefore = Boolean(before.shadowRoot);

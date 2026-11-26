@@ -9,13 +9,13 @@
  * its accessible name.
  *
  * Attributes:
- * - `text` — visible label, rendered as text content.
+ * - `text` — visible label, rendered as text content when the slot has no
+ *   assigned content.
  * - `accessible-label` — `aria-label` on the trigger. Unset keeps the
  *   button's content as its accessible name.
  *
- * The element renders the trigger only. `aria-sort` belongs on the
- * surrounding `<th>` column header (#932), and the sort extension bridge
- * (#933) supplies the column and its direction.
+ * The element renders the trigger only; `aria-sort` is set on the
+ * surrounding `<th>` column header (#932).
  *
  * Content is projected through the default slot. Styling is left to the
  * theme via `--tf-*` custom properties and `::part()`; no CSS class or
@@ -40,6 +40,8 @@ export class TfSortHeaderElement extends HTMLElement {
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         this._trigger = this.shadowRoot.querySelector('[part="trigger"]');
         this._textEl = this.shadowRoot.querySelector('[part="text"]');
+        this._slot = this.shadowRoot.querySelector('slot');
+        this._slot.addEventListener('slotchange', () => this._update());
     }
 
     static get observedAttributes() {
@@ -75,11 +77,8 @@ export class TfSortHeaderElement extends HTMLElement {
      * Render the label text and the accessible name into the shadow parts.
      */
     _update() {
-        if (!this._trigger) {
-            return;
-        }
-
-        this._textEl.textContent = this.getAttribute('text') || '';
+        this._textEl.textContent = this._hasProjectedContent() ?
+            '' : (this.getAttribute('text') || '');
 
         const label = this.getAttribute('accessible-label');
         if (label) {
@@ -88,10 +87,21 @@ export class TfSortHeaderElement extends HTMLElement {
             this._trigger.removeAttribute('aria-label');
         }
     }
+
+    /**
+     * Whether the default slot has assigned content: an element or text
+     * that is not whitespace.
+     * @return {Boolean} True when content is projected
+     */
+    _hasProjectedContent() {
+        return this._slot.assignedNodes().some((node) =>
+            node.nodeType === Node.ELEMENT_NODE ||
+            (node.nodeType === Node.TEXT_NODE &&
+                node.textContent.trim() !== ''));
+    }
 }
 
-// Register once: loading this module twice (or on a page that already
-// defined the element) must not throw.
+// The element is registered only when no definition exists.
 if (typeof customElements !== 'undefined' &&
     !customElements.get('tf-sort-header')) {
     customElements.define('tf-sort-header', TfSortHeaderElement);
