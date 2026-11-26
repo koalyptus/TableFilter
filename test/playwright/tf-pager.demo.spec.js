@@ -55,8 +55,8 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
         };
     });
 
-    // The host attributes are driven by the feature (paging.js:698,
-    // :898), so the page state is asserted through them.
+    // The host attributes are driven by the feature
+    // (src/modules/paging.js), so the page state is asserted through them.
     const result = await page.evaluate(async () => {
         const host = document.querySelector('tf-pager');
         const sr = host.shadowRoot;
@@ -109,7 +109,7 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
         };
 
         // The hosts carry the legacy classes
-        // (v1-webcomponents-investigation.md:479), so exclude them: no
+        // (ROADMAP/v1-webcomponents-investigation.md), so exclude them: no
         // legacy paging or results control was rendered beside them.
         const legacyResultsLeftovers = document.querySelectorAll(
             'select.rspg, span.rspgSpan'
@@ -121,10 +121,22 @@ test(`paging mounts on <tf-pager>: ${DEMO_PAGE}`, async ({ page }) => {
 
         // Loader: a page change fires the before-action events, so the
         // host is visible while the feature runs and hides again after
-        // closeDelay (250ms). Read it inside that window.
-        const loader = document.querySelector('tf-loader');
-        await new Promise((resolve) => setTimeout(resolve, 50));
-        const loaderShown = getComputedStyle(loader).display !== 'none';
+        // closeDelay (250ms). Wait for the visible state instead of
+        // sampling a single point in that window.
+        const loaderShown = await new Promise((resolve) => {
+            const loader = document.querySelector('tf-loader');
+            const deadline = performance.now() + 1000;
+            const check = () => {
+                if (getComputedStyle(loader).display !== 'none') {
+                    resolve(true);
+                } else if (performance.now() > deadline) {
+                    resolve(false);
+                } else {
+                    requestAnimationFrame(check);
+                }
+            };
+            check();
+        });
 
         return {
             selectorTag: slc.tagName,

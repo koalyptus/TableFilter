@@ -385,7 +385,7 @@ export class Paging extends Feature {
         // path: the icon is painted by the `.nextPage`/`.previousPage`/
         // `.firstPage`/`.lastPage` classes (tablefilter.css), and
         // `btn_*_page_html` is user markup. Both render on the legacy
-        // button span only (paging.js:399-444).
+        // button span only.
         // TODO(#965): route enableIcons and btn_*_page_html through the
         // element once theming moves to `::part()`.
         if (typeof customElements !== 'undefined' &&
@@ -607,8 +607,7 @@ export class Paging extends Feature {
     }
 
     /**
-     * Set the `btn_*_page_text` captions on the <tf-pager> buttons
-     * (paging.js:390-444).
+     * Set the `btn_*_page_text` captions on the <tf-pager> buttons.
      * @param {DOMElement} pagerEl <tf-pager> host
      * @private
      */
@@ -828,12 +827,39 @@ export class Paging extends Feature {
 
         // TODO(#965): remove the legacy render path once the webpack
         // pipeline is retired.
-        if (typeof customElements !== 'undefined' &&
-            customElements.get('tf-results-per-page')) {
+        if (this.canUseResultsCE()) {
             this.setResultsPerPageCE();
         } else {
             this.setResultsPerPageLegacy();
         }
+    }
+
+    /**
+     * Whether the feature renders through <tf-results-per-page>.
+     * A definition is accepted when it exposes the bridge methods and the
+     * shadow select the feature reads.
+     * @returns {Boolean} True when the bridge renders through the element
+     * @private
+     */
+    canUseResultsCE() {
+        const ResultsElement = typeof customElements === 'undefined' ?
+            null : customElements.get('tf-results-per-page');
+        if (!ResultsElement ||
+            typeof ResultsElement.prototype.setText !== 'function' ||
+            typeof ResultsElement.prototype.setPageLengths !== 'function' ||
+            typeof ResultsElement.prototype.setPageLength !== 'function') {
+            return false;
+        }
+
+        let probe;
+        try {
+            probe = document.createElement('tf-results-per-page');
+        } catch (e) {
+            return false;
+        }
+        const shadow = probe.shadowRoot;
+        return Boolean(shadow &&
+            shadow.querySelector('[part="results-select"]'));
     }
 
     /**
@@ -994,7 +1020,9 @@ export class Paging extends Feature {
     }
 
     /**
-     * Change the number of results per page based on passed value
+     * Change the number of results per page based on passed value.
+     * A value matching no option selects the first option, which the host
+     * reflects into `page-length`.
      * @param {String} val The number of results per page
      */
     changeResultsPerPage(val) {

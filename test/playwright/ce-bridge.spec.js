@@ -170,7 +170,7 @@ test('rows counter bridge uses tf-rows-counter', async ({ page }) => {
 // legacy paging config reaches it — the button captions, the text
 // either side of the selector, `btns: false`, and the four legacy
 // paging classes applied to the host
-// (v1-webcomponents-investigation.md:479).
+// (ROADMAP/v1-webcomponents-investigation.md).
 const PAGER_TABLE_HTML = '<tbody><tr><th>From</th></tr>' +
     Array.from({ length: 12 }, (v, i) => `<tr><td>City ${i}</td></tr>`)
         .join('') + '</tbody>';
@@ -1378,7 +1378,7 @@ test('results per page bridge keeps the attribute in step with the API',
             const host = window.resultsHost(tf);
             const state = [];
 
-            ['2', '5'].forEach((val) => {
+            ['2', '5', '999'].forEach((val) => {
                 paging.changeResultsPerPage(val);
                 state.push({
                     pageLength: paging.pageLength,
@@ -1397,6 +1397,58 @@ test('results per page bridge keeps the attribute in step with the API',
         });
         expect(result[1]).toEqual({
             pageLength: 5, nbPages: 3, attr: '5', selected: '5'
+        });
+        expect(result[2]).toEqual({
+            pageLength: 5, nbPages: 3, attr: '5', selected: '5'
+        });
+    });
+
+test('results per page falls back for a foreign element without the part',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ content: MOUNT });
+
+        const result = await page.evaluate(async (html) => {
+            class ForeignResults extends HTMLElement {
+                setText() {}
+                setPageLengths() {}
+                setPageLength() {}
+            }
+            customElements.define('tf-results-per-page', ForeignResults);
+
+            const tf = await window.mountPager('ce-results-foreign',
+                {
+                    paging: {
+                        length: 5,
+                        results_per_page: ['Rows: ', [5, 2]]
+                    }
+                }, html);
+            const paging = tf.feature('paging');
+            const state = {
+                foreign: customElements.get('tf-results-per-page') ===
+                    ForeignResults,
+                hosts: document.querySelectorAll(
+                    'tf-results-per-page').length,
+                isCE: Boolean(paging.resultsPerPageEl),
+                tag: paging.pageLengthSlc.tagName,
+                className: paging.pageLengthSlc.className,
+                span: document.querySelector('span.rspgSpan').tagName
+            };
+
+            paging.changeResultsPerPage('2');
+            state.pageLength = paging.pageLength;
+            tf.destroy();
+            return state;
+        }, PAGER_TABLE_HTML);
+
+        expect(result).toEqual({
+            foreign: true,
+            hosts: 0,
+            isCE: false,
+            tag: 'SELECT',
+            className: 'rspg',
+            span: 'SPAN',
+            pageLength: 2
         });
     });
 
