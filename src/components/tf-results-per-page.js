@@ -116,7 +116,7 @@ export class TfResultsPerPageElement extends HTMLElement {
 
     /**
      * Supply the option list. Each entry becomes an option whose value
-     * and text are both the entry (src/modules/paging.js:681).
+     * and text are both the entry (src/modules/paging.js).
      * @param {Array<*>} lengths Page lengths
      */
     setPageLengths(lengths) {

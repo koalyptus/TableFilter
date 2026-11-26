@@ -45,6 +45,14 @@ export class Paging extends Feature {
         this.pageLengthSlc = null;
 
         /**
+         * `<tf-results-per-page>` custom element host, when the bridge is
+         * active
+         * @type {DOMElement}
+         * @private
+         */
+        this.resultsPerPageEl = null;
+
+        /**
          * ID of custom container element
          * @type {String}
          */
@@ -377,7 +385,7 @@ export class Paging extends Feature {
         // path: the icon is painted by the `.nextPage`/`.previousPage`/
         // `.firstPage`/`.lastPage` classes (tablefilter.css), and
         // `btn_*_page_html` is user markup. Both render on the legacy
-        // button span only (paging.js:399-444).
+        // button span only.
         // TODO(#965): route enableIcons and btn_*_page_html through the
         // element once theming moves to `::part()`.
         if (typeof customElements !== 'undefined' &&
@@ -599,8 +607,7 @@ export class Paging extends Feature {
     }
 
     /**
-     * Set the `btn_*_page_text` captions on the <tf-pager> buttons
-     * (paging.js:390-444).
+     * Set the `btn_*_page_text` captions on the <tf-pager> buttons.
      * @param {DOMElement} pagerEl <tf-pager> host
      * @private
      */
@@ -814,12 +821,102 @@ export class Paging extends Feature {
      * Generates UI elements for the number of results per page drop-down
      */
     setResultsPerPage() {
-        let tf = this.tf;
-        let evt = this.evt;
-
         if (this.pageLengthSlc || !this.resultsPerPage) {
             return;
         }
+
+        // TODO(#965): remove the legacy render path once the webpack
+        // pipeline is retired.
+        if (this.canUseResultsCE()) {
+            this.setResultsPerPageCE();
+        } else {
+            this.setResultsPerPageLegacy();
+        }
+    }
+
+    // TODO(#965): remove with setResultsPerPageLegacy().
+    /**
+     * Whether the feature renders through <tf-results-per-page>.
+     * A definition is accepted when it exposes the bridge methods and the
+     * shadow select the feature reads.
+     * @returns {Boolean} True when the bridge renders through the element
+     * @private
+     */
+    canUseResultsCE() {
+        const ResultsElement = typeof customElements === 'undefined' ?
+            null : customElements.get('tf-results-per-page');
+        if (!ResultsElement ||
+            typeof ResultsElement.prototype.setText !== 'function' ||
+            typeof ResultsElement.prototype.setPageLengths !== 'function' ||
+            typeof ResultsElement.prototype.setPageLength !== 'function') {
+            return false;
+        }
+
+        let probe;
+        try {
+            probe = document.createElement('tf-results-per-page');
+        } catch (e) {
+            return false;
+        }
+        const shadow = probe.shadowRoot;
+        return Boolean(shadow &&
+            shadow.querySelector('[part="results-select"]'));
+    }
+
+    /**
+     * Generates the results per page selector with <tf-results-per-page>
+     * @private
+     */
+    setResultsPerPageCE() {
+        let tf = this.tf;
+        let evt = this.evt;
+
+        evt.slcResultsChange = (ev) => {
+            this.onChangeResultsPerPage();
+            ev.target.blur();
+        };
+
+        let host = document.createElement('tf-results-per-page');
+        host.className = this.resultsCssClass();
+        host.setText(this.resultsPerPage[0]);
+        host.setPageLengths(this.resultsPerPage[1]);
+        host.setPageLength(this.pageLength);
+
+        // results per page select is added to external element
+        let targetEl = !this.pageLengthTgtId ?
+            tf.feature('toolbar').container(RIGHT) :
+            elm(this.pageLengthTgtId);
+
+        let help = tf.feature('help');
+        if (help && help.btn) {
+            help.btn.parentNode.insertBefore(host, help.btn);
+        } else {
+            targetEl.appendChild(host);
+        }
+
+        addEvt(host, 'page-length-change', evt.slcResultsChange);
+        this.resultsPerPageEl = host;
+        this.pageLengthSlc = host.shadowRoot.querySelector(
+            '[part="results-select"]');
+    }
+
+    /**
+     * The legacy results per page classes, applied to the
+     * <tf-results-per-page> host
+     * @return {String} Space-separated class list
+     * @private
+     */
+    resultsCssClass() {
+        return [this.resultsSlcCssClass, this.resultsSpanCssClass].join(' ');
+    }
+
+    /**
+     * Generates the results per page selector with the legacy span and select
+     * @private
+     */
+    setResultsPerPageLegacy() {
+        let tf = this.tf;
+        let evt = this.evt;
 
         evt.slcResultsChange = (ev) => {
             this.onChangeResultsPerPage();
@@ -866,11 +963,18 @@ export class Paging extends Feature {
             !this.resultsPerPage) {
             return;
         }
-        if (this.pageLengthSlc) {
-            removeElm(this.pageLengthSlc);
-        }
-        if (this.slcResultsTxt) {
-            removeElm(this.slcResultsTxt);
+        if (this.resultsPerPageEl) {
+            removeEvt(this.resultsPerPageEl, 'page-length-change',
+                this.evt.slcResultsChange);
+            removeElm(this.resultsPerPageEl);
+            this.resultsPerPageEl = null;
+        } else {
+            if (this.pageLengthSlc) {
+                removeElm(this.pageLengthSlc);
+            }
+            if (this.slcResultsTxt) {
+                removeElm(this.slcResultsTxt);
+            }
         }
         this.pageLengthSlc = null;
         this.slcResultsTxt = null;
@@ -917,7 +1021,9 @@ export class Paging extends Feature {
     }
 
     /**
-     * Change the number of results per page based on passed value
+     * Change the number of results per page based on passed value.
+     * A value matching no option selects the first option, which the host
+     * reflects into `page-length`.
      * @param {String} val The number of results per page
      */
     changeResultsPerPage(val) {
@@ -926,6 +1032,9 @@ export class Paging extends Feature {
         }
 
         this.pageLengthSlc.value = val;
+        if (this.resultsPerPageEl) {
+            this.resultsPerPageEl.setPageLength(val);
+        }
         this.onChangeResultsPerPage();
     }
 
@@ -1000,6 +1109,10 @@ export class Paging extends Feature {
 
         if (pglenIndex !== '') {
             this.pageLengthSlc.options[pglenIndex].selected = true;
+            if (this.resultsPerPageEl) {
+                this.resultsPerPageEl.setPageLength(
+                    this.pageLengthSlc.value);
+            }
             this.changeResultsPerPage();
         }
         this.emitter.emit('after-reset-page-length', tf, pglenIndex);
