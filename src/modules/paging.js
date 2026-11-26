@@ -834,6 +834,7 @@ export class Paging extends Feature {
         }
     }
 
+    // TODO(#965): remove with setResultsPerPageLegacy().
     /**
      * Whether the feature renders through <tf-results-per-page>.
      * A definition is accepted when it exposes the bridge methods and the
