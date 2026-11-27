@@ -32,9 +32,9 @@ before opening a review.
 - [ ] `_update()` renders label text and accessible name into shadow parts
 - [ ] `setText(text)` sets the `text` attribute; empty/null renders empty text content
 - [ ] `setLabel(label)` sets the `accessible-label` attribute; empty/null removes `aria-label`
-- [ ] Attribute → config mapping follows `src/components/attributes.js` conventions
-  (`isSkippedAttribute()` skips `id`, `class`, `style`, `slot`, hidden, title, lang,
-  dir, role, tabindex, part, exportparts, `data-*`, `aria-*`)
+- [ ] Attribute → config mapping follows `src/components/attributes.js` conventions;
+  `isSkippedAttribute()` covers `FORBIDDEN_KEYS`, `data-*`/`aria-*` and any
+  component-owned `extraSkips`
 - [ ] Live-region contract (`role="status"`, `aria-live="polite"`, `aria-atomic="true"`)
   enforced via `applyLiveRegion()` when the component announces updates
 

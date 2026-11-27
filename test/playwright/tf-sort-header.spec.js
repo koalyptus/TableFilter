@@ -272,6 +272,7 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
         const style = document.createElement('style');
         style.textContent = `
             tf-sort-header::part(trigger) { display: flex; }
+            tf-sort-header::part(text) { color: rgb(4, 5, 6); }
             tf-sort-header::part(icon) { color: rgb(1, 2, 3); }
         `;
         document.head.appendChild(style);
@@ -280,12 +281,15 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
         return {
             display: getComputedStyle(
                 sr.querySelector('[part="trigger"]')).display,
+            textColor: getComputedStyle(
+                sr.querySelector('[part="text"]')).color,
             color: getComputedStyle(
                 sr.querySelector('[part="icon"]')).color
         };
     }, COMPONENT);
 
     expect(result.display).toBe('flex');
+    expect(result.textColor).toBe('rgb(4, 5, 6)');
     expect(result.color).toBe('rgb(1, 2, 3)');
 });
 

@@ -21,7 +21,8 @@
  * styling surface: `--tf-*` custom properties and `::part()`, with no CSS
  * class or presentational style shipped.
  *
- * Importing this module registers the element.
+ * Importing this module registers the element when `customElements` is
+ * available and no definition is present.
  */
 
 const TEMPLATE = document.createElement('template');
