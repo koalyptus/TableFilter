@@ -26,8 +26,9 @@ without the parity issue is not complete. See `ROADMAP/visual-parity.md`.
 ## Component conventions
 
 Every new `<tf-*>` element follows the conventions, patterns and practices
-documented in [CONVENTIONS.md](./CONVENTIONS.md). Read that file before
-scaffolding a new component; the PR checklist mirrors it.
+documented in
+[TF-COMPONENTS-CONVENTIONS.md](./TF-COMPONENTS-CONVENTIONS.md). Read that file
+before scaffolding a new component; the PR checklist mirrors it.
 
 ## Code comments
 

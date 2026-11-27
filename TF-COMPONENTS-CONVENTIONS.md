@@ -1,4 +1,4 @@
-# Component conventions, patterns and practices
+# TableFilter web component conventions, patterns and practices
 
 Template for implementing a new `<tf-*>` custom element and its Playwright gate.
 Derived from `tf-pager`, `tf-checklist`, `tf-results-per-page`, `tf-popup-filter` and
