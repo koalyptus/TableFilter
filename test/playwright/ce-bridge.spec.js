@@ -5693,12 +5693,14 @@ test('sort bridge uses tf-sort-header and updates aria-sort',
         expect(result.before.count).toBe(3);
         expect(result.before.ariaSorts).toEqual(['none', 'none', 'none']);
         expect(result.before.directions).toEqual(['none', 'none', 'none']);
-        expect(result.afterAsc.ariaSorts).toEqual(['none', 'none', 'ascending']);
+        expect(result.afterAsc.ariaSorts).toEqual(
+            ['none', 'none', 'ascending']);
         expect(result.afterAsc.first).toBe('286');
         expect(result.afterAsc.events).toEqual([
             ['before', 2], ['after', 2, false]
         ]);
-        expect(result.afterDesc.ariaSorts).toEqual(['none', 'none', 'descending']);
+        expect(result.afterDesc.ariaSorts).toEqual(
+            ['none', 'none', 'descending']);
         expect(result.afterDesc.first).toBe('2781');
         expect(result.removed).toBe(0);
         expect(result.ariaAfterDestroy).toEqual([null, null, null]);
