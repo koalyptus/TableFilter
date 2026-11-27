@@ -4,7 +4,7 @@
 // a decorative icon. The trigger is the only tab stop and its content is
 // its accessible name; `accessible-label` overrides it. `aria-sort` is set
 // on the surrounding `<th>` (#932). The parts are the styling surface
-// (ROADMAP/visual-parity.md §7).
+// (TF-COMPONENTS-CONVENTIONS.md §5).
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
 
