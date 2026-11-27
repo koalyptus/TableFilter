@@ -23,6 +23,12 @@ scaffolds it, and adds an evidence line to the release gate
 [#1075](https://github.com/koalyptus/TableFilter/issues/1075). A scaffold PR
 without the parity issue is not complete. See `ROADMAP/visual-parity.md`.
 
+## Component conventions
+
+Every new `<tf-*>` element follows the conventions, patterns and practices
+documented in [CONVENTIONS.md](./CONVENTIONS.md). Read that file before
+scaffolding a new component; the PR checklist mirrors it.
+
 ## Code comments
 
 Comments document behaviour, not the reasoning behind it. Never reference
