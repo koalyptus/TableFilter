@@ -1,10 +1,10 @@
-// Gate for <tf-sort-header> (#931): the element registers an open shadow
-// root exposing a single `<button type="button">` trigger that carries the
-// column label, projects header markup through the default slot and holds
-// a decorative icon. The trigger is the only tab stop and its content is
-// its accessible name; `accessible-label` overrides it. `aria-sort` is set
-// on the surrounding `<th>` (#932). The sort extension bridge is tracked in
-// #933. The parts are the styling surface
+// Gate for <tf-sort-header> (#931, #932): the element registers an open
+// shadow root exposing a single `<button type="button">` trigger that
+// carries the column label, projects header markup through the default slot
+// and holds a decorative icon. The trigger is the only tab stop and its
+// content is its accessible name; `accessible-label` overrides it.
+// `sort-direction` sets `aria-sort` on the surrounding `<th>`. The sort
+// extension bridge is tracked in #933. The parts are the styling surface
 // (TF-COMPONENTS-CONVENTIONS.md §5).
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
@@ -89,6 +89,325 @@ test('invents no accessible names and renders no aria-sort',
         expect(result.ariaSort).toBeNull();
         expect(result.hostAriaSort).toBeNull();
         expect(result.text).toBe('');
+    });
+
+test('sets aria-sort on the closest th from sort-direction',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const th = document.createElement('th');
+            const el = document.createElement('tf-sort-header');
+            th.appendChild(el);
+            const tr = document.createElement('tr');
+            tr.appendChild(th);
+            const thead = document.createElement('thead');
+            thead.appendChild(tr);
+            const table = document.createElement('table');
+            table.appendChild(thead);
+            document.body.appendChild(table);
+
+            const states = [];
+            ['ascending', 'descending', 'none'].forEach((direction) => {
+                el.setAttribute('sort-direction', direction);
+                states.push({
+                    direction,
+                    ariaSort: th.getAttribute('aria-sort'),
+                    host: el.getAttribute('aria-sort'),
+                    trigger: el.shadowRoot.querySelector('[part="trigger"]')
+                        .getAttribute('aria-sort')
+                });
+            });
+
+            el.removeAttribute('sort-direction');
+            return {
+                states,
+                cleared: th.getAttribute('aria-sort')
+            };
+        }, COMPONENT);
+
+        expect(result.states).toEqual([
+            {
+                direction: 'ascending', ariaSort: 'ascending',
+                host: null, trigger: null
+            },
+            {
+                direction: 'descending', ariaSort: 'descending',
+                host: null, trigger: null
+            },
+            {
+                direction: 'none', ariaSort: 'none',
+                host: null, trigger: null
+            }
+        ]);
+        expect(result.cleared).toBeNull();
+    });
+
+test('setSortDirection() and getSortDirection() reflect valid values',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const th = document.createElement('th');
+            const el = document.createElement('tf-sort-header');
+            th.appendChild(el);
+            const tr = document.createElement('tr');
+            tr.appendChild(th);
+            const thead = document.createElement('thead');
+            thead.appendChild(tr);
+            const table = document.createElement('table');
+            table.appendChild(thead);
+            document.body.appendChild(table);
+
+            const state = () => ({
+                attribute: el.getAttribute('sort-direction'),
+                value: el.getSortDirection(),
+                ariaSort: th.getAttribute('aria-sort')
+            });
+
+            el.setSortDirection('ASCENDING');
+            const normalized = state();
+            el.setSortDirection('descending');
+            const descending = state();
+            el.setSortDirection('sideways');
+            const invalid = state();
+            el.setSortDirection(null);
+            const cleared = state();
+
+            return { normalized, descending, invalid, cleared };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            normalized: {
+                attribute: 'ascending', value: 'ascending',
+                ariaSort: 'ascending'
+            },
+            descending: {
+                attribute: 'descending', value: 'descending',
+                ariaSort: 'descending'
+            },
+            invalid: { attribute: null, value: null, ariaSort: null },
+            cleared: { attribute: null, value: null, ariaSort: null }
+        });
+    });
+
+test('restores aria-sort when the header leaves a column',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const th = document.createElement('th');
+            const el = document.createElement('tf-sort-header');
+            th.appendChild(el);
+            const otherTh = document.createElement('th');
+            otherTh.setAttribute('aria-sort', 'descending');
+            const tr = document.createElement('tr');
+            tr.appendChild(th);
+            tr.appendChild(otherTh);
+            const thead = document.createElement('thead');
+            thead.appendChild(tr);
+            const table = document.createElement('table');
+            table.appendChild(thead);
+            document.body.appendChild(table);
+
+            el.setAttribute('sort-direction', 'ascending');
+            const initial = {
+                first: th.getAttribute('aria-sort'),
+                second: otherTh.getAttribute('aria-sort')
+            };
+
+            otherTh.appendChild(el);
+            const moved = {
+                first: th.getAttribute('aria-sort'),
+                second: otherTh.getAttribute('aria-sort')
+            };
+
+            el.remove();
+            return {
+                initial,
+                moved,
+                removed: {
+                    first: th.getAttribute('aria-sort'),
+                    second: otherTh.getAttribute('aria-sort')
+                }
+            };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            initial: { first: 'ascending', second: 'descending' },
+            moved: { first: null, second: 'ascending' },
+            removed: { first: null, second: 'descending' }
+        });
+    });
+
+test('two headers in one column keep the active aria-sort',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+
+            const setup = () => {
+                const th = document.createElement('th');
+                const a = document.createElement('tf-sort-header');
+                const b = document.createElement('tf-sort-header');
+                th.appendChild(a);
+                th.appendChild(b);
+                const tr = document.createElement('tr');
+                tr.appendChild(th);
+                const thead = document.createElement('thead');
+                thead.appendChild(tr);
+                const table = document.createElement('table');
+                table.appendChild(thead);
+                document.body.appendChild(table);
+                a.setAttribute('sort-direction', 'ascending');
+                b.setAttribute('sort-direction', 'descending');
+                return { th, a, b };
+            };
+
+            const removeAFirst = setup();
+            removeAFirst.a.remove();
+            const afterA = removeAFirst.th.getAttribute('aria-sort');
+            removeAFirst.b.remove();
+            const afterBothFromA = removeAFirst.th.getAttribute(
+                'aria-sort');
+
+            const removeBFirst = setup();
+            removeBFirst.b.remove();
+            const afterB = removeBFirst.th.getAttribute('aria-sort');
+            removeBFirst.a.remove();
+            const afterBothFromB = removeBFirst.th.getAttribute(
+                'aria-sort');
+
+            return { afterA, afterBothFromA, afterB, afterBothFromB };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            afterA: 'descending',
+            afterBothFromA: null,
+            afterB: 'ascending',
+            afterBothFromB: null
+        });
+    });
+
+test('clearing or invalidating a direction restores an existing aria-sort',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const th = document.createElement('th');
+            th.setAttribute('aria-sort', 'descending');
+            const el = document.createElement('tf-sort-header');
+            th.appendChild(el);
+            const tr = document.createElement('tr');
+            tr.appendChild(th);
+            const thead = document.createElement('thead');
+            thead.appendChild(tr);
+            const table = document.createElement('table');
+            table.appendChild(thead);
+            document.body.appendChild(table);
+
+            const state = () => ({
+                attribute: el.getAttribute('sort-direction'),
+                ariaSort: th.getAttribute('aria-sort')
+            });
+
+            el.setAttribute('sort-direction', 'ascending');
+            const applied = state();
+            el.setSortDirection('sideways');
+            const invalid = state();
+            el.setAttribute('sort-direction', 'none');
+            const none = state();
+            el.removeAttribute('sort-direction');
+            const cleared = state();
+
+            return { applied, invalid, none, cleared };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            applied: { attribute: 'ascending', ariaSort: 'ascending' },
+            invalid: { attribute: null, ariaSort: 'descending' },
+            none: { attribute: 'none', ariaSort: 'none' },
+            cleared: { attribute: null, ariaSort: 'descending' }
+        });
+    });
+
+test('a shared column follows the most recently updated header',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const th = document.createElement('th');
+            th.setAttribute('aria-sort', 'descending');
+            const a = document.createElement('tf-sort-header');
+            const b = document.createElement('tf-sort-header');
+            th.appendChild(a);
+            th.appendChild(b);
+            const tr = document.createElement('tr');
+            tr.appendChild(th);
+            const thead = document.createElement('thead');
+            thead.appendChild(tr);
+            const table = document.createElement('table');
+            table.appendChild(thead);
+            document.body.appendChild(table);
+
+            a.setAttribute('sort-direction', 'ascending');
+            b.setAttribute('sort-direction', 'none');
+            const second = th.getAttribute('aria-sort');
+            a.setAttribute('sort-direction', 'descending');
+            const updated = th.getAttribute('aria-sort');
+            b.remove();
+            const afterB = th.getAttribute('aria-sort');
+            a.remove();
+            const afterA = th.getAttribute('aria-sort');
+
+            return { second, updated, afterB, afterA };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            second: 'none',
+            updated: 'descending',
+            afterB: 'descending',
+            afterA: 'descending'
+        });
+    });
+
+test('applies a direction set outside a column when the header attaches',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+            const el = document.createElement('tf-sort-header');
+            document.body.appendChild(el);
+            el.setSortDirection('descending');
+            const outside = el.closest('th') === null;
+
+            const th = document.createElement('th');
+            const tr = document.createElement('tr');
+            tr.appendChild(th);
+            const thead = document.createElement('thead');
+            thead.appendChild(tr);
+            const table = document.createElement('table');
+            table.appendChild(thead);
+            document.body.appendChild(table);
+            th.appendChild(el);
+            const attached = th.getAttribute('aria-sort');
+
+            el.remove();
+            return { outside, attached, removed: th.getAttribute('aria-sort') };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            outside: true,
+            attached: 'descending',
+            removed: null
+        });
     });
 
 test('renders accessible names from attributes when set',
@@ -412,6 +731,31 @@ test('upgrades declarative markup present before the module loads',
         });
     });
 
+test('upgrades declarative sort-direction on a column header',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            document.body.innerHTML = `
+                <table><thead><tr><th scope="col">
+                    <tf-sort-header text="Destination"
+                        sort-direction="descending">
+                    </tf-sort-header>
+                </th></tr></thead></table>`;
+            await import(component);
+            const el = document.querySelector('tf-sort-header');
+            return {
+                direction: el.getSortDirection(),
+                ariaSort: el.closest('th').getAttribute('aria-sort')
+            };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            direction: 'descending',
+            ariaSort: 'descending'
+        });
+    });
+
 test('importing the module again keeps a single definition',
     async ({ page }) => {
         await page.goto(FIXTURE);
@@ -487,7 +831,8 @@ test('passes a scoped axe scan', async ({ page }, testInfo) => {
             <table>
                 <thead><tr>
                     <th scope="col">
-                        <tf-sort-header text="Destination">
+                        <tf-sort-header text="Destination"
+                            sort-direction="ascending">
                         </tf-sort-header>
                     </th>
                     <th scope="col">
