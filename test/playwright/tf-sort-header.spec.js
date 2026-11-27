@@ -150,31 +150,46 @@ test('setSortDirection() and getSortDirection() reflect valid values',
 
         const result = await page.evaluate(async (component) => {
             await import(component);
+            const th = document.createElement('th');
             const el = document.createElement('tf-sort-header');
-            document.body.appendChild(el);
+            th.appendChild(el);
+            const tr = document.createElement('tr');
+            tr.appendChild(th);
+            const thead = document.createElement('thead');
+            thead.appendChild(tr);
+            const table = document.createElement('table');
+            table.appendChild(thead);
+            document.body.appendChild(table);
 
             const state = () => ({
                 attribute: el.getAttribute('sort-direction'),
-                value: el.getSortDirection()
+                value: el.getSortDirection(),
+                ariaSort: th.getAttribute('aria-sort')
             });
 
             el.setSortDirection('ASCENDING');
             const normalized = state();
             el.setSortDirection('descending');
             const descending = state();
-            el.setSortDirection(null);
-            const cleared = state();
             el.setSortDirection('sideways');
             const invalid = state();
+            el.setSortDirection(null);
+            const cleared = state();
 
-            return { normalized, descending, cleared, invalid };
+            return { normalized, descending, invalid, cleared };
         }, COMPONENT);
 
         expect(result).toEqual({
-            normalized: { attribute: 'ascending', value: 'ascending' },
-            descending: { attribute: 'descending', value: 'descending' },
-            cleared: { attribute: null, value: null },
-            invalid: { attribute: null, value: null }
+            normalized: {
+                attribute: 'ascending', value: 'ascending',
+                ariaSort: 'ascending'
+            },
+            descending: {
+                attribute: 'descending', value: 'descending',
+                ariaSort: 'descending'
+            },
+            invalid: { attribute: null, value: null, ariaSort: null },
+            cleared: { attribute: null, value: null, ariaSort: null }
         });
     });
 
@@ -225,6 +240,56 @@ test('restores aria-sort when the header leaves a column',
             initial: { first: 'ascending', second: 'descending' },
             moved: { first: null, second: 'ascending' },
             removed: { first: null, second: 'descending' }
+        });
+    });
+
+test('two headers in one column keep the active aria-sort',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+
+        const result = await page.evaluate(async (component) => {
+            await import(component);
+
+            const setup = () => {
+                const th = document.createElement('th');
+                const a = document.createElement('tf-sort-header');
+                const b = document.createElement('tf-sort-header');
+                th.appendChild(a);
+                th.appendChild(b);
+                const tr = document.createElement('tr');
+                tr.appendChild(th);
+                const thead = document.createElement('thead');
+                thead.appendChild(tr);
+                const table = document.createElement('table');
+                table.appendChild(thead);
+                document.body.appendChild(table);
+                a.setAttribute('sort-direction', 'ascending');
+                b.setAttribute('sort-direction', 'descending');
+                return { th, a, b };
+            };
+
+            const removeAFirst = setup();
+            removeAFirst.a.remove();
+            const afterA = removeAFirst.th.getAttribute('aria-sort');
+            removeAFirst.b.remove();
+            const afterBothFromA = removeAFirst.th.getAttribute(
+                'aria-sort');
+
+            const removeBFirst = setup();
+            removeBFirst.b.remove();
+            const afterB = removeBFirst.th.getAttribute('aria-sort');
+            removeBFirst.a.remove();
+            const afterBothFromB = removeBFirst.th.getAttribute(
+                'aria-sort');
+
+            return { afterA, afterBothFromA, afterB, afterBothFromB };
+        }, COMPONENT);
+
+        expect(result).toEqual({
+            afterA: 'descending',
+            afterBothFromA: null,
+            afterB: 'ascending',
+            afterBothFromB: null
         });
     });
 

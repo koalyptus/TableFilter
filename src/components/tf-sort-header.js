@@ -14,7 +14,8 @@
  * - `accessible-label` — `aria-label` on the trigger. Unset keeps the
  *   button's content as its accessible name.
  * - `sort-direction` — `none`, `ascending` or `descending`, reflected as
- *   `aria-sort` on the closest `<th>` column header. Unset removes the state.
+ *   `aria-sort` on the closest `<th>` column header. Unset or invalid values
+ *   restore the column header's previous `aria-sort`.
  *
  * `setSortDirection()` and `getSortDirection()` write and read the direction.
  * The sort extension bridge is tracked in #933.
@@ -29,6 +30,9 @@
 
 const DIRECTIONS = ['none', 'ascending', 'descending'];
 
+// Column headers with one or more contributing sort headers.
+const COLUMN_SORT = new WeakMap();
+
 /**
  * Normalize a direction to its ARIA value.
  * @param {*} value Candidate direction
@@ -37,6 +41,44 @@ const DIRECTIONS = ['none', 'ascending', 'descending'];
 function normalizeDirection(value) {
     const direction = value == null ? '' : String(value).toLowerCase();
     return DIRECTIONS.indexOf(direction) >= 0 ? direction : null;
+}
+
+/**
+ * Get a column's sort state, recording its original `aria-sort` on first
+ * use.
+ * @param {Element} th Column header
+ * @return {Object} Sort state with the original value and owners
+ */
+function columnSortState(th) {
+    let state = COLUMN_SORT.get(th);
+    if (!state) {
+        state = { base: th.getAttribute('aria-sort'), owners: [] };
+        COLUMN_SORT.set(th, state);
+    }
+    return state;
+}
+
+/**
+ * Render the most recently updated owner's direction, or the column's
+ * original `aria-sort` when no sort header contributes one.
+ * @param {Element} th Column header
+ */
+function renderColumnSort(th) {
+    const state = COLUMN_SORT.get(th);
+    if (!state) {
+        return;
+    }
+    const owner = state.owners[state.owners.length - 1];
+    if (owner) {
+        th.setAttribute('aria-sort', owner.getSortDirection());
+    } else if (state.base === null) {
+        th.removeAttribute('aria-sort');
+    } else {
+        th.setAttribute('aria-sort', state.base);
+    }
+    if (!state.owners.length) {
+        COLUMN_SORT.delete(th);
+    }
 }
 
 const TEMPLATE = document.createElement('template');
@@ -56,9 +98,7 @@ export class TfSortHeaderElement extends HTMLElement {
         this._textEl = this.shadowRoot.querySelector('[part="text"]');
         this._slot = this.shadowRoot.querySelector('slot');
         this._slot.addEventListener('slotchange', () => this._update());
-        // Column header carrying `aria-sort` while a direction is set.
         this._sortTarget = null;
-        this._previousAriaSort = null;
     }
 
     static get observedAttributes() {
@@ -70,7 +110,7 @@ export class TfSortHeaderElement extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this._restoreSortTarget();
+        this._releaseSortTarget();
     }
 
     attributeChangedCallback() {
@@ -95,7 +135,8 @@ export class TfSortHeaderElement extends HTMLElement {
     }
 
     /**
-     * Set the column's sort direction. Invalid values clear the state.
+     * Set the column's sort direction. Invalid values restore the column
+     * header's previous `aria-sort`.
      * @param {*} direction `none`, `ascending` or `descending`
      */
     setSortDirection(direction) {
@@ -133,45 +174,52 @@ export class TfSortHeaderElement extends HTMLElement {
     }
 
     /**
-     * Apply `aria-sort` to the closest `<th>` column header. A header
-     * without a direction keeps the value it had before the element
-     * applied one.
+     * Apply `aria-sort` to the closest `<th>` column header. The most
+     * recently updated sort header in a column supplies its value.
      */
     _updateSortTarget() {
-        const direction = this.getSortDirection();
         const th = this.closest('th');
+        const direction = this.getSortDirection();
 
         if (this._sortTarget && this._sortTarget !== th) {
-            this._restoreSortTarget();
+            this._releaseSortTarget();
         }
 
-        if (!direction || !th) {
-            this._restoreSortTarget();
+        if (!th || !direction) {
+            this._releaseSortTarget();
             return;
         }
 
-        if (!this._sortTarget) {
+        if (this._sortTarget !== th) {
             this._sortTarget = th;
-            this._previousAriaSort = th.getAttribute('aria-sort');
+            columnSortState(th);
         }
-        th.setAttribute('aria-sort', direction);
+        const state = COLUMN_SORT.get(th);
+        const index = state.owners.indexOf(this);
+        if (index >= 0) {
+            state.owners.splice(index, 1);
+        }
+        state.owners.push(this);
+        renderColumnSort(th);
     }
 
     /**
-     * Restore the column header's `aria-sort` value and release it.
+     * Release this element's contribution and render the remaining
+     * column state.
      */
-    _restoreSortTarget() {
+    _releaseSortTarget() {
         if (!this._sortTarget) {
             return;
         }
-        if (this._previousAriaSort === null) {
-            this._sortTarget.removeAttribute('aria-sort');
-        } else {
-            this._sortTarget.setAttribute('aria-sort',
-                this._previousAriaSort);
+        const state = COLUMN_SORT.get(this._sortTarget);
+        if (state) {
+            const index = state.owners.indexOf(this);
+            if (index >= 0) {
+                state.owners.splice(index, 1);
+            }
+            renderColumnSort(this._sortTarget);
         }
         this._sortTarget = null;
-        this._previousAriaSort = null;
     }
 
     /**
