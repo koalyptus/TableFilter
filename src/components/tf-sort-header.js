@@ -47,28 +47,25 @@ function normalizeDirection(value) {
  * Get a column's sort state, recording its original `aria-sort` on first
  * use.
  * @param {Element} th Column header
- * @return {Object} Sort state with the original value and owners
+ * @return {Object} Sort state with the original value and owner set
  */
 function columnSortState(th) {
     let state = COLUMN_SORT.get(th);
     if (!state) {
-        state = { base: th.getAttribute('aria-sort'), owners: [] };
+        state = { base: th.getAttribute('aria-sort'), owners: new Set() };
         COLUMN_SORT.set(th, state);
     }
     return state;
 }
 
 /**
- * Render the most recently updated owner's direction, or the column's
- * original `aria-sort` when no sort header contributes one.
+ * Render the most recently added owner's direction, or the column's original
+ * `aria-sort` when no sort header contributes one.
  * @param {Element} th Column header
+ * @param {Object} state Column sort state
  */
-function renderColumnSort(th) {
-    const state = COLUMN_SORT.get(th);
-    if (!state) {
-        return;
-    }
-    const owner = state.owners[state.owners.length - 1];
+function renderColumnSort(th, state) {
+    const owner = Array.from(state.owners).pop();
     if (owner) {
         th.setAttribute('aria-sort', owner.getSortDirection());
     } else if (state.base === null) {
@@ -76,7 +73,7 @@ function renderColumnSort(th) {
     } else {
         th.setAttribute('aria-sort', state.base);
     }
-    if (!state.owners.length) {
+    if (!state.owners.size) {
         COLUMN_SORT.delete(th);
     }
 }
@@ -192,15 +189,11 @@ export class TfSortHeaderElement extends HTMLElement {
 
         if (this._sortTarget !== th) {
             this._sortTarget = th;
-            columnSortState(th);
         }
-        const state = COLUMN_SORT.get(th);
-        const index = state.owners.indexOf(this);
-        if (index >= 0) {
-            state.owners.splice(index, 1);
-        }
-        state.owners.push(this);
-        renderColumnSort(th);
+        const state = columnSortState(th);
+        state.owners.delete(this);
+        state.owners.add(this);
+        renderColumnSort(th, state);
     }
 
     /**
@@ -211,14 +204,9 @@ export class TfSortHeaderElement extends HTMLElement {
         if (!this._sortTarget) {
             return;
         }
-        const state = COLUMN_SORT.get(this._sortTarget);
-        if (state) {
-            const index = state.owners.indexOf(this);
-            if (index >= 0) {
-                state.owners.splice(index, 1);
-            }
-            renderColumnSort(this._sortTarget);
-        }
+        const state = columnSortState(this._sortTarget);
+        state.owners.delete(this);
+        renderColumnSort(this._sortTarget, state);
         this._sortTarget = null;
     }
 
