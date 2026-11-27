@@ -5752,3 +5752,124 @@ test('sort bridge keeps legacy indicators without the element',
         expect(result.cls).toContain('sort-arrow');
         expect(result.removed).toBe(0);
     });
+
+test('sort bridge reflects sort_col_at_start and skips null types',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
+
+        const result = await page.evaluate(async (tableHtml) => {
+            await import('/src/components/tf-sort-header.js');
+
+            const table = document.createElement('table');
+            table.id = 'ce-sort-start';
+            table.innerHTML = tableHtml;
+            document.body.appendChild(table);
+
+            const tf = new TableFilter('ce-sort-start', {
+                base_path: '/dist/tablefilter/',
+                extensions: [{
+                    name: 'sort',
+                    types: ['string', 'None', 'number'],
+                    sort_col_at_start: [2, false]
+                }]
+            });
+            tf.init();
+            await new Promise((resolve) => {
+                const sort = tf.extension('sort');
+                if (sort && sort.initialized) {
+                    resolve();
+                    return;
+                }
+                tf.emitter.on(['sort-initialized'], () => resolve());
+            });
+
+            const headers = Array.from(
+                table.querySelectorAll('thead th tf-sort-header'));
+            const ths = Array.from(table.querySelectorAll('thead th'));
+            const state = {
+                count: headers.length,
+                middle: ths[1].querySelectorAll('tf-sort-header, img').length,
+                directions: headers.map((h) => h.getSortDirection()),
+                ariaSorts: ths.map((th) => th.getAttribute('aria-sort')),
+                first: tf.getColValues(2)[0]
+            };
+            tf.destroy();
+            return state;
+        }, SORT_TABLE_HTML);
+
+        expect(result.count).toBe(2);
+        expect(result.middle).toBe(0);
+        expect(result.directions).toEqual(['none', 'ascending']);
+        expect(result.ariaSorts).toEqual(['none', null, 'ascending']);
+        expect(result.first).toBe('286');
+    });
+
+test('sort bridge keeps async external triggers on the legacy path',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
+
+        const result = await page.evaluate(async (tableHtml) => {
+            await import('/src/components/tf-sort-header.js');
+
+            const triggers = document.createElement('div');
+            triggers.innerHTML = '<button id="ext-0">From</button>' +
+                '<button id="ext-1">Destination</button>' +
+                '<button id="ext-2">Distance</button>';
+            document.body.appendChild(triggers);
+
+            const table = document.createElement('table');
+            table.id = 'ce-sort-async';
+            table.innerHTML = tableHtml;
+            document.body.appendChild(table);
+
+            const tf = new TableFilter('ce-sort-async', {
+                base_path: '/dist/tablefilter/',
+                extensions: [{
+                    name: 'sort',
+                    types: ['string', 'string', 'number'],
+                    async_sort: true,
+                    trigger_ids: ['ext-0', 'ext-1', 'ext-2']
+                }]
+            });
+            tf.init();
+            await new Promise((resolve) => {
+                const sort = tf.extension('sort');
+                if (sort && sort.initialized) {
+                    resolve();
+                    return;
+                }
+                tf.emitter.on(['sort-initialized'], () => resolve());
+            });
+
+            const sort = tf.extension('sort');
+            const state = {
+                headers: table.querySelectorAll(
+                    'thead th tf-sort-header').length,
+                canUseCE: sort.canUseCE(),
+                triggerTypes: Array.from(triggers.children)
+                    .map((b) => b.getAttribute('_sortType')),
+                cursors: Array.from(triggers.children)
+                    .map((b) => b.style.cursor)
+            };
+
+            sort.sortByColumnIndex(2);
+            await new Promise((r) => setTimeout(r, 30));
+            state.legacy = triggers.querySelectorAll('img.sort-arrow').length;
+            state.first = tf.getColValues(2)[0];
+            state.inTableLegacy =
+                table.querySelectorAll('thead th img').length;
+            tf.destroy();
+            return state;
+        }, SORT_TABLE_HTML);
+
+        expect(result.headers).toBe(0);
+        expect(result.canUseCE).toBe(false);
+        expect(result.triggerTypes).toEqual(
+            ['string', 'string', 'formatted-number']);
+        expect(result.cursors).toEqual(['pointer', 'pointer', 'pointer']);
+        expect(result.legacy).toBe(3);
+        expect(result.inTableLegacy).toBe(3);
+        expect(result.first).toBe('286');
+    });
