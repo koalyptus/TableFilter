@@ -533,9 +533,6 @@ export default class AdapterSortableTable extends Feature {
 
                     addEvt(trigger, 'click', (evt) => {
                         let elm = evt.target;
-                        if (!this.tf.sort) {
-                            return;
-                        }
                         this.stt.asyncSort(triggers.indexOf(elm.id));
                     });
                     trigger.setAttribute('_sortType', _sortTypes[j]);

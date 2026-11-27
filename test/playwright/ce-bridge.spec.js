@@ -5854,7 +5854,7 @@ test('sort bridge keeps async external triggers on the legacy path',
                     .map((b) => b.style.cursor)
             };
 
-            sort.sortByColumnIndex(2);
+            document.getElementById('ext-2').click();
             await new Promise((r) => setTimeout(r, 30));
             state.legacy = triggers.querySelectorAll('img.sort-arrow').length;
             state.first = tf.getColValues(2)[0];
