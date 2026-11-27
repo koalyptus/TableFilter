@@ -1,9 +1,9 @@
 # TableFilter web component conventions, patterns and practices
 
 Template for implementing a new `<tf-*>` custom element and its Playwright gate.
-Derived from `tf-pager`, `tf-checklist`, `tf-results-per-page`, `tf-popup-filter` and
-`<tf-sort-header>`. Every new component PR should run through this checklist before
-opening a review.
+Derived from `tf-pager`, `tf-checklist`, `tf-results-per-page` and
+`tf-popup-filter`. Every new component PR should run through this checklist
+before opening a review.
 
 ## 1. File placement
 
@@ -32,7 +32,7 @@ opening a review.
 - [ ] `_update()` renders label text and accessible name into shadow parts
 - [ ] `setText(text)` sets the `text` attribute; empty/null renders empty text content
 - [ ] `setLabel(label)` sets the `accessible-label` attribute; empty/null removes `aria-label`
-- [ ] Attribute → config mapping follows `components/attributes.js` conventions
+- [ ] Attribute → config mapping follows `src/components/attributes.js` conventions
   (`isSkippedAttribute()` skips `id`, `class`, `style`, `slot`, hidden, title, lang,
   dir, role, tabindex, part, exportparts, `data-*`, `aria-*`)
 - [ ] Live-region contract (`role="status"`, `aria-live="polite"`, `aria-atomic="true"`)

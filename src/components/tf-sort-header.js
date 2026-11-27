@@ -14,7 +14,8 @@
  * - `accessible-label` — `aria-label` on the trigger. Unset keeps the
  *   button's content as its accessible name.
  *
- * `aria-sort` is set on the surrounding `<th>` column header (#932).
+ * `aria-sort` is set on the surrounding `<th>` column header (#932). The sort
+ * extension bridge is tracked in #933.
  *
  * Content is projected through the default slot. The shadow parts are the
  * styling surface: `--tf-*` custom properties and `::part()`, with no CSS

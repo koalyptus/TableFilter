@@ -3,7 +3,8 @@
 // column label, projects header markup through the default slot and holds
 // a decorative icon. The trigger is the only tab stop and its content is
 // its accessible name; `accessible-label` overrides it. `aria-sort` is set
-// on the surrounding `<th>` (#932). The parts are the styling surface
+// on the surrounding `<th>` (#932). The sort extension bridge is tracked in
+// #933. The parts are the styling surface
 // (TF-COMPONENTS-CONVENTIONS.md §5).
 const { test, expect } = require('@playwright/test');
 const { scanAccessibility } = require('./axeScan');
