@@ -9,6 +9,8 @@ import {
 } from '../../const';
 import {defaultsStr, defaultsFn, defaultsArr} from '../../settings';
 
+const SORT_HEADER_TAG = 'tf-sort-header';
+
 /**
  * SortableTable Adapter module
  */
@@ -130,6 +132,20 @@ export default class AdapterSortableTable extends Feature {
          */
         this.stt = null;
 
+        /**
+         * `<tf-sort-header>` hosts, keyed by column index.
+         * @type {Array}
+         * @private
+         */
+        this.sortHeaders = [];
+
+        /**
+         * Bound sort-header click handlers, keyed by column index.
+         * @type {Array}
+         * @private
+         */
+        this.sortHeaderClickEvts = [];
+
         this.enable();
     }
 
@@ -212,6 +228,59 @@ export default class AdapterSortableTable extends Feature {
     }
 
     /**
+     * Whether the sort headers render through `<tf-sort-header>`.
+     * External async triggers keep the legacy trigger path.
+     * @returns {Boolean}
+     * @private
+     */
+    canUseCE() {
+        if (this.asyncSort && this.triggerIds.length > 0) {
+            return false;
+        }
+        const SortHeader = typeof customElements === 'undefined' ?
+            null : customElements.get(SORT_HEADER_TAG);
+        return Boolean(SortHeader &&
+            typeof SortHeader.prototype.setSortDirection === 'function' &&
+            typeof SortHeader.prototype.getSortDirection === 'function');
+    }
+
+    /**
+     * Build a sortable header through `<tf-sort-header>`.
+     * @param {HTMLElement} cell Header cell
+     * @param {Number} colIndex Column index
+     * @param {Function} onclick SortableTable click handler
+     * @private
+     */
+    initHeaderCE(cell, colIndex, onclick) {
+        const sortHeader = document.createElement(SORT_HEADER_TAG);
+        sortHeader.style.display = 'block';
+        while (cell.firstChild) {
+            sortHeader.appendChild(cell.firstChild);
+        }
+        cell.appendChild(sortHeader);
+
+        const handler = (evt) => onclick(evt);
+        this.sortHeaderClickEvts[colIndex] = handler;
+        addEvt(sortHeader, 'click', handler);
+        this.sortHeaders[colIndex] = sortHeader;
+    }
+
+    /**
+     * Build a sortable header with the legacy indicator image.
+     * @param {HTMLElement} cell Header cell
+     * @param {Number} colIndex Column index
+     * @param {Function} onclick SortableTable click handler
+     * @private
+     */
+    initHeaderLegacy(cell, colIndex, onclick) {
+        cell.style.cursor = 'pointer';
+        const img = createElm('img',
+            ['src', this.imgPath + this.imgBlank]);
+        cell.appendChild(img);
+        addEvt(cell, 'click', onclick);
+    }
+
+    /**
      * Set SortableTable overrides for TableFilter integration
      */
     overrideSortableTable() {
@@ -268,22 +337,25 @@ export default class AdapterSortableTable extends Feature {
             }
 
             stt.headersRow = tf.headersRow;
+            if (!stt.tHead.rows[stt.headersRow]) {
+                stt.headersRow = 0;
+            }
             let cells = stt.tHead.rows[stt.headersRow].cells;
             stt.sortTypes = oSortTypes || [];
             let l = cells.length;
-            let img, c;
+            let c;
 
             for (let i = 0; i < l; i++) {
                 c = cells[i];
                 if (stt.sortTypes[i] !== null && stt.sortTypes[i] !== 'None') {
-                    c.style.cursor = 'pointer';
-                    img = createElm('img',
-                        ['src', adpt.imgPath + adpt.imgBlank]);
-                    c.appendChild(img);
+                    if (adpt.canUseCE()) {
+                        adpt.initHeaderCE(c, i, stt._headerOnclick);
+                    } else {
+                        adpt.initHeaderLegacy(c, i, stt._headerOnclick);
+                    }
                     if (stt.sortTypes[i] !== null) {
                         c.setAttribute('_sortType', stt.sortTypes[i]);
                     }
-                    addEvt(c, 'click', stt._headerOnclick);
                 } else {
                     c.setAttribute('_sortType', oSortTypes[i]);
                     c._sortType = 'None';
@@ -311,7 +383,11 @@ export default class AdapterSortableTable extends Feature {
                 if (!this.tHead) {
                     return;
                 }
-                cells = stt.tHead.rows[stt.headersRow].cells;
+                const row = stt.tHead.rows[stt.headersRow] || stt.tHead.rows[0];
+                if (!row) {
+                    return;
+                }
+                cells = row.cells;
                 l = cells.length;
             }
             for (let i = 0; i < l; i++) {
@@ -321,6 +397,15 @@ export default class AdapterSortableTable extends Feature {
                 }
                 let cellAttr = cell.getAttribute('_sortType');
                 if (cellAttr !== null && cellAttr !== 'None') {
+                    let sortHeader = adpt.sortHeaders[i];
+                    if (sortHeader && cell.contains(sortHeader)) {
+                        sortHeader.setSortDirection(
+                            i === stt.sortColumn ?
+                                (this.descending ? 'descending' : 'ascending') :
+                                'none'
+                        );
+                        continue;
+                    }
                     img = cell.lastChild || cell;
                     if (img.nodeName.toLowerCase() !== 'img') {
                         img = createElm('img',
@@ -497,12 +582,28 @@ export default class AdapterSortableTable extends Feature {
         let ids = tf.getFiltersId();
         for (let idx = 0; idx < ids.length; idx++) {
             let header = tf.getHeaderElement(idx);
+            const sortHeader = this.sortHeaders[idx];
+            if (sortHeader) {
+                const handler = this.sortHeaderClickEvts[idx];
+                if (handler) {
+                    sortHeader.removeEventListener('click', handler);
+                }
+                if (header.contains(sortHeader)) {
+                    while (sortHeader.firstChild) {
+                        header.insertBefore(sortHeader.firstChild, sortHeader);
+                    }
+                    header.removeChild(sortHeader);
+                }
+            }
+            header.style.cursor = '';
+            header.removeAttribute('aria-sort');
             let img = tag(header, 'img');
-
             if (img.length === 1) {
                 header.removeChild(img[0]);
             }
         }
+        this.sortHeaders = [];
+        this.sortHeaderClickEvts = [];
         this.initialized = false;
     }
 
