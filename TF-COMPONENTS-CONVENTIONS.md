@@ -33,8 +33,7 @@ before opening a review.
 - [ ] `setText(text)` sets the `text` attribute; empty/null renders empty text content
 - [ ] `setLabel(label)` sets the `accessible-label` attribute; empty/null removes `aria-label`
 - [ ] Attribute → config mapping follows `src/components/attributes.js` conventions;
-  `isSkippedAttribute()` covers `FORBIDDEN_KEYS`, `data-*`/`aria-*` and any
-  component-owned `extraSkips`
+  use `isSkippedAttribute()` as the skip rule
 - [ ] Live-region contract (`role="status"`, `aria-live="polite"`, `aria-atomic="true"`)
   enforced via `applyLiveRegion()` when the component announces updates
 
