@@ -159,12 +159,11 @@ export class TfSortHeaderElement extends HTMLElement {
      * Render the label text and the accessible name into the shadow parts.
      */
     _update() {
-        const text = this._hasProjectedContent() ?
-            '' : (this.getAttribute('text') || '');
+        const projected = this._hasProjectedContent();
+        const text = projected ? '' : (this.getAttribute('text') || '');
         this._textEl.textContent = text;
 
         const label = this.getAttribute('accessible-label');
-        const projected = this._hasProjectedContent();
         if (label) {
             this._trigger.setAttribute('aria-label', label);
             this._trigger.removeAttribute('aria-labelledby');
@@ -180,6 +179,8 @@ export class TfSortHeaderElement extends HTMLElement {
         }
 
         const direction = this.getSortDirection();
+        // The icon is aria-hidden; sort direction is conveyed by aria-sort on
+        // the closest <th>.
         this._iconEl.textContent = this._sortIndicator(direction);
 
         this._updateSortTarget();
