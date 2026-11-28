@@ -28,9 +28,11 @@ test(`popup filters mount on <tf-popup-filter>: ${DEMO_PAGE}`,
         const initial = await page.evaluate(() => {
             const hosts = Array.from(
                 document.querySelectorAll('tf-popup-filter'));
+            const sortHeaders = Array.from(
+                document.querySelectorAll('tf-sort-header'));
             return {
                 hosts: hosts.length,
-                columns: hosts.map((host) => host.parentNode.cellIndex),
+                columns: hosts.map((host) => host.closest('th').cellIndex),
                 inHeader: hosts.every((host) => host.closest('thead')),
                 shadowPopups: hosts.filter((host) =>
                     host.shadowRoot &&
@@ -44,8 +46,11 @@ test(`popup filters mount on <tf-popup-filter>: ${DEMO_PAGE}`,
                     document.querySelectorAll('div.popUpPlaceholder').length,
                 legacyPlaceholderColumn:
                     document.querySelector('div.popUpPlaceholder')
-                        .parentNode.cellIndex,
-                legacyIcons: document.querySelectorAll('span.ci').length
+                        .closest('th').cellIndex,
+                legacyIcons: document.querySelectorAll('span.ci').length,
+                sortHeaders: sortHeaders.length,
+                sortHeadersInHeader: sortHeaders.every((host) =>
+                    host.closest('thead'))
             };
         });
 
@@ -99,7 +104,9 @@ test(`popup filters mount on <tf-popup-filter>: ${DEMO_PAGE}`,
             // trigger.
             legacyPlaceholders: 1,
             legacyPlaceholderColumn: 8,
-            legacyIcons: 0
+            legacyIcons: 0,
+            sortHeaders: 9,
+            sortHeadersInHeader: true
         });
         expect(result.opened).toEqual({
             hasOpen: true,

@@ -1,8 +1,8 @@
-// Gate for <tf-sort-header> (#931, #932): the element registers an open
-// shadow root exposing a single `<button type="button">` trigger that
-// carries the column label, projects header markup through the default slot
-// and holds a decorative icon. The trigger is the only tab stop and its
-// content is its accessible name; `accessible-label` overrides it.
+// Gate for <tf-sort-header> (#931, #932, #1132): the element registers an
+// open shadow root exposing the header label outside the trigger and a
+// single `<button type="button">` sort trigger containing a decorative icon.
+// The button is the only tab stop; `accessible-label` overrides its
+// accessible name, otherwise the `text` label names it.
 // `sort-direction` sets `aria-sort` on the surrounding `<th>`. The sort
 // extension bridge is tracked in #933. The parts are the styling surface
 // (TF-COMPONENTS-CONVENTIONS.md §5).
@@ -13,7 +13,7 @@ const FIXTURE = '/test/test-emitter.html';
 const COMPONENT = '/src/components/tf-sort-header.js';
 
 // Document order, matching the shadow template.
-const PARTS = ['trigger', 'text', 'icon'];
+const PARTS = ['label', 'text', 'trigger', 'icon'];
 
 test('registers an open shadow root exposing the trigger parts',
     async ({ page }) => {
@@ -30,6 +30,7 @@ test('registers an open shadow root exposing the trigger parts',
                 : [];
             const trigger = sr && sr.querySelector('[part="trigger"]');
             const icon = sr && sr.querySelector('[part="icon"]');
+            const label = sr && sr.querySelector('[part="label"]');
             const slot = sr && sr.querySelector('slot');
             return {
                 defined,
@@ -40,7 +41,12 @@ test('registers an open shadow root exposing the trigger parts',
                 buttonCount: buttons.length,
                 triggerTag: trigger && trigger.tagName.toLowerCase(),
                 triggerType: trigger && trigger.getAttribute('type'),
+                triggerText: trigger && trigger.textContent.trim(),
                 hasDefaultSlot: Boolean(slot) && !slot.hasAttribute('name'),
+                labelContainsSlot: Boolean(label && slot &&
+                    label.contains(slot)),
+                triggerContainsSlot: Boolean(trigger && slot &&
+                    trigger.contains(slot)),
                 iconHidden: icon && icon.getAttribute('aria-hidden'),
                 iconTabindex: icon && icon.getAttribute('tabindex'),
                 classless: nodes.every((n) => !n.hasAttribute('class')),
@@ -55,7 +61,10 @@ test('registers an open shadow root exposing the trigger parts',
         expect(result.buttonCount).toBe(1);
         expect(result.triggerTag).toBe('button');
         expect(result.triggerType).toBe('button');
+        expect(result.triggerText).toBe('↕');
         expect(result.hasDefaultSlot).toBe(true);
+        expect(result.labelContainsSlot).toBe(true);
+        expect(result.triggerContainsSlot).toBe(false);
         expect(result.iconHidden).toBe('true');
         expect(result.iconTabindex).toBeNull();
         expect(result.classless).toBe(true);
@@ -88,7 +97,7 @@ test('invents no accessible names and renders no aria-sort',
         expect(result.title).toBeNull();
         expect(result.ariaSort).toBeNull();
         expect(result.hostAriaSort).toBeNull();
-        expect(result.text).toBe('');
+        expect(result.text).toBe('↕');
     });
 
 test('sets aria-sort on the closest th from sort-direction',
@@ -116,32 +125,37 @@ test('sets aria-sort on the closest th from sort-direction',
                     ariaSort: th.getAttribute('aria-sort'),
                     host: el.getAttribute('aria-sort'),
                     trigger: el.shadowRoot.querySelector('[part="trigger"]')
-                        .getAttribute('aria-sort')
+                        .getAttribute('aria-sort'),
+                    icon: el.shadowRoot.querySelector('[part="icon"]')
+                        .textContent
                 });
             });
 
             el.removeAttribute('sort-direction');
             return {
                 states,
-                cleared: th.getAttribute('aria-sort')
+                cleared: th.getAttribute('aria-sort'),
+                clearedIcon: el.shadowRoot.querySelector('[part="icon"]')
+                    .textContent
             };
         }, COMPONENT);
 
         expect(result.states).toEqual([
             {
                 direction: 'ascending', ariaSort: 'ascending',
-                host: null, trigger: null
+                host: null, trigger: null, icon: '▲'
             },
             {
                 direction: 'descending', ariaSort: 'descending',
-                host: null, trigger: null
+                host: null, trigger: null, icon: '▼'
             },
             {
                 direction: 'none', ariaSort: 'none',
-                host: null, trigger: null
+                host: null, trigger: null, icon: '↕'
             }
         ]);
         expect(result.cleared).toBeNull();
+        expect(result.clearedIcon).toBe('↕');
     });
 
 test('setSortDirection() and getSortDirection() reflect valid values',
@@ -556,17 +570,28 @@ test('setText() and setLabel() update the trigger', async ({ page }) => {
         const set = {
             text: text.textContent,
             label: trigger.getAttribute('aria-label'),
+            labelledby: trigger.getAttribute('aria-labelledby'),
             textAttr: el.getAttribute('text'),
             labelAttr: el.getAttribute('accessible-label')
+        };
+
+        el.setText('Country');
+        el.setLabel(null);
+        const fallback = {
+            text: text.textContent,
+            label: trigger.getAttribute('aria-label'),
+            labelledby: trigger.getAttribute('aria-labelledby')
         };
 
         el.setText(null);
         el.setLabel(null);
         return {
             set,
+            fallback,
             cleared: {
                 text: text.textContent,
-                label: trigger.getAttribute('aria-label')
+                label: trigger.getAttribute('aria-label'),
+                labelledby: trigger.getAttribute('aria-labelledby')
             }
         };
     }, COMPONENT);
@@ -574,10 +599,20 @@ test('setText() and setLabel() update the trigger', async ({ page }) => {
     expect(result.set).toEqual({
         text: 'Country',
         label: 'Sort by country',
+        labelledby: null,
         textAttr: 'Country',
         labelAttr: 'Sort by country'
     });
-    expect(result.cleared).toEqual({ text: '', label: null });
+    expect(result.fallback).toEqual({
+        text: 'Country',
+        label: 'Country',
+        labelledby: null
+    });
+    expect(result.cleared).toEqual({
+        text: '',
+        label: null,
+        labelledby: null
+    });
 });
 
 test('exposes ::part() styling hooks for theming', async ({ page }) => {
@@ -590,6 +625,7 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
 
         const style = document.createElement('style');
         style.textContent = `
+            tf-sort-header::part(label) { color: rgb(7, 8, 9); }
             tf-sort-header::part(trigger) { display: flex; }
             tf-sort-header::part(text) { color: rgb(4, 5, 6); }
             tf-sort-header::part(icon) { color: rgb(1, 2, 3); }
@@ -598,6 +634,8 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
 
         const sr = el.shadowRoot;
         return {
+            labelColor: getComputedStyle(
+                sr.querySelector('[part="label"]')).color,
             display: getComputedStyle(
                 sr.querySelector('[part="trigger"]')).display,
             textColor: getComputedStyle(
@@ -607,6 +645,7 @@ test('exposes ::part() styling hooks for theming', async ({ page }) => {
         };
     }, COMPONENT);
 
+    expect(result.labelColor).toBe('rgb(7, 8, 9)');
     expect(result.display).toBe('flex');
     expect(result.textColor).toBe('rgb(4, 5, 6)');
     expect(result.color).toBe('rgb(1, 2, 3)');
@@ -693,7 +732,7 @@ test('two elements keep independent state', async ({ page }) => {
         aText: 'Destination',
         bText: 'Country',
         aLabel: 'Sort by destination',
-        bLabel: null,
+        bLabel: 'Country',
         distinct: true
     });
 });
