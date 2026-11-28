@@ -1,18 +1,19 @@
 /**
- * `<tf-sort-header>` custom element: the keyboard-operable trigger inside
- * a sortable column header.
+ * `<tf-sort-header>` custom element: the keyboard-operable sort trigger
+ * inside a sortable column header.
  *
- * An open shadow root exposing a `<button type="button">` (`part="trigger"`)
- * with the column label (`part="text"`), projected header content through
- * the default slot, and a decorative sort icon (`part="icon"`,
- * `aria-hidden="true"`). The button is the only tab stop and its content is
- * its accessible name.
+ * An open shadow root exposing the header label (`part="label"`) with
+ * projected content through the default slot and text (`part="text"`), and
+ * a `<button type="button">` sort trigger (`part="trigger"`) containing a
+ * decorative sort icon (`part="icon"`, `aria-hidden="true"`). The button
+ * is the only tab stop; its accessible name comes from `accessible-label`
+ * or, when unset, the `text` label.
  *
  * Attributes:
  * - `text` — visible label, rendered as text content when the slot has no
  *   assigned content.
- * - `accessible-label` — `aria-label` on the trigger. Unset keeps the
- *   button's content as its accessible name.
+ * - `accessible-label` — `aria-label` on the trigger. When unset, the
+ *   `text` value is used as the trigger's accessible name.
  * - `sort-direction` — `none`, `ascending` or `descending`, reflected as
  *   `aria-sort` on the closest `<th>` column header. Unset or invalid values
  *   restore the column header's previous `aria-sort`.
@@ -80,8 +81,8 @@ function renderColumnSort(th, state) {
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
-    <button type="button" part="trigger">
-        <slot></slot><span part="text"></span>
+    <span part="label" id="label"><slot></slot><span part="text"></span></span>
+    <button type="button" part="trigger" aria-labelledby="label">
         <span part="icon" aria-hidden="true"></span>
     </button>
 `;
@@ -157,14 +158,17 @@ export class TfSortHeaderElement extends HTMLElement {
      * Render the label text and the accessible name into the shadow parts.
      */
     _update() {
-        this._textEl.textContent = this._hasProjectedContent() ?
+        const text = this._hasProjectedContent() ?
             '' : (this.getAttribute('text') || '');
+        this._textEl.textContent = text;
 
         const label = this.getAttribute('accessible-label');
         if (label) {
             this._trigger.setAttribute('aria-label', label);
+            this._trigger.removeAttribute('aria-labelledby');
         } else {
             this._trigger.removeAttribute('aria-label');
+            this._trigger.setAttribute('aria-labelledby', 'label');
         }
 
         this._updateSortTarget();
