@@ -61,7 +61,7 @@ test('registers an open shadow root exposing the trigger parts',
         expect(result.buttonCount).toBe(1);
         expect(result.triggerTag).toBe('button');
         expect(result.triggerType).toBe('button');
-        expect(result.triggerText).toBe('');
+        expect(result.triggerText).toBe('↕');
         expect(result.hasDefaultSlot).toBe(true);
         expect(result.labelContainsSlot).toBe(true);
         expect(result.triggerContainsSlot).toBe(false);
@@ -93,11 +93,11 @@ test('invents no accessible names and renders no aria-sort',
         }, COMPONENT);
 
         expect(result.ariaLabel).toBeNull();
-        expect(result.ariaLabelledby).toBe('label');
+        expect(result.ariaLabelledby).toBeNull();
         expect(result.title).toBeNull();
         expect(result.ariaSort).toBeNull();
         expect(result.hostAriaSort).toBeNull();
-        expect(result.text).toBe('');
+        expect(result.text).toBe('↕');
     });
 
 test('sets aria-sort on the closest th from sort-direction',
@@ -125,32 +125,37 @@ test('sets aria-sort on the closest th from sort-direction',
                     ariaSort: th.getAttribute('aria-sort'),
                     host: el.getAttribute('aria-sort'),
                     trigger: el.shadowRoot.querySelector('[part="trigger"]')
-                        .getAttribute('aria-sort')
+                        .getAttribute('aria-sort'),
+                    icon: el.shadowRoot.querySelector('[part="icon"]')
+                        .textContent
                 });
             });
 
             el.removeAttribute('sort-direction');
             return {
                 states,
-                cleared: th.getAttribute('aria-sort')
+                cleared: th.getAttribute('aria-sort'),
+                clearedIcon: el.shadowRoot.querySelector('[part="icon"]')
+                    .textContent
             };
         }, COMPONENT);
 
         expect(result.states).toEqual([
             {
                 direction: 'ascending', ariaSort: 'ascending',
-                host: null, trigger: null
+                host: null, trigger: null, icon: '▲'
             },
             {
                 direction: 'descending', ariaSort: 'descending',
-                host: null, trigger: null
+                host: null, trigger: null, icon: '▼'
             },
             {
                 direction: 'none', ariaSort: 'none',
-                host: null, trigger: null
+                host: null, trigger: null, icon: '↕'
             }
         ]);
         expect(result.cleared).toBeNull();
+        expect(result.clearedIcon).toBe('↕');
     });
 
 test('setSortDirection() and getSortDirection() reflect valid values',
@@ -438,7 +443,7 @@ test('renders accessible names from attributes when set',
         }, COMPONENT);
 
         expect(result.set).toBe('Sort by destination');
-    expect(result.removed).toBe('label');
+        expect(result.removed).toBeNull();
     });
 
 test('renders the text attribute as text content', async ({ page }) => {
@@ -600,13 +605,13 @@ test('setText() and setLabel() update the trigger', async ({ page }) => {
     });
     expect(result.fallback).toEqual({
         text: 'Country',
-        label: null,
-        labelledby: 'label'
+        label: 'Country',
+        labelledby: null
     });
     expect(result.cleared).toEqual({
         text: '',
         label: null,
-        labelledby: 'label'
+        labelledby: null
     });
 });
 
@@ -727,7 +732,7 @@ test('two elements keep independent state', async ({ page }) => {
         aText: 'Destination',
         bText: 'Country',
         aLabel: 'Sort by destination',
-        bLabel: null,
+        bLabel: 'Country',
         distinct: true
     });
 });

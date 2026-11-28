@@ -94,6 +94,7 @@ export class TfSortHeaderElement extends HTMLElement {
         this.shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
         this._trigger = this.shadowRoot.querySelector('[part="trigger"]');
         this._textEl = this.shadowRoot.querySelector('[part="text"]');
+        this._iconEl = this.shadowRoot.querySelector('[part="icon"]');
         this._slot = this.shadowRoot.querySelector('slot');
         this._slot.addEventListener('slotchange', () => this._update());
         this._sortTarget = null;
@@ -163,15 +164,41 @@ export class TfSortHeaderElement extends HTMLElement {
         this._textEl.textContent = text;
 
         const label = this.getAttribute('accessible-label');
+        const projected = this._hasProjectedContent();
         if (label) {
             this._trigger.setAttribute('aria-label', label);
             this._trigger.removeAttribute('aria-labelledby');
-        } else {
+        } else if (projected) {
             this._trigger.removeAttribute('aria-label');
             this._trigger.setAttribute('aria-labelledby', 'label');
+        } else if (text) {
+            this._trigger.setAttribute('aria-label', text);
+            this._trigger.removeAttribute('aria-labelledby');
+        } else {
+            this._trigger.removeAttribute('aria-label');
+            this._trigger.removeAttribute('aria-labelledby');
         }
 
+        const direction = this.getSortDirection();
+        this._iconEl.textContent = this._sortIndicator(direction);
+
         this._updateSortTarget();
+    }
+
+    /**
+     * Text indicator shown in the sort trigger button.
+     * @param {?String} direction Sort direction
+     * @return {String} Direction indicator
+     * @private
+     */
+    _sortIndicator(direction) {
+        if (direction === 'ascending') {
+            return '▲';
+        }
+        if (direction === 'descending') {
+            return '▼';
+        }
+        return '↕';
     }
 
     /**
