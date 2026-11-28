@@ -146,6 +146,13 @@ export default class AdapterSortableTable extends Feature {
          */
         this.sortHeaderClickEvts = [];
 
+        /**
+         * Pre-bridge `aria-sort` values, keyed by column index.
+         * @type {Array}
+         * @private
+         */
+        this.sortHeaderAriaSorts = [];
+
         this.enable();
     }
 
@@ -252,6 +259,10 @@ export default class AdapterSortableTable extends Feature {
      * @private
      */
     initHeaderCE(cell, colIndex, onclick) {
+        if (!(colIndex in this.sortHeaderAriaSorts)) {
+            this.sortHeaderAriaSorts[colIndex] =
+                cell.getAttribute('aria-sort');
+        }
         const sortHeader = document.createElement(SORT_HEADER_TAG);
         sortHeader.style.display = 'block';
         while (cell.firstChild) {
@@ -362,6 +373,51 @@ export default class AdapterSortableTable extends Feature {
                 }
             }
             stt.updateHeaderArrows();
+        };
+
+        /**
+         * Overrides uninitHeader to restore projected header content and
+         * detach sort-header triggers before the base removes the cell's
+         * last child.
+         */
+        SortableTable.prototype.uninitHeader = function () {
+            let stt = this;
+            if (!stt.tHead) {
+                return;
+            }
+            let row = stt.tHead.rows[stt.headersRow] || stt.tHead.rows[0];
+            if (!row) {
+                return;
+            }
+            let cells = row.cells;
+            for (let i = 0; i < cells.length; i++) {
+                let c = cells[i];
+                let sortHeader = adpt.sortHeaders[i];
+                if (sortHeader && c.contains(sortHeader)) {
+                    const handler = adpt.sortHeaderClickEvts[i];
+                    if (handler) {
+                        sortHeader.removeEventListener('click', handler);
+                    }
+                    while (sortHeader.firstChild) {
+                        c.insertBefore(sortHeader.firstChild, sortHeader);
+                    }
+                    c.removeChild(sortHeader);
+                    c._sortType = null;
+                    c.removeAttribute('_sortType');
+                    continue;
+                }
+                if (c._sortType != null && c._sortType !== 'None') {
+                    c.removeChild(c.lastChild);
+                    if (typeof c.removeEventListener !== 'undefined') {
+                        c.removeEventListener('click', stt._headerOnclick,
+                            false);
+                    } else if (typeof c.detachEvent !== 'undefined') {
+                        c.detachEvent('onclick', stt._headerOnclick);
+                    }
+                    c._sortType = null;
+                    c.removeAttribute('_sortType');
+                }
+            }
         };
 
         /**
@@ -591,9 +647,15 @@ export default class AdapterSortableTable extends Feature {
                     }
                     header.removeChild(sortHeader);
                 }
+                const ariaSort = this.sortHeaderAriaSorts[idx];
+                if (ariaSort === null || ariaSort === undefined) {
+                    header.removeAttribute('aria-sort');
+                } else {
+                    header.setAttribute('aria-sort', ariaSort);
+                }
+                continue;
             }
             header.style.cursor = '';
-            header.removeAttribute('aria-sort');
             let img = tag(header, 'img');
             if (img.length === 1) {
                 header.removeChild(img[0]);
@@ -601,6 +663,7 @@ export default class AdapterSortableTable extends Feature {
         }
         this.sortHeaders = [];
         this.sortHeaderClickEvts = [];
+        this.sortHeaderAriaSorts = [];
         this.initialized = false;
     }
 

@@ -11,6 +11,28 @@ const FIXTURE = '/test/test-emitter.html';
 const TABLE_HTML =
     '<tbody><tr><th>From</th></tr><tr><td>Sydney</td></tr></tbody>';
 
+// Install a page-side sort waiter with a timeout so a failed init cannot
+// hang the test.
+const addSortWaiter = (page) => page.addScriptTag({
+    content: `
+        window.waitForSort = async (tf) => {
+            const sort = tf.extension('sort');
+            if (sort && sort.initialized) {
+                return sort;
+            }
+            await new Promise((resolve, reject) => {
+                const timer = setTimeout(
+                    () => reject(new Error('sort init timeout')), 3000);
+                tf.emitter.on(['sort-initialized'], () => {
+                    clearTimeout(timer);
+                    resolve();
+                });
+            });
+            return tf.extension('sort');
+        };
+    `
+});
+
 test('clear button bridge uses tf-clear-button', async ({ page }) => {
     await page.goto(FIXTURE);
 
@@ -5617,6 +5639,7 @@ const SORT_TABLE_HTML = '<thead><tr><th>From</th><th>Destination</th>' +
 test('sort bridge uses tf-sort-header and updates aria-sort',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -5640,16 +5663,7 @@ test('sort bridge uses tf-sort-header and updates aria-sort',
                 }]
             });
             tf.init();
-            await new Promise((resolve) => {
-                const sort = tf.extension('sort');
-                if (sort && sort.initialized) {
-                    resolve();
-                    return;
-                }
-                tf.emitter.on(['sort-initialized'], () => resolve());
-            });
-
-            const sort = tf.extension('sort');
+            const sort = await window.waitForSort(tf);
             const headers = Array.from(
                 table.querySelectorAll('thead th tf-sort-header'));
             const ariaSorts = () =>
@@ -5689,7 +5703,10 @@ test('sort bridge uses tf-sort-header and updates aria-sort',
                 afterAsc,
                 afterDesc,
                 removed: table.querySelectorAll('tf-sort-header').length,
-                ariaAfterDestroy: ariaSorts()
+                ariaAfterDestroy: ariaSorts(),
+                textAfterDestroy: Array.from(
+                    table.querySelectorAll('thead th'))
+                    .map((th) => th.textContent.trim())
             };
         }, SORT_TABLE_HTML);
 
@@ -5708,11 +5725,14 @@ test('sort bridge uses tf-sort-header and updates aria-sort',
         expect(result.afterDesc.first).toBe('2781');
         expect(result.removed).toBe(0);
         expect(result.ariaAfterDestroy).toEqual([null, null, null]);
+        expect(result.textAfterDestroy).toEqual(
+            ['From', 'Destination', 'Road Distance (km)']);
     });
 
 test('sort bridge keeps legacy indicators without the element',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -5729,16 +5749,7 @@ test('sort bridge keeps legacy indicators without the element',
                 }]
             });
             tf.init();
-            await new Promise((resolve) => {
-                const sort = tf.extension('sort');
-                if (sort && sort.initialized) {
-                    resolve();
-                    return;
-                }
-                tf.emitter.on(['sort-initialized'], () => resolve());
-            });
-
-            const sort = tf.extension('sort');
+            const sort = await window.waitForSort(tf);
             const headers = Array.from(table.querySelectorAll('thead th'));
             const indicators = headers.map((th) =>
                 th.querySelectorAll('img.sort-arrow').length);
@@ -5746,12 +5757,16 @@ test('sort bridge keeps legacy indicators without the element',
             const cls = headers[0].querySelector('img.sort-arrow').className;
             sort.destroy();
             return {
+                ceDefined: !!customElements.get('tf-sort-header'),
+                canUseCE: sort.canUseCE(),
                 indicators,
                 cls,
                 removed: table.querySelectorAll('img.sort-arrow').length
             };
         }, SORT_TABLE_HTML);
 
+        expect(result.ceDefined).toBe(false);
+        expect(result.canUseCE).toBe(false);
         expect(result.indicators).toEqual([1, 1, 1]);
         expect(result.cls).toContain('sort-arrow');
         expect(result.removed).toBe(0);
@@ -5760,6 +5775,7 @@ test('sort bridge keeps legacy indicators without the element',
 test('sort bridge reflects sort_col_at_start and non-sortable types',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -5775,14 +5791,7 @@ test('sort bridge reflects sort_col_at_start and non-sortable types',
             const initSort = async (table, config) => {
                 const tf = new TableFilter(table.id, config);
                 tf.init();
-                await new Promise((resolve) => {
-                    const sort = tf.extension('sort');
-                    if (sort && sort.initialized) {
-                        resolve();
-                        return;
-                    }
-                    tf.emitter.on(['sort-initialized'], () => resolve());
-                });
+                await window.waitForSort(tf);
                 return tf;
             };
             const snapshot = (table, tf) => {
@@ -5795,6 +5804,7 @@ test('sort bridge reflects sort_col_at_start and non-sortable types',
                         'tf-sort-header, img').length,
                     directions: headers.map((h) => h.getSortDirection()),
                     ariaSorts: ths.map((th) => th.getAttribute('aria-sort')),
+                    sortType: ths[1].getAttribute('_sortType'),
                     first: tf.getColValues(2)[0]
                 };
             };
@@ -5836,12 +5846,15 @@ test('sort bridge reflects sort_col_at_start and non-sortable types',
         expect(result.none.middle).toBe(0);
         expect(result.none.directions).toEqual(['none', 'ascending']);
         expect(result.none.ariaSorts).toEqual(['none', null, 'ascending']);
+        expect(result.none.sortType).toBe('None');
         expect(result.none.first).toBe('286');
 
         expect(result.nullType.count).toBe(2);
         expect(result.nullType.middle).toBe(0);
         expect(result.nullType.directions).toEqual(['none', 'descending']);
-        expect(result.nullType.ariaSorts).toEqual(['none', null, 'descending']);
+        expect(result.nullType.ariaSorts).toEqual(
+            ['none', null, 'descending']);
+        expect(result.nullType.sortType).toBe('None');
         expect(result.nullType.first).toBe('2781');
         expect(result.nullType.afterMiddleClick).toEqual({
             col: 2, first: '2781'
@@ -5851,6 +5864,7 @@ test('sort bridge reflects sort_col_at_start and non-sortable types',
 test('sort bridge keeps async external triggers on the legacy path',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -5877,16 +5891,7 @@ test('sort bridge keeps async external triggers on the legacy path',
                 }]
             });
             tf.init();
-            await new Promise((resolve) => {
-                const sort = tf.extension('sort');
-                if (sort && sort.initialized) {
-                    resolve();
-                    return;
-                }
-                tf.emitter.on(['sort-initialized'], () => resolve());
-            });
-
-            const sort = tf.extension('sort');
+            const sort = await window.waitForSort(tf);
             const state = {
                 headers: table.querySelectorAll(
                     'thead th tf-sort-header').length,
@@ -5927,6 +5932,7 @@ const SORT_KEY_TABLE_HTML =
 test('sort bridge sorts by the default and custom cell keys',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -5945,14 +5951,7 @@ test('sort bridge sorts by the default and custom cell keys',
                     }, sortOpts)]
                 });
                 tf.init();
-                await new Promise((resolve) => {
-                    const sort = tf.extension('sort');
-                    if (sort && sort.initialized) {
-                        resolve();
-                        return;
-                    }
-                    tf.emitter.on(['sort-initialized'], () => resolve());
-                });
+                await window.waitForSort(tf);
                 const header = table.querySelector('tf-sort-header');
                 header.shadowRoot.querySelector('[part="trigger"]').click();
                 await new Promise((r) => setTimeout(r, 30));
@@ -5976,6 +5975,7 @@ test('sort bridge sorts by the default and custom cell keys',
 test('sort bridge honours the legacy icon configuration',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -5996,14 +5996,7 @@ test('sort bridge honours the legacy icon configuration',
                 }]
             });
             tf.init();
-            await new Promise((resolve) => {
-                const sort = tf.extension('sort');
-                if (sort && sort.initialized) {
-                    resolve();
-                    return;
-                }
-                tf.emitter.on(['sort-initialized'], () => resolve());
-            });
+            await window.waitForSort(tf);
 
             const ths = Array.from(table.querySelectorAll('thead th'));
             const before = ths.map((th) => {
@@ -6014,12 +6007,16 @@ test('sort bridge honours the legacy icon configuration',
                 };
             });
             const sort = tf.extension('sort');
+            const ceDefined = !!customElements.get('tf-sort-header');
+            const canUseCE = sort.canUseCE();
             sort.sortByColumnIndex(2);
             const asc = ths[2].querySelector('img').className;
             sort.sortByColumnIndex(2, true);
             const desc = ths[2].querySelector('img').className;
             tf.destroy();
             return {
+                ceDefined,
+                canUseCE,
                 before,
                 asc,
                 desc,
@@ -6027,6 +6024,8 @@ test('sort bridge honours the legacy icon configuration',
             };
         }, SORT_TABLE_HTML);
 
+        expect(result.ceDefined).toBe(false);
+        expect(result.canUseCE).toBe(false);
         expect(result.before.map((b) => b.src))
             .toEqual(['blank-custom.png', 'blank-custom.png',
                 'blank-custom.png']);
@@ -6040,6 +6039,7 @@ test('sort bridge honours the legacy icon configuration',
 test('sort bridge exposes the CE icon part instead of legacy images',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -6061,14 +6061,7 @@ test('sort bridge exposes the CE icon part instead of legacy images',
                 }]
             });
             tf.init();
-            await new Promise((resolve) => {
-                const sort = tf.extension('sort');
-                if (sort && sort.initialized) {
-                    resolve();
-                    return;
-                }
-                tf.emitter.on(['sort-initialized'], () => resolve());
-            });
+            await window.waitForSort(tf);
 
             const header = table.querySelector('thead th tf-sort-header');
             const before = {
@@ -6109,6 +6102,7 @@ const PAGING_SORT_TABLE_HTML =
 test('sort bridge re-enables paging and keeps the current page',
     async ({ page }) => {
         await page.goto(FIXTURE);
+        await addSortWaiter(page);
         await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
 
         const result = await page.evaluate(async (tableHtml) => {
@@ -6128,14 +6122,7 @@ test('sort bridge re-enables paging and keeps the current page',
                 }]
             });
             tf.init();
-            await new Promise((resolve) => {
-                const sort = tf.extension('sort');
-                if (sort && sort.initialized) {
-                    resolve();
-                    return;
-                }
-                tf.emitter.on(['sort-initialized'], () => resolve());
-            });
+            await window.waitForSort(tf);
 
             const paging = tf.feature('paging');
             paging.setPage(2);
@@ -6162,4 +6149,53 @@ test('sort bridge re-enables paging and keeps the current page',
         expect(result.after.page).toBe(2);
         expect(result.after.validRows).toBe(6);
         expect(result.after.first).toBe('286');
+    });
+
+const AUTHOR_ARIA_TABLE_HTML = SORT_TABLE_HTML
+    .replace('<th>From</th>', '<th aria-sort="ascending">From</th>')
+    .replace('<th>Destination</th>',
+        '<th aria-sort="descending">Destination</th>');
+
+test('sort bridge restores author aria-sort values on destroy',
+    async ({ page }) => {
+        await page.goto(FIXTURE);
+        await addSortWaiter(page);
+        await page.addScriptTag({ path: 'dist/tablefilter/tablefilter.js' });
+
+        const result = await page.evaluate(async (tableHtml) => {
+            await import('/src/components/tf-sort-header.js');
+
+            const table = document.createElement('table');
+            table.id = 'ce-sort-author';
+            table.innerHTML = tableHtml;
+            document.body.appendChild(table);
+
+            const tf = new TableFilter('ce-sort-author', {
+                base_path: '/dist/tablefilter/',
+                extensions: [{
+                    name: 'sort',
+                    types: ['string', 'string', 'number']
+                }]
+            });
+            tf.init();
+            await window.waitForSort(tf);
+
+            const ths = Array.from(table.querySelectorAll('thead th'));
+            const aria = () =>
+                ths.map((th) => th.getAttribute('aria-sort'));
+            const before = aria();
+
+            const header = table.querySelector(
+                'thead th:nth-child(3) tf-sort-header');
+            header.shadowRoot.querySelector('[part="trigger"]').click();
+            await new Promise((r) => setTimeout(r, 30));
+            const sorted = aria();
+
+            tf.destroy();
+            return { before, sorted, after: aria() };
+        }, AUTHOR_ARIA_TABLE_HTML);
+
+        expect(result.before).toEqual(['none', 'none', 'none']);
+        expect(result.sorted).toEqual(['none', 'none', 'ascending']);
+        expect(result.after).toEqual(['ascending', 'descending', null]);
     });
