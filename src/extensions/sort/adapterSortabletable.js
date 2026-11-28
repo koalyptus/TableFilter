@@ -357,7 +357,7 @@ export default class AdapterSortableTable extends Feature {
                         c.setAttribute('_sortType', stt.sortTypes[i]);
                     }
                 } else {
-                    c.setAttribute('_sortType', oSortTypes[i]);
+                    c.setAttribute('_sortType', 'None');
                     c._sortType = 'None';
                 }
             }
@@ -506,7 +506,7 @@ export default class AdapterSortableTable extends Feature {
                     }
                 }
             } else {
-                colType = STRING;
+                colType = sortTypes[i] === null ? null : STRING;
             }
             _sortTypes.push(colType);
         });
