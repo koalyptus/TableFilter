@@ -27,6 +27,7 @@
 <script type="module" src="../src/components/tf-loader.js"></script>
 <script type="module" src="../src/components/tf-pager.js"></script>
 <script type="module" src="../src/components/tf-results-per-page.js"></script>
+<script type="module" src="../src/components/tf-sort-header.js"></script>
 <script data-config>
     var filtersConfig = {
         base_path: '../dist/tablefilter/',
@@ -45,13 +46,15 @@
         paging: {
             length: 10,
             results_per_page: ['Records: ', [10, 25, 50, 100]]
-        }
+        },
+        extensions: [{ name: 'sort' }]
     };
 
     Promise.all([
         customElements.whenDefined('tf-pager'),
         customElements.whenDefined('tf-loader'),
-        customElements.whenDefined('tf-results-per-page')
+        customElements.whenDefined('tf-results-per-page'),
+        customElements.whenDefined('tf-sort-header')
     ]).then(function () {
         var tf = new TableFilter('demo', filtersConfig);
         tf.init();
